@@ -6,7 +6,7 @@
  * @author Diogo Fonseca a79858
  * @version 18/03/2024
  */
-public class Square extends Retangulo
+public class Square extends Rectangle
 {
     private final String ERROR_MESSAGE = "Quadrado:vi";
 

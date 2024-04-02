@@ -25,7 +25,7 @@ public class Client
         {
             Class<?> cl = Class.forName(capital(polyTokens[0]));
             Constructor<?> constructor = cl.getConstructor(String.class);
-            Poligono poly = (Poligono) constructor.newInstance(polyTokens[1]);
+            Polygon poly = (Polygon) constructor.newInstance(polyTokens[1]);
             Point centroid = new Point(Double.parseDouble(centroidTokens[0]), Double.parseDouble(centroidTokens[1]));
             System.out.println(poly.moveCentroid(centroid).toString());
         }

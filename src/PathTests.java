@@ -34,7 +34,7 @@ public class PathTests
             new Point(3, 4),
             new Point(4, 4),
         });
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 3),
             new Point(2, 1),
             new Point(4, 1),
@@ -58,7 +58,7 @@ public class PathTests
             new Point(1, 4),
             new Point(4, 4),
         });
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 3),
             new Point(2, 1),
             new Point(4, 1),
@@ -82,7 +82,7 @@ public class PathTests
             new Point(3, 5),
             new Point(4, 4),
         });
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 3),
             new Point(2, 1),
             new Point(4, 1),
@@ -106,7 +106,7 @@ public class PathTests
             new Point(2, 4),
             new Point(4, 4),
         });
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 3),
             new Point(2, 1),
             new Point(4, 1),
@@ -123,17 +123,17 @@ public class PathTests
     public void ShouldInterceptPolygons()
     {
         // Arrange
-        Poligono poly0 = new Poligono(new Point[] {
+        Polygon poly0 = new Polygon(new Point[] {
             new Point(1, 2),
             new Point(1, 4),
             new Point(3, 4),
         });
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
             new Point(2, 1),
             new Point(4, 1),
             new Point(4, 3),
         });
-        Poligono[] polys = new Poligono[] { poly0, poly1 };
+        Polygon[] polys = new Polygon[] { poly0, poly1 };
         Path path0 = new Path(new Point[] {
             new Point(1, 1),
             new Point(5, 3),
@@ -156,17 +156,17 @@ public class PathTests
     public void ShouldNotInterceptPolygons()
     {
         // Arrange
-        Poligono poly0 = new Poligono(new Point[] {
+        Polygon poly0 = new Polygon(new Point[] {
             new Point(1, 2),
             new Point(1, 4),
             new Point(3, 4),
         });
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
             new Point(2, 1),
             new Point(4, 1),
             new Point(4, 3),
         });
-        Poligono[] polys = new Poligono[] { poly0, poly1 };
+        Polygon[] polys = new Polygon[] { poly0, poly1 };
         Path path = new Path(new Point[] {
             new Point(1, 1),
             new Point(4, 4),
@@ -186,7 +186,7 @@ public class PathTests
         Point p0 = new Point(1, 1);
         Point p1 = new Point(4, 4);
         Path path = new Path(new Point[] { p0, p1 });
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 3),
             new Point(2, 1),
             new Point(4, 1),
