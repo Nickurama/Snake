@@ -1,34 +1,31 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.ParseException;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 
 public class PointTests
 {
     @Test
-    public void ShouldMakeDeepCopyWhenCopying()
+    public void ShouldMakeDeepCopyWhenCopying() throws GeometricException
     {
         // Arrange
         Point p0 = new Point(3, 5);
-        // Point p1 = (Point) p0.copy();
         Point p2 = new Point(p0);
 
         // Act
-        // boolean areEqual0 = p0.equals(p1);
-        // boolean areSame0 = p0 == p1;
-
         boolean areEqual1 = p0.equals(p2);
         boolean areSame1 = p0 == p2;
 
         // Assert
-        // assertTrue(areEqual0);
-        // assertFalse(areSame0);
-
         assertTrue(areEqual1);
         assertFalse(areSame1);
     }
 
     @Test
-    public void ShouldMakeDeepCopyWhenCopyingArray()
+    public void ShouldMakeDeepCopyWhenCopyingArray() throws GeometricException
     {
         // Arrange
         Point[] vpArray = {
@@ -50,7 +47,7 @@ public class PointTests
     }
 
     @Test
-    public void ShouldTurnArrayOfPointsToString()
+    public void ShouldTurnArrayOfPointsToString() throws GeometricException
     {
         // Arrange
         Point[] vps = new Point[] {
@@ -71,7 +68,7 @@ public class PointTests
     }
     
     @Test
-    public void ShouldTurnStringToPoints()
+    public void ShouldTurnStringToPoints() throws GeometricException, ParseException
     {
         // Arrange
         String str0 = "4 1 1 1 2 2 2 2 1";
@@ -88,7 +85,7 @@ public class PointTests
     }
 
     @Test
-    public void ShouldApplyTranslation()
+    public void ShouldApplyTranslation() throws GeometricException
     {
         // Arrange
         Point point = new Point(11, 12);
@@ -120,7 +117,7 @@ public class PointTests
 
 
     @Test
-    public void ShouldBeImmutableOnTranslation()
+    public void ShouldBeImmutableOnTranslation() throws GeometricException
     {
         // Arrange
         Point point = new Point(1, 2);
@@ -132,4 +129,68 @@ public class PointTests
         // Assert
         assertTrue(point.equals(replica));
     }
+
+	@Test
+	public void ShouldApplyRotation() throws GeometricException
+	{
+        // Arrange
+        Point p = new Point(2, 2);
+        VirtualPoint anchor = new VirtualPoint(-3, -1);
+        Point expected = new Point(2.489197368064537, 0.96690423112905);
+
+        // Act
+        Point rotation = p.rotate(- Math.PI / 16, anchor);
+
+        // Assert
+        assertTrue(rotation.equals(expected));
+	}
+
+	@Test
+	public void ShouldBeImmutableOnRotation() throws GeometricException
+	{
+        // Arrange
+        Point point = new Point(1, 2);
+        Point replica = new Point(1, 2);
+
+        // Act
+        point.rotate(Math.PI / 2f, new Point(4, 4));
+
+        // Assert
+        assertTrue(point.equals(replica));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenConstructingWithNegativeCoordinates()
+	{
+		// Arrange
+		VirtualPoint vp = new VirtualPoint(-2, 3);
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Point(-1, 4));
+		assertThrows(GeometricException.class, () -> new Point(1, -4));
+		assertThrows(GeometricException.class, () -> new Point(-1, -4));
+		assertThrows(GeometricException.class, () -> new Point(vp));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenRotatingToNegativeCoordinates() throws GeometricException
+	{
+		// Arrange
+		Point p = new Point(1, 1);
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> p.rotate(Math.PI, new VirtualPoint(0, 0)));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenTranslatingToNegativeCoordinates() throws GeometricException
+	{
+		// Arrange
+		Point p = new Point(1, 1);
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> p.translate(new Vector(0, -2)));
+	}
 }

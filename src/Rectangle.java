@@ -1,3 +1,5 @@
+import java.text.ParseException;
+
 /**
  * Represents a rectangle
  * A rectangle is a polygon with 4 sides and every side has
@@ -18,7 +20,7 @@ public class Rectangle extends Polygon
      * @pre points.length = 4
      * @pre all angles are right angles
      */
-    public Rectangle(Point[] points)
+    public Rectangle(Point[] points) throws GeometricException
     {
         super(points);
         validateRectangle(points.length);
@@ -28,7 +30,7 @@ public class Rectangle extends Polygon
      * Initializes a rectangle from a polygon
      * @param poly the polygon to initialize from
      */
-    public Rectangle(Polygon poly)
+    public Rectangle(Polygon poly) throws GeometricException
     {
         super(poly);
         validateRectangle(poly.getNumSides());
@@ -39,13 +41,13 @@ public class Rectangle extends Polygon
      * class to work. terminates the program if
      * they aren't met
      */
-    private void validateRectangle(int numSides)
+    void validateRectangle(int numSides) throws GeometricException
     {
         if (numSides != NUM_SIDES)
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " A Rectangle must have exactly 4 sides.");
         
         if (!allAnglesAreRightAngles())
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " A Recrangle's inner angles must all form 90 degrees.");
     }
 
     /**
@@ -56,7 +58,7 @@ public class Rectangle extends Polygon
      * @pre must have 4 points
      * @pre all angles are right angles
      */
-    public Rectangle(String str)
+    public Rectangle(String str) throws GeometricException, ParseException
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -79,37 +81,37 @@ public class Rectangle extends Polygon
     }
 
     @Override
-    public Rectangle rotate(double angle, VirtualPoint anchor)
+    public Rectangle rotate(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Rectangle(super.rotate(angle, anchor));
     }
 
     @Override
-    public Rectangle rotate(double angle)
+    public Rectangle rotate(double angle) throws GeometricException
     {
         return new Rectangle(super.rotate(angle));
     }
 
     @Override
-    public Rectangle rotateDegrees(double angle, VirtualPoint anchor)
+    public Rectangle rotateDegrees(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Rectangle(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Rectangle rotateDegrees(double angle)
+    public Rectangle rotateDegrees(double angle) throws GeometricException
     {
         return new Rectangle(super.rotateDegrees(angle));
     }
 
     @Override
-    public Rectangle translate(Vector vector)
+    public Rectangle translate(Vector vector) throws GeometricException
     {
         return new Rectangle(super.translate(vector));
     }
 
     @Override
-    public Rectangle moveCentroid(Point newCentroid)
+    public Rectangle moveCentroid(Point newCentroid) throws GeometricException
     {
         return new Rectangle(super.moveCentroid(newCentroid));
     }

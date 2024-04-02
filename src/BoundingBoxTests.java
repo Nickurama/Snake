@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 public class BoundingBoxTests
 {
     @Test
-    public void ShouldNotInterceptWhenBoxesDontIntercept()
+    public void ShouldNotInterceptWhenBoxesDontIntercept() throws GeometricException
     {
         // Arrange
         BoundingBox bb0 = new BoundingBox(new Point[] {
@@ -26,7 +26,7 @@ public class BoundingBoxTests
     }
 
     @Test
-    public void ShouldInterceptWhenSegmentsDontInterceptButAreClose()
+    public void ShouldInterceptWhenSegmentsDontInterceptButAreClose() throws GeometricException
     {
         // Arrange
         BoundingBox bb0 = new BoundingBox(new Point[] {
@@ -50,7 +50,7 @@ public class BoundingBoxTests
     }
 
     @Test
-    public void ShouldNotInterceptWhenSideOverlaps()
+    public void ShouldNotInterceptWhenSideOverlaps() throws GeometricException
     {
         // Arrange
         BoundingBox bb0 = new BoundingBox(new Point[] {
@@ -72,4 +72,16 @@ public class BoundingBoxTests
         // Assert
         assertFalse(intercepts);
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenNoPointsProvided()
+	{
+		// Arrange
+		Point[] points = new Point[] {};
+
+		// Act
+
+		// Assert
+		assertThrows(GeometricException.class, () -> new BoundingBox(points));
+	}
 }

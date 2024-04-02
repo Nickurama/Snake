@@ -25,10 +25,10 @@ public class Line
      * 
      * @pre a != b
      */
-    public Line(Point a, Point b)
+    public Line(Point a, Point b) throws GeometricException
     {
         if (a.equals(b))
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " cannot create a line with equal points.");
         
         this.coefficientX = a.Y() - b.Y();
         this.coefficientY = b.X() - a.X();
@@ -62,10 +62,9 @@ public class Line
      * @pre the lines must not be paralel
      * @return the point that intersects the two lines
      */
-    public VirtualPoint calcIntersect(Line that)
+    public VirtualPoint intersection(Line that)
     {
-        if (isParalel(that))
-            Error.terminateProgram("Line.java tried to calculate the intersection of parallel lines (division by 0)");
+		assert(isParalel(that)); // lines shoudn't be paralel
         
         double x = (this.coefficientY * that.constant - that.coefficientY * this.constant) /
                     (this.coefficientX * that.coefficientY - that.coefficientX * this.coefficientY);

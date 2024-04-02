@@ -1,4 +1,6 @@
 import java.io.*;
+import java.text.ParseException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -186,7 +188,7 @@ public class VirtualPointTests
     }
     
     @Test
-    public void ShouldTurnStringToPoints()
+    public void ShouldTurnStringToPoints() throws ParseException
     {
         // Arrange
         String str0 = "4 1 1 1 2 2 2 2 1";
@@ -203,7 +205,7 @@ public class VirtualPointTests
     }
 
     @Test
-    public void ShouldRotateAroundAnchor()
+    public void ShouldRotateAroundAnchor() throws GeometricException
     {
         // Arrange
         VirtualPoint vp0 = new VirtualPoint(-2, -2);
@@ -237,7 +239,7 @@ public class VirtualPointTests
     }
 
     @Test
-    public void ShouldBeImmutableWhenRotating()
+    public void ShouldBeImmutableWhenRotating() throws GeometricException
     {
         // Assert
         VirtualPoint point = new VirtualPoint(2, 3);
@@ -251,7 +253,7 @@ public class VirtualPointTests
     }
 
     @Test
-    public void ShouldApplyTranslation()
+    public void ShouldApplyTranslation() throws GeometricException
     {
         // Arrange
         VirtualPoint point = new VirtualPoint(1, 2);
@@ -282,7 +284,7 @@ public class VirtualPointTests
     }
 
     @Test
-    public void ShouldBeImmutableOnTranslation()
+    public void ShouldBeImmutableOnTranslation() throws GeometricException
     {
         // Arrange
         VirtualPoint point = new Point(1, 2);
@@ -294,4 +296,19 @@ public class VirtualPointTests
         // Assert
         assertTrue(point.equals(replica));
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenParsingWrongStringFormat()
+	{
+		// Arrange
+		String s0 = "1 2";
+		String s1 = "a 2 4 5 6";
+		String s2 = "3 2 1 4 5 b 2";
+
+		// Act
+		// Assert
+		assertThrows(ParseException.class, () -> VirtualPoint.parseToArray(s0));
+		assertThrows(ParseException.class, () -> VirtualPoint.parseToArray(s1));
+		assertThrows(ParseException.class, () -> VirtualPoint.parseToArray(s2));
+	}
 }

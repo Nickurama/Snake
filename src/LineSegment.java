@@ -22,13 +22,13 @@ public class LineSegment
      * @post getFirstPoint() = a
      * @post getSecondPoint() = b
      */
-    public LineSegment(Point a, Point b)
+    public LineSegment(Point a, Point b) throws GeometricException
     {
         this.point1 = new Point(a);
         this.point2 = new Point(b);
         this.line = new Line(this.point1, this.point2);
         if (a.equals(b))
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " can't create a line segment with two equal points.");
     }
 
     /**
@@ -41,7 +41,7 @@ public class LineSegment
         if (this.line.isParalel(that.line))
             return false;
             // return doParalelSegmentsCollide(that);
-        VirtualPoint intersection = this.line.calcIntersect(that.line);
+        VirtualPoint intersection = this.line.intersection(that.line);
 
         // checks if a point is exactly on one of the bounds of the segment
         if (isPointOnBounds(intersection) || that.isPointOnBounds(intersection))

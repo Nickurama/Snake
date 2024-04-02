@@ -1,10 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.ParseException;
+
 import org.junit.jupiter.api.Test;
 
 public class PolygonTests
 {
     @Test
-    public void ShouldNotInterceptWhenPolygonsAreSeparated()
+    public void ShouldNotInterceptWhenPolygonsAreSeparated() throws GeometricException
     {
         // Arrange
         Polygon poly1 = new Polygon(new Point[] {
@@ -28,7 +31,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotInterceptWhenPointsInPolygonsOverlap()
+    public void ShouldNotInterceptWhenPointsInPolygonsOverlap() throws GeometricException
     {
         // Arrange
         Polygon poly1 = new Polygon(new Point[] {
@@ -51,7 +54,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotInterceptWhenPolygonSegmentsOverlap()
+    public void ShouldNotInterceptWhenPolygonSegmentsOverlap() throws GeometricException
     {
         // Arrange
         Polygon poly1 = new Polygon(new Point[] {
@@ -73,7 +76,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldInterceptWhenSegmentOfPolygonIntercepts()
+    public void ShouldInterceptWhenSegmentOfPolygonIntercepts() throws GeometricException
     {
         // Arrange
         Polygon poly1 = new Polygon(new Point[] {
@@ -97,7 +100,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldInterceptWhenSegmentIntercepts()
+    public void ShouldInterceptWhenSegmentIntercepts() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -115,7 +118,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotInterceptWhenSegmentOverlaps()
+    public void ShouldNotInterceptWhenSegmentOverlaps() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -134,7 +137,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotInterceptWhenPointsOnSegmentOverlap()
+    public void ShouldNotInterceptWhenPointsOnSegmentOverlap() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -153,7 +156,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldInterceptOnLastSide()
+    public void ShouldInterceptOnLastSide() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -171,7 +174,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldCalculatePerimeter()
+    public void ShouldCalculatePerimeter() throws GeometricException
     {
         // Arrange
         Polygon poly0 = new Polygon(new Point[] {
@@ -238,7 +241,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldBeImmutable()
+    public void ShouldBeImmutable() throws GeometricException
     {
         // Arrange
         Point p0 = new Point(1, 1);
@@ -259,7 +262,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldIncludeAllVerticesInString()
+    public void ShouldIncludeAllVerticesInString() throws GeometricException
     {
         Polygon poly = new Polygon(new Point[] {
             new Point(3, 5),
@@ -279,7 +282,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldTakeConstructorWithString()
+    public void ShouldTakeConstructorWithString() throws GeometricException, ParseException
     {
         // Arrange
         Polygon poly = new Polygon("5 1 1 1 3 2 5 7 2 5 1");
@@ -293,7 +296,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldEquals()
+    public void ShouldEquals() throws GeometricException
     {
         // Arrange
         Polygon p0 = new Polygon(new Point[] {
@@ -320,7 +323,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldEqualsWhenSamePolygonButInvertedOrderOfVertices()
+    public void ShouldEqualsWhenSamePolygonButInvertedOrderOfVertices() throws GeometricException
     {
         // Arrange
         Polygon p0 = new Polygon(new Point[] {
@@ -348,7 +351,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldEqualsWhenSamePolygonButOffset()
+    public void ShouldEqualsWhenSamePolygonButOffset() throws GeometricException
     {
         // Arrange
         Polygon p0 = new Polygon(new Point[] {
@@ -376,7 +379,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotEqualsWhenDifferentValues()
+    public void ShouldNotEqualsWhenDifferentValues() throws GeometricException
     {
         // Arrange
         Polygon p0 = new Polygon(new Point[] {
@@ -402,7 +405,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldNotEqualsWhenDifferentNumberOfVertices()
+    public void ShouldNotEqualsWhenDifferentNumberOfVertices() throws GeometricException
     {
         // Arrange
         Polygon p0 = new Polygon(new Point[] {
@@ -427,7 +430,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldRotateAroundAnchor()
+    public void ShouldRotateAroundAnchor() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -454,7 +457,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldRotateAroundNegativeAnchor()
+    public void ShouldRotateAroundNegativeAnchor() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -481,7 +484,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldRotateAroundCentroid()
+    public void ShouldRotateAroundCentroid() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -507,7 +510,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldTakeDegrees()
+    public void ShouldTakeDegrees() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -534,7 +537,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldBeImmutableWhenRotating()
+    public void ShouldBeImmutableWhenRotating() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -560,7 +563,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldTranslatePositionWithPositiveVector()
+    public void ShouldTranslatePositionWithPositiveVector() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -585,7 +588,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldTranslatePositionWithNegativeVector()
+    public void ShouldTranslatePositionWithNegativeVector() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -610,7 +613,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldMoveCentroid()
+    public void ShouldMoveCentroid() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -650,7 +653,7 @@ public class PolygonTests
     }
 
     @Test
-    public void ShouldBeImmutableWhenMovingCentroid()
+    public void ShouldBeImmutableWhenMovingCentroid() throws GeometricException
     {
         // Arrange
         Polygon poly = new Polygon(new Point[] {
@@ -677,4 +680,161 @@ public class PolygonTests
         // Assert
         assertTrue(poly.equals(replica));
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenConstructingAPolygonWithLessThanThreePoints() throws GeometricException
+	{
+		// Arrange
+		Point p0 = new Point(0, 0);
+		Point p1 = new Point(0, 1);
+		Point[] points = new Point[] { p0, p1 };
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Polygon(points));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenThereAreCollinearPoints() throws GeometricException
+	{
+		// Arrange
+		Point[] points0 = new Point[] { 
+			new Point(0, 0),
+			new Point(0, 2),
+			new Point(1, 3),
+			new Point(2, 4),
+			new Point(4, 2),
+		};
+		Point[] points1 = new Point[] { 
+			new Point(0, 0),
+			new Point(0, 2),
+			new Point(2, 2),
+			new Point(1, 1),
+		};
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Polygon(points0));
+		assertThrows(GeometricException.class, () -> new Polygon(points1));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenTwoSubsequentPointsAreEqual() throws GeometricException
+	{
+		// Arrange
+		Point[] points = new Point[] { 
+			new Point(0, 0),
+			new Point(0, 2),
+			new Point(0, 2),
+			new Point(2, 4),
+			new Point(4, 2),
+		};
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Polygon(points));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenTwoSidesIntersect() throws GeometricException
+	{
+		// Arrange
+		Point[] points = new Point[] { 
+			new Point(0, 0),
+			new Point(2, 1),
+			new Point(2, 0),
+			new Point(0, 2),
+		};
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Polygon(points));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenRotatingToNegativeCoords() throws GeometricException
+	{
+		// Arrange
+		Point[] points0 = new Point[] {
+			new Point(1, 1),
+			new Point(2, 3),
+			new Point(3, 3),
+		};
+		Point[] points1 = new Point[] {
+			new Point(1, 1),
+			new Point(10, 1),
+			new Point(10, 2),
+			new Point(1, 2),
+		};
+
+		// Act
+		Polygon poly0 = new Polygon(points0);
+		Polygon poly1 = new Polygon(points1);
+
+		// Assert
+		assertThrows(GeometricException.class, () -> poly0.rotate(- Math.PI / 2, new VirtualPoint(0, 0)));
+		assertThrows(GeometricException.class, () -> poly1.rotateDegrees(-90));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenTranslatingToNegativeCoords() throws GeometricException
+	{
+		// Arrange
+		Point[] points = new Point[] {
+			new Point(1, 1),
+			new Point(2, 3),
+			new Point(3, 3),
+		};
+
+		// Act
+		Polygon poly = new Polygon(points);
+
+		// Assert
+		assertThrows(GeometricException.class, () -> poly.translate(new Vector(-4, 0)));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenMovingCentroidToNegativeCoords() throws GeometricException
+	{
+		// Arrange
+		Point[] points = new Point[] {
+			new Point(0, 5),
+			new Point(2, 5),
+			new Point(1, 1),
+		};
+
+		// Act
+		Polygon poly = new Polygon(points);
+
+		// Assert
+		assertThrows(GeometricException.class, () -> poly.moveCentroid(new Point(1, 1)));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenInvalidParseString()
+	{
+		// Arrange
+		String parseStr0 = "a 2 3 5 4 1 9";
+		String parseStr1 = "4 2 3 5 4 1 9";
+		String parseStr2 = "3 2 3 5 b 1 9";
+		// String parseStr3 = "3 1 1 2 3 5 1 5 0";
+
+		// Act
+		// Arrange
+		assertThrows(ParseException.class, () -> new Polygon(parseStr0));
+		assertThrows(ParseException.class, () -> new Polygon(parseStr1));
+		assertThrows(ParseException.class, () -> new Polygon(parseStr2));
+		// assertThrows(ParseException.class, () -> new Polygon(parseStr3));
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenValidParseStringButInvalidPolygon()
+	{
+		// Arrange
+		String parseStr = "4 0 0 0 3 3 3 2 2";
+
+		// Act
+		// Arrange
+		assertThrows(GeometricException.class, () -> new Polygon(parseStr));
+	}
 }

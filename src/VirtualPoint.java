@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * Represents an immutable point in two dimensional space
@@ -40,7 +41,7 @@ public class VirtualPoint
      * @param array the array to copy
      * @return a deep copy of the array
      */
-    public static VirtualPoint[] copyArray(VirtualPoint[] array) //! Can cause errors
+    public static VirtualPoint[] copyArray(VirtualPoint[] array)
     {
         VirtualPoint[] result = new VirtualPoint[array.length];
         for (int i = 0; i < array.length; i++)
@@ -130,21 +131,39 @@ public class VirtualPoint
      * num_points x0 y0 x1 y1 x2 y2 ...
      * @param str the string to read the points from
      * @return the points extracted form the string
+	 * @pre str = num_points x0 y0 x1 y1 x2 y2 ...
      */
-    public static VirtualPoint[] parseToArray(String str)
+    public static VirtualPoint[] parseToArray(String str) throws ParseException
     {
-        //! unhandled exception
         String[] tokens = str.split(" ");
         if (tokens.length < 3)
-            return null;
+			throw new ParseException("Can't parse a string to VirtualPoint with less than 3 elements", 0);
         
-        int numVertices = Integer.parseInt(tokens[0]);
+		int numVertices;
+		try
+		{
+        	numVertices = Integer.parseInt(tokens[0]);
+		}
+		catch (NumberFormatException e)
+		{
+			throw new ParseException("Error parsing number of virtual points", 0);
+		}
+
         VirtualPoint[] result = new VirtualPoint[numVertices];
-        for (int i = 1; i < tokens.length; i += 2)
+		int maxInd = numVertices * 2;
+        for (int i = 1; i < maxInd; i += 2)
         {
-            double x = Double.parseDouble(tokens[i]);
-            double y = Double.parseDouble(tokens[i + 1]);
-            result[i / 2] = new VirtualPoint(x, y);
+			double x, y;
+			try
+			{
+				x = Double.parseDouble(tokens[i]);
+				y = Double.parseDouble(tokens[i + 1]);
+				result[i / 2] = new VirtualPoint(x, y);
+			}
+			catch (Exception e)
+			{
+				throw new ParseException("Error parsing string to virtual points: " + e.getMessage(), 2 + 2*i);
+			}
         }
 
         return result;
@@ -157,7 +176,7 @@ public class VirtualPoint
      * @param numPoints how many points are to be read from the string
      * @return the points extracted from the string
      */
-    public static VirtualPoint[] parseToArray(String str, int numPoints)
+    public static VirtualPoint[] parseToArray(String str, int numPoints) throws ParseException
     {
         return parseToArray(String.valueOf(numPoints) + " " + str);
     }
@@ -168,7 +187,7 @@ public class VirtualPoint
      * @param anchor the fixed point to rotate the point around
      * @return a point with the rotation applied to it
      */
-    public VirtualPoint rotate(double angle, VirtualPoint anchor)
+    public VirtualPoint rotate(double angle, VirtualPoint anchor) throws GeometricException
     {
         double newX = (this.x - anchor.x) * Math.cos(angle) - (this.y - anchor.y) * Math.sin(angle) + anchor.x;
         double newY = (this.x - anchor.x) * Math.sin(angle) + (this.y - anchor.y) * Math.cos(angle) + anchor.y;
@@ -180,7 +199,7 @@ public class VirtualPoint
      * @param vector the vector to translate the point
      * @return the translated point
      */
-    public VirtualPoint translate(Vector vector)
+    public VirtualPoint translate(Vector vector) throws GeometricException
     {
         return new VirtualPoint(this.X() + vector.X(), this.Y() + vector.Y());
     }

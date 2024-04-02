@@ -1,3 +1,5 @@
+import java.text.ParseException;
+
 /**
  * Represents a triangle
  * A triangle is a polygon with 3 sides
@@ -16,7 +18,7 @@ public class Triangle extends Polygon
      * 
      * @pre points.length = 3
      */
-    public Triangle(Point[] points)
+    public Triangle(Point[] points) throws GeometricException
     {
         super(points);
         validateTriangle(this.sides.length);
@@ -26,7 +28,7 @@ public class Triangle extends Polygon
      * Initializes a triangle from a polygon
      * @param poly the polygon to initialize from
      */
-    public Triangle(Polygon poly)
+    public Triangle(Polygon poly) throws GeometricException
     {
         super(poly);
         validateTriangle(poly.getNumSides());
@@ -37,10 +39,10 @@ public class Triangle extends Polygon
      * class to work. terminates the program if
      * they aren't met
      */
-    private void validateTriangle(int numSides)
+    private void validateTriangle(int numSides) throws GeometricException
     {
         if (this.sides.length != NUM_SIDES)
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " A triangle should have exactly 3 vertices.");
     }
 
     /**
@@ -50,7 +52,7 @@ public class Triangle extends Polygon
      * 
      * @pre must have 3 points
      */
-    public Triangle(String str)
+    public Triangle(String str) throws GeometricException, ParseException
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -62,37 +64,37 @@ public class Triangle extends Polygon
     }
 
     @Override
-    public Triangle rotate(double angle, VirtualPoint anchor)
+    public Triangle rotate(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Triangle(super.rotate(angle, anchor));
     }
 
     @Override
-    public Triangle rotate(double angle)
+    public Triangle rotate(double angle) throws GeometricException
     {
         return new Triangle(super.rotate(angle));
     }
 
     @Override
-    public Triangle rotateDegrees(double angle, VirtualPoint anchor)
+    public Triangle rotateDegrees(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Triangle(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Triangle rotateDegrees(double angle)
+    public Triangle rotateDegrees(double angle) throws GeometricException
     {
         return new Triangle(super.rotateDegrees(angle));
     }
 
     @Override
-    public Triangle translate(Vector vector)
+    public Triangle translate(Vector vector) throws GeometricException
     {
         return new Triangle(super.translate(vector));
     }
 
     @Override
-    public Triangle moveCentroid(Point newCentroid)
+    public Triangle moveCentroid(Point newCentroid) throws GeometricException
     {
         return new Triangle(super.moveCentroid(newCentroid));
     }

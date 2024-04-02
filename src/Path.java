@@ -18,10 +18,11 @@ public class Path
      * @param points the points the path goes over
      * @pre two points in a row cannot be the same point
      */
-    public Path(Point[] points)
+    public Path(Point[] points) throws GeometricException
     {
         if (points.length < 2)
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " Can't have a path with less than two poitns");
+
         this.points = Point.copyArray(points);
         segments = generateSegments(points);
     }
@@ -31,7 +32,7 @@ public class Path
      * @param points the points that describe the path
      * @return the line segments the points describe
      */
-    private LineSegment[] generateSegments(Point[] points)
+    private LineSegment[] generateSegments(Point[] points) throws GeometricException
     {
         LineSegment[] segments = new LineSegment[points.length - 1];
         for (int i = 1; i < points.length; i++)

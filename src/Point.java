@@ -1,3 +1,5 @@
+import java.text.ParseException;
+
 /**
  * Represents an immutable point in two dimensional space, in the first quadrant only
  * 
@@ -15,7 +17,7 @@ public class Point extends VirtualPoint
      * @pre x >= 0
      * @pre y >= 0
      */
-    public Point(double x, double y)
+    public Point(double x, double y) throws GeometricException
     {
         super(x, y);
         validatePoint();
@@ -26,7 +28,7 @@ public class Point extends VirtualPoint
      * over the other point
      * @param p the point to copy from
      */
-    public Point(Point p)
+    public Point(Point p) throws GeometricException
     {
         super(p);
         validatePoint();
@@ -36,7 +38,7 @@ public class Point extends VirtualPoint
      * Initializes a point from a VirtualPoint
      * @param p the VirtualPoint to initialize from
      */
-    public Point(VirtualPoint p)
+    public Point(VirtualPoint p) throws GeometricException
     {
         super(p);
         validatePoint();
@@ -47,10 +49,10 @@ public class Point extends VirtualPoint
      * class to work. terminates the program if
      * they aren't met
      */
-    private void validatePoint()
+    private void validatePoint() throws GeometricException
     {
         if (x < 0 || y < 0)
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " point coordinates should always be positive");
     }
     
     /**
@@ -58,13 +60,22 @@ public class Point extends VirtualPoint
      * @param array the array to copy
      * @return the copy of the array
      */
-    public static Point[] copyArray(Point[] array) //! Makes two arrays, good practice?
+    public static Point[] copyArray(Point[] array)
     {
         VirtualPoint[] vps = VirtualPoint.copyArray(array);
         Point[] result = new Point[vps.length];
 
         for (int i = 0; i < vps.length; i++)
-            result[i] = new Point(vps[i]);
+		{
+			try
+			{
+            	result[i] = new Point(vps[i]);
+			}
+			catch (GeometricException e)
+			{
+				throw new IllegalStateException("This should never happen: a point will be a point");
+			}
+		}
         return result;
 
         // Point[] result = new Point[array.length]; //! Issue: if not implemented, could use the parent class's implementation which will break
@@ -79,13 +90,22 @@ public class Point extends VirtualPoint
      * @param str the string to read the points from
      * @return the points extracted form the string
      */
-    public static Point[] parseToArray(String str)
+    public static Point[] parseToArray(String str) throws ParseException
     {
         VirtualPoint[] vps = VirtualPoint.parseToArray(str);
         Point[] result = new Point[vps.length];
 
         for (int i = 0; i < vps.length; i++)
-            result[i] = new Point(vps[i]);
+		{
+			try
+			{
+				result[i] = new Point(vps[i]);
+			}
+			catch (GeometricException e)
+			{
+				throw new ParseException("Error parsing point to array, the point isn't valid: " + e.getMessage(), 2 + 2*i);
+			}
+		}
         return result;
     }
 
@@ -96,20 +116,35 @@ public class Point extends VirtualPoint
      * @param numPoints how many points are to be read from the string
      * @return the points extracted from the string
      */
-    public static Point[] parseToArray(String str, int numPoints)
+    public static Point[] parseToArray(String str, int numPoints) throws ParseException
     {
         VirtualPoint[] vps = VirtualPoint.parseToArray(str, numPoints);
         Point[] result = new Point[vps.length];
 
         for (int i = 0; i < vps.length; i++)
-            result[i] = new Point(vps[i]);
+		{
+			try
+			{
+				result[i] = new Point(vps[i]);
+			}
+			catch (GeometricException e)
+			{
+				throw new ParseException("Error parsing point to array, the point isn't valid: " + e.toString(), 2 + 2*i);
+			}
+		}
         return result;
         // return parseToArray(String.valueOf(numPoints) + " " + str);
     }
 
     @Override
-    public Point translate(Vector vector)
+    public Point translate(Vector vector) throws GeometricException
     {
         return new Point(super.translate(vector));
     }
+
+	@Override
+	public Point rotate(double angle, VirtualPoint anchor) throws GeometricException
+	{
+		return new Point(super.rotate(angle, anchor));
+	}
 }

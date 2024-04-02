@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class PathTests
 {
     @Test
-    public void ShouldCalculateDistance()
+    public void ShouldCalculateDistance() throws GeometricException
     {
         // Arrange
         Path p = new Path(new Point[] {
@@ -24,7 +24,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldInterceptPolygon()
+    public void ShouldInterceptPolygon() throws GeometricException
     {
         // Arrange
         Path path = new Path(new Point[] {
@@ -48,7 +48,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldNotInterceptPolygon()
+    public void ShouldNotInterceptPolygon() throws GeometricException
     {
         // Arrange
         Path path = new Path(new Point[] {
@@ -72,7 +72,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldNotInterceptPolygonIfVerticeOverlaps()
+    public void ShouldNotInterceptPolygonIfVerticeOverlaps() throws GeometricException
     {
         // Arrange
         Path path = new Path(new Point[] {
@@ -96,7 +96,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldNotInterceptPolygonIfSideOverlaps()
+    public void ShouldNotInterceptPolygonIfSideOverlaps() throws GeometricException
     {
         // Arrange
         Path path = new Path(new Point[] {
@@ -120,7 +120,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldInterceptPolygons()
+    public void ShouldInterceptPolygons() throws GeometricException
     {
         // Arrange
         Polygon poly0 = new Polygon(new Point[] {
@@ -153,7 +153,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldNotInterceptPolygons()
+    public void ShouldNotInterceptPolygons() throws GeometricException
     {
         // Arrange
         Polygon poly0 = new Polygon(new Point[] {
@@ -180,7 +180,7 @@ public class PathTests
     }
 
     @Test
-    public void ShouldBeImmutable()
+    public void ShouldBeImmutable() throws GeometricException
     {
         // Arrange
         Point p0 = new Point(1, 1);
@@ -200,4 +200,28 @@ public class PathTests
         // Assert
         assertTrue(intercepts);
     }
+
+	@Test
+	public void ShouldThrowWhenPathWithSubsequentEqualPoints() throws GeometricException
+	{
+		// Arrange
+		Point p0 = new Point(3, 2);
+		Point p1 = new Point(3, 2);
+		Point[] points = new Point[] { p0, p1 };
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Path(points));
+	}
+
+	@Test
+	public void ShouldThrowWhenPathHasLessThanTwoPoints() throws GeometricException
+	{
+		// Arrange
+		Point[] points = new Point[] { new Point(1, 2) };
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Path(points));
+	}
 }

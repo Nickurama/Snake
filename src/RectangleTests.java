@@ -1,10 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.ParseException;
+
 import org.junit.jupiter.api.Test;
 
 public class RectangleTests
 {
     @Test
-    public void ShouldIncludeNameInString()
+    public void ShouldIncludeNameInString() throws GeometricException
     {
         // Arrange
         Rectangle s = new Rectangle(new Point[] {
@@ -23,7 +26,7 @@ public class RectangleTests
     }
 
     @Test
-    public void ShouldTakeStringInConstructor()
+    public void ShouldTakeStringInConstructor() throws GeometricException, ParseException
     {
         // Arrange
         String str = "1 1 1 2 4 2 4 1";
@@ -38,7 +41,7 @@ public class RectangleTests
     }
 
     @Test
-    public void ShouldRotate()
+    public void ShouldRotate() throws GeometricException
     {
         // Arrange
         Rectangle rect = new Rectangle(new Point[] {
@@ -64,7 +67,7 @@ public class RectangleTests
     }
 
     @Test
-    public void ShouldTranslate()
+    public void ShouldTranslate() throws GeometricException
     {
         // Assert
         Rectangle rect = new Rectangle(new Point[] {
@@ -88,7 +91,7 @@ public class RectangleTests
     }
 
     @Test
-    public void ShouldMoveCentroid()
+    public void ShouldMoveCentroid() throws GeometricException
     {
         // Assert
         Rectangle rect = new Rectangle(new Point[] {
@@ -111,4 +114,28 @@ public class RectangleTests
         // Arrange
         assertTrue(moved.equals(expected));
     }
+
+	@Test
+	public void ShouldThrowExceptionIfNotRectangle() throws GeometricException
+	{
+		// Arrange
+		Point[] points0 = new Point[] {
+			new Point(0, 0),
+			new Point(1, 4),
+			new Point(5, 4),
+			new Point(4, 0),
+		};
+		Point[] points1 = new Point[] {
+			new Point(0, 0),
+			new Point(0, 4),
+			new Point(4, 4),
+			new Point(4, 0),
+			new Point(2, 1),
+		};
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Rectangle(points0));
+		assertThrows(GeometricException.class, () -> new Rectangle(points1));
+	}
 }

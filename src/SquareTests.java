@@ -1,10 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.ParseException;
+
 import org.junit.jupiter.api.Test;
 
 public class SquareTests
 {
     @Test
-    public void ShouldIncludeNameInString()
+    public void ShouldIncludeNameInString() throws GeometricException
     {
         // Arrange
         Square s = new Square(new Point[] {
@@ -23,7 +26,7 @@ public class SquareTests
     }
 
     @Test
-    public void ShouldTakeStringInConstructor()
+    public void ShouldTakeStringInConstructor() throws GeometricException, ParseException
     {
         // Arrange
         String str = "1 1 1 2 2 2 2 1";
@@ -38,7 +41,7 @@ public class SquareTests
     }
 
     @Test
-    public void ShouldRotate()
+    public void ShouldRotate() throws GeometricException
     {
         // Arrange
         Square sq = new Square(new Point[] {
@@ -64,7 +67,7 @@ public class SquareTests
     }
 
     @Test
-    public void ShouldTranslate()
+    public void ShouldTranslate() throws GeometricException
     {
         // Assert
         Square sq = new Square(new Point[] {
@@ -88,7 +91,7 @@ public class SquareTests
     }
 
     @Test
-    public void ShouldMoveCentroid()
+    public void ShouldMoveCentroid() throws GeometricException
     {
         // Assert
         Square sq = new Square(new Point[] {
@@ -111,4 +114,35 @@ public class SquareTests
         // Arrange
         assertTrue(moved.equals(expected));
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenNotSquare() throws GeometricException
+	{
+		// Assert
+		Point[] points0 = new Point[] {
+			new Point(1, 1),
+			new Point(2, 2),
+			new Point(2 + Math.sqrt(2), 2),
+			new Point(1 + Math.sqrt(2), 1),
+		};
+		Point[] points1 = new Point[] {
+			new Point(0, 0),
+			new Point(0, 1),
+			new Point(1, 1),
+			new Point(1, 0),
+			new Point(0.5, 0.5),
+		};
+		Point[] points2 = new Point[] {
+			new Point(0, 0),
+			new Point(0, 2),
+			new Point(1, 2),
+			new Point(1, 0),
+		};
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Square(points0));
+		assertThrows(GeometricException.class, () -> new Square(points1));
+		assertThrows(GeometricException.class, () -> new Square(points2));
+	}
 }

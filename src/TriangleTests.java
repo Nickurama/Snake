@@ -1,10 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.ParseException;
+
 import org.junit.jupiter.api.Test;
 
 public class TriangleTests
 {
     @Test
-    public void ShouldIncludeNameInString()
+    public void ShouldIncludeNameInString() throws GeometricException
     {
         // Arrange
         Triangle s = new Triangle(new Point[] {
@@ -22,7 +25,7 @@ public class TriangleTests
     }
 
     @Test
-    public void ShouldTakeStringInConstructor()
+    public void ShouldTakeStringInConstructor() throws GeometricException, ParseException
     {
         // Arrange
         String str = "7 1 9 1 9 3";
@@ -38,7 +41,7 @@ public class TriangleTests
     }
 
     @Test
-    public void ShouldRotate()
+    public void ShouldRotate() throws GeometricException
     {
         // Arrange
         Triangle tri = new Triangle(new Point[] {
@@ -62,7 +65,7 @@ public class TriangleTests
     }
 
     @Test
-    public void ShouldTranslate()
+    public void ShouldTranslate() throws GeometricException
     {
         // Assert
         Triangle tri = new Triangle(new Point[] {
@@ -84,7 +87,7 @@ public class TriangleTests
     }
 
     @Test
-    public void ShouldMoveCentroid()
+    public void ShouldMoveCentroid() throws GeometricException
     {
         // Assert
         Triangle tri = new Triangle(new Point[] {
@@ -105,4 +108,20 @@ public class TriangleTests
         // Arrange
         assertTrue(moved.equals(expected));
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenNotTriangle() throws GeometricException
+	{
+		// Assert
+		Point[] points = new Point[] {
+			new Point(0, 0),
+			new Point(1, 2),
+			new Point(2, 1),
+			new Point(2, 0),
+		};
+
+		// Act
+		// Arrange
+		assertThrows(GeometricException.class, () -> new Triangle(points));
+	}
 }

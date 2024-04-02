@@ -14,11 +14,12 @@ public class BoundingBox
     /**
      * Initializes a bounding box
      * @param points the points to be bounded
+	 * @pre points > 0
      */
-    public BoundingBox(Point[] points)
+    public BoundingBox(Point[] points) throws GeometricException
     {
         if (points.length == 0)
-            Error.terminateProgram("BoundingBox::BoundingBox error: points should be greater than 0");
+            throw new GeometricException("BoundingBox::BoundingBox error: points should be greater than 0");
         
         this.min = points[0];
         this.max = points[0];
@@ -33,8 +34,15 @@ public class BoundingBox
      */
     private void addPoint(Point p)
     {
-        this.min = new Point(Math.min(this.min.X(), p.X()), Math.min(this.min.Y(), p.Y()));
-        this.max = new Point(Math.max(this.max.X(), p.X()), Math.max(this.max.Y(), p.Y()));
+		try
+		{
+			this.min = new Point(Math.min(this.min.X(), p.X()), Math.min(this.min.Y(), p.Y()));
+			this.max = new Point(Math.max(this.max.X(), p.X()), Math.max(this.max.Y(), p.Y()));
+		}
+		catch (GeometricException e)
+		{
+			throw new IllegalStateException("Should never happen: error making a point from a point: " + e.getMessage());
+		}
     }
 
     /**

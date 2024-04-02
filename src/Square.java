@@ -1,3 +1,5 @@
+import java.text.ParseException;
+
 /**
  * Represents a square
  * A square is a rectangle whose sides are
@@ -15,7 +17,7 @@ public class Square extends Rectangle
      * @param points the points that make the square
      * @pre all sides must have equal length
      */
-    public Square(Point[] points)
+    public Square(Point[] points) throws GeometricException
     {
         super(points);
         validateSquare();
@@ -25,7 +27,7 @@ public class Square extends Rectangle
      * Initializes a square from a polygon
      * @param poly the polygon to initialize from
      */
-    public Square(Polygon poly)
+    public Square(Polygon poly) throws GeometricException
     {
         super(poly);
         validateSquare();
@@ -36,10 +38,10 @@ public class Square extends Rectangle
      * class to work. terminates the program if
      * they aren't met
      */
-    public void validateSquare()
+    public void validateSquare() throws GeometricException
     {
         if (!areAllSidesSameLength())
-            Error.terminateProgram(ERROR_MESSAGE);
+			throw new GeometricException(ERROR_MESSAGE + " Square should have all sides of same length.");
     }
 
     /**
@@ -48,7 +50,7 @@ public class Square extends Rectangle
      * @param str the string to parse into a square
      * @pre all sides must have equal length
      */
-    public Square(String str)
+    public Square(String str) throws GeometricException, ParseException
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -73,37 +75,37 @@ public class Square extends Rectangle
     }
 
     @Override
-    public Square rotate(double angle, VirtualPoint anchor)
+    public Square rotate(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Square(super.rotate(angle, anchor));
     }
 
     @Override
-    public Square rotate(double angle)
+    public Square rotate(double angle) throws GeometricException
     {
         return new Square(super.rotate(angle));
     }
 
     @Override
-    public Square rotateDegrees(double angle, VirtualPoint anchor)
+    public Square rotateDegrees(double angle, VirtualPoint anchor) throws GeometricException
     {
         return new Square(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Square rotateDegrees(double angle)
+    public Square rotateDegrees(double angle) throws GeometricException
     {
         return new Square(super.rotateDegrees(angle));
     }
 
     @Override
-    public Square translate(Vector vector)
+    public Square translate(Vector vector) throws GeometricException
     {
         return new Square(super.translate(vector));
     }
 
     @Override
-    public Square moveCentroid(Point newCentroid)
+    public Square moveCentroid(Point newCentroid) throws GeometricException
     {
         return new Square(super.moveCentroid(newCentroid));
     }

@@ -1,7 +1,7 @@
 /**
  * Represents an exception of the geometric type.
  */
-class GeometricException extends Exception
+public class GeometricException extends Exception
 {
 	/**
 	* Empty geometric exception

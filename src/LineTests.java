@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class LineTests
 {
     @Test
-    public void ShouldBeCollinearWithHorizontalCollinearity()
+    public void ShouldBeCollinearWithHorizontalCollinearity() throws GeometricException
     {
         // Arrange
         Line horizontal = new Line(new Point(1, 1), new Point(2, 1));
@@ -19,7 +19,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeCollinearWithVerticalCollinearity()
+    public void ShouldBeCollinearWithVerticalCollinearity() throws GeometricException
     {
         // Arrange
         Line vertical = new Line(new Point(1, 1), new Point(1, 2));
@@ -33,7 +33,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeCollinearWithDiagonalCollinearity()
+    public void ShouldBeCollinearWithDiagonalCollinearity() throws GeometricException
     {
         // Arrange
         Line diagonal = new Line(new Point(1, 1), new Point(2, 2));
@@ -46,7 +46,7 @@ public class LineTests
         assertTrue(diagonalIsCollinear);
     }
 
-    @Test void ShouldNotBeCollinearWhenPointIsntCollinear()
+    @Test void ShouldNotBeCollinearWhenPointIsntCollinear() throws GeometricException
     {
        // Arrange
         Line vertical = new Line(new Point(1, 1), new Point(1, 2));
@@ -64,7 +64,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldCalculateIntersectionForHorizontalIntersections()
+    public void ShouldCalculateIntersectionForHorizontalIntersections() throws GeometricException
     {
         // Assert
         Line l0 = new Line(new Point(1, 1), new Point(2, 1));
@@ -72,14 +72,14 @@ public class LineTests
         VirtualPoint expected = new VirtualPoint(5, 1);
 
         // Act
-        VirtualPoint vp = l0.calcIntersect(l1);
+        VirtualPoint vp = l0.intersection(l1);
 
         // Arrange
         assertTrue(vp.equals(expected));
     }
 
     @Test
-    public void ShouldCalculateIntersectionsForVerticalIntersections()
+    public void ShouldCalculateIntersectionsForVerticalIntersections() throws GeometricException
     {
         // Assert
         Line l0 = new Line(new Point(1, 1), new Point(1, 2));
@@ -87,14 +87,14 @@ public class LineTests
         VirtualPoint expected = new VirtualPoint(1, 5);
 
         // Act
-        VirtualPoint vp = l0.calcIntersect(l1);
+        VirtualPoint vp = l0.intersection(l1);
 
         // Arrange
         assertTrue(vp.equals(expected));
     }
 
     @Test
-    public void ShouldCalculateIntersectionsForNonIntegerIntersections()
+    public void ShouldCalculateIntersectionsForNonIntegerIntersections() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(0, 5), new Point(1, 0));
@@ -102,14 +102,14 @@ public class LineTests
         VirtualPoint expected = new VirtualPoint(0.21739130434, 3.91304347826);
 
         // Act
-        VirtualPoint vp = l0.calcIntersect(l1);
+        VirtualPoint vp = l0.intersection(l1);
 
         // Assert
         assertTrue(vp.equals(expected));
     }
 
     @Test
-    public void ShouldCalculateIntersectionWhenIntersectionIsNegative()
+    public void ShouldCalculateIntersectionWhenIntersectionIsNegative() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(0, 6), new Point(1, 8));
@@ -117,14 +117,14 @@ public class LineTests
         VirtualPoint expected = new VirtualPoint(-5.3333333333, -4.6666666666);
 
         // Act
-        VirtualPoint vp = l0.calcIntersect(l1);
+        VirtualPoint vp = l0.intersection(l1);
 
         // Assert
         assertTrue(vp.equals(expected));
     }
 
     @Test
-    public void ShouldBeParalelWhenHorizontalParalelism()
+    public void ShouldBeParalelWhenHorizontalParalelism() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(1, 1), new Point(2, 1));
@@ -138,7 +138,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeParalelWhenVerticalParalelism()
+    public void ShouldBeParalelWhenVerticalParalelism() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(1, 1), new Point(1, 2));
@@ -152,7 +152,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeParalelWhenDiagonalParalelism()
+    public void ShouldBeParalelWhenDiagonalParalelism() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(4, 0), new Point(14, 2));
@@ -166,7 +166,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldNotBeParalel()
+    public void ShouldNotBeParalel() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(4, 0), new Point(14, 2));
@@ -180,7 +180,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeEqualsWithExactSameLine()
+    public void ShouldBeEqualsWithExactSameLine() throws GeometricException
     {
         // Arrange
         Line l = new Line(new Point(0, 0), new Point(1, 1));
@@ -193,7 +193,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeEqualsWithEqualLines()
+    public void ShouldBeEqualsWithEqualLines() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(0, 0), new Point(1, 1));
@@ -207,7 +207,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeEqualsWithEquivalentLines()
+    public void ShouldBeEqualsWithEquivalentLines() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(2, 2), new Point(3, 3));
@@ -226,7 +226,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldNotBeEqualsWhenLinesAreParalel()
+    public void ShouldNotBeEqualsWhenLinesAreParalel() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(0, 0), new Point(1, 0));
@@ -240,7 +240,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldNotBeEqualsWhenLinesAreNotEqual()
+    public void ShouldNotBeEqualsWhenLinesAreNotEqual() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(0, 0), new Point(1, 1));
@@ -254,7 +254,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldBeImmutable()
+    public void ShouldBeImmutable() throws GeometricException
     {
         // Arrange
         Point p0 = new Point(0, 0);
@@ -271,7 +271,7 @@ public class LineTests
     }
 
     @Test
-    public void ShouldCalculateIfIsPerpendicular()
+    public void ShouldCalculateIfIsPerpendicular() throws GeometricException
     {
         // Arrange
         Line l0 = new Line(new Point(1, 1), new Point(1, 2));
@@ -289,4 +289,16 @@ public class LineTests
         assertTrue(isPerpendicular1);
         assertFalse(isPerpendicular2);
     }
+
+	@Test
+	public void ShouldThrowWhenConstructingWithEqualPoints() throws GeometricException
+	{
+		// Arrange
+		Point p0 = new Point(2, 5);
+		Point p1 = new Point(2, 5);
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Line(p0, p1));
+	}
 }

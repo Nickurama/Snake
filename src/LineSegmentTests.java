@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class LineSegmentTests
 {
     @Test
-    public void ShouldIntercept()
+    public void ShouldIntercept() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(1, 1), new Point(3, 2));
@@ -19,7 +19,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldNotInterceptEvenIfInherentLinesIntercept()
+    public void ShouldNotInterceptEvenIfInherentLinesIntercept() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(1, 1), new Point(3, 4));
@@ -33,7 +33,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldNotInterceptIfSegmentsOverlap()
+    public void ShouldNotInterceptIfSegmentsOverlap() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(1, 1), new Point(3, 1));
@@ -47,7 +47,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldNotInterceptIfOnlyTheEndsOverlap()
+    public void ShouldNotInterceptIfOnlyTheEndsOverlap() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(1, 1), new Point(3, 3));
@@ -64,7 +64,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldNotInterceptIfOneEndTouchesTheSegment()
+    public void ShouldNotInterceptIfOneEndTouchesTheSegment() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(1, 1), new Point(1, 3));
@@ -78,7 +78,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldCalculateLength()
+    public void ShouldCalculateLength() throws GeometricException
     {
         // Arrange
         LineSegment s0 = new LineSegment(new Point(0, 0), new Point(0, 5));
@@ -100,7 +100,7 @@ public class LineSegmentTests
     }
 
     @Test
-    public void ShouldBeImmutable()
+    public void ShouldBeImmutable() throws GeometricException
     {
         // Arrange
         Point p = new Point(0, 0);
@@ -112,4 +112,16 @@ public class LineSegmentTests
         // 
         assertFalse(p.equals(s.getFirstPoint()));
     }
+
+	@Test
+	public void ShouldThrowExceptionWhenConstructingWithEqualPoints() throws GeometricException
+	{
+		// Arrange
+		Point p0 = new Point(7, 2);
+		Point p1 = new Point(7, 2);
+
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new LineSegment(p0, p1));
+	}
 }
