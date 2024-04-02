@@ -6,7 +6,7 @@
  * @author Diogo Fonseca a79858
  * @version 18/03/2024
  */
-public class Retangulo extends Poligono
+public class Rectangle extends Polygon
 {
     private static final String ERROR_MESSAGE = "Retangulo:vi";
     public static final int NUM_SIDES = 4;
@@ -18,7 +18,7 @@ public class Retangulo extends Poligono
      * @pre points.length = 4
      * @pre all angles are right angles
      */
-    public Retangulo(Point[] points)
+    public Rectangle(Point[] points)
     {
         super(points);
         validateRectangle(points.length);
@@ -28,7 +28,7 @@ public class Retangulo extends Poligono
      * Initializes a rectangle from a polygon
      * @param poly the polygon to initialize from
      */
-    public Retangulo(Poligono poly)
+    public Rectangle(Polygon poly)
     {
         super(poly);
         validateRectangle(poly.getNumSides());
@@ -56,7 +56,7 @@ public class Retangulo extends Poligono
      * @pre must have 4 points
      * @pre all angles are right angles
      */
-    public Retangulo(String str)
+    public Rectangle(String str)
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -79,38 +79,38 @@ public class Retangulo extends Poligono
     }
 
     @Override
-    public Retangulo rotate(double angle, VirtualPoint anchor)
+    public Rectangle rotate(double angle, VirtualPoint anchor)
     {
-        return new Retangulo(super.rotate(angle, anchor));
+        return new Rectangle(super.rotate(angle, anchor));
     }
 
     @Override
-    public Retangulo rotate(double angle)
+    public Rectangle rotate(double angle)
     {
-        return new Retangulo(super.rotate(angle));
+        return new Rectangle(super.rotate(angle));
     }
 
     @Override
-    public Retangulo rotateDegrees(double angle, VirtualPoint anchor)
+    public Rectangle rotateDegrees(double angle, VirtualPoint anchor)
     {
-        return new Retangulo(super.rotateDegrees(angle, anchor));
+        return new Rectangle(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Retangulo rotateDegrees(double angle)
+    public Rectangle rotateDegrees(double angle)
     {
-        return new Retangulo(super.rotateDegrees(angle));
+        return new Rectangle(super.rotateDegrees(angle));
     }
 
     @Override
-    public Retangulo translate(Vector vector)
+    public Rectangle translate(Vector vector)
     {
-        return new Retangulo(super.translate(vector));
+        return new Rectangle(super.translate(vector));
     }
 
     @Override
-    public Retangulo moveCentroid(Point newCentroid)
+    public Rectangle moveCentroid(Point newCentroid)
     {
-        return new Retangulo(super.moveCentroid(newCentroid));
+        return new Rectangle(super.moveCentroid(newCentroid));
     }
 }

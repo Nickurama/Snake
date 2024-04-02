@@ -6,7 +6,7 @@
  * @author Diogo Fonseca a79858
  * @version 18/03/2024
  */
-public class Quadrado extends Retangulo
+public class Square extends Retangulo
 {
     private final String ERROR_MESSAGE = "Quadrado:vi";
 
@@ -15,7 +15,7 @@ public class Quadrado extends Retangulo
      * @param points the points that make the square
      * @pre all sides must have equal length
      */
-    public Quadrado(Point[] points)
+    public Square(Point[] points)
     {
         super(points);
         validateSquare();
@@ -25,7 +25,7 @@ public class Quadrado extends Retangulo
      * Initializes a square from a polygon
      * @param poly the polygon to initialize from
      */
-    public Quadrado(Poligono poly)
+    public Square(Polygon poly)
     {
         super(poly);
         validateSquare();
@@ -48,7 +48,7 @@ public class Quadrado extends Retangulo
      * @param str the string to parse into a square
      * @pre all sides must have equal length
      */
-    public Quadrado(String str)
+    public Square(String str)
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -73,38 +73,38 @@ public class Quadrado extends Retangulo
     }
 
     @Override
-    public Quadrado rotate(double angle, VirtualPoint anchor)
+    public Square rotate(double angle, VirtualPoint anchor)
     {
-        return new Quadrado(super.rotate(angle, anchor));
+        return new Square(super.rotate(angle, anchor));
     }
 
     @Override
-    public Quadrado rotate(double angle)
+    public Square rotate(double angle)
     {
-        return new Quadrado(super.rotate(angle));
+        return new Square(super.rotate(angle));
     }
 
     @Override
-    public Quadrado rotateDegrees(double angle, VirtualPoint anchor)
+    public Square rotateDegrees(double angle, VirtualPoint anchor)
     {
-        return new Quadrado(super.rotateDegrees(angle, anchor));
+        return new Square(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Quadrado rotateDegrees(double angle)
+    public Square rotateDegrees(double angle)
     {
-        return new Quadrado(super.rotateDegrees(angle));
+        return new Square(super.rotateDegrees(angle));
     }
 
     @Override
-    public Quadrado translate(Vector vector)
+    public Square translate(Vector vector)
     {
-        return new Quadrado(super.translate(vector));
+        return new Square(super.translate(vector));
     }
 
     @Override
-    public Quadrado moveCentroid(Point newCentroid)
+    public Square moveCentroid(Point newCentroid)
     {
-        return new Quadrado(super.moveCentroid(newCentroid));
+        return new Square(super.moveCentroid(newCentroid));
     }
 }

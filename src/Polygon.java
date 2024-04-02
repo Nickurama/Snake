@@ -7,7 +7,7 @@
  * @inv sides are the sides of the polygon
  * @inv vertices are the vertices of the polygon
  */
-public class Poligono {
+public class Polygon {
   private static final String ERROR_MESSAGE = "Poligono:vi";
   protected LineSegment[] sides;
   protected Point[] vertices;
@@ -19,7 +19,7 @@ public class Poligono {
    * @pre points must contain at least 3 points
    * @pre points must generate valid sides (that don't collide)
    */
-  public Poligono(Point[] points) {
+  public Polygon(Point[] points) {
     if (points.length < 3)
       Error.terminateProgram(ERROR_MESSAGE);
 
@@ -39,11 +39,11 @@ public class Poligono {
    * 
    * @param str the string to parse
    */
-  public Poligono(String str) {
+  public Polygon(String str) {
     this(Point.parseToArray(str));
   }
 
-  public Poligono(Poligono poly) {
+  public Polygon(Polygon poly) {
     this(poly.vertices);
   }
 
@@ -113,7 +113,7 @@ public class Poligono {
    * @param that the polygon to test collision with
    * @return if the polygon intercepts the other
    */
-  public boolean intersects(Poligono that) {
+  public boolean intersects(Polygon that) {
     for (LineSegment segment : this.sides)
       if (that.intersects(segment))
         return true;
@@ -148,9 +148,9 @@ public class Poligono {
       return true;
     if (other == null)
       return false;
-    if (!Poligono.class.isInstance(other))
+    if (!Polygon.class.isInstance(other))
       return false; // if not Polygon or child of Polygon
-    Poligono that = (Poligono) other;
+    Polygon that = (Polygon) other;
     return this.isPolygonEqual(that);
   }
 
@@ -160,7 +160,7 @@ public class Poligono {
    * @param that the polygon to test with
    * @return if the two polygons are equal
    */
-  private boolean isPolygonEqual(Poligono that) {
+  private boolean isPolygonEqual(Polygon that) {
     // linear Algorithm that checks if two polygons are equal
     if (this.vertices.length != that.vertices.length)
       return false;
@@ -207,11 +207,11 @@ public class Poligono {
    * @param anchor the fixed point to rotate the polygon around
    * @return a polygon with the rotation applied to it
    */
-  public Poligono rotate(double angle, VirtualPoint anchor) {
+  public Polygon rotate(double angle, VirtualPoint anchor) {
     Point[] newVertices = new Point[this.vertices.length];
     for (int i = 0; i < this.vertices.length; i++)
       newVertices[i] = new Point(this.vertices[i].rotate(angle, anchor));
-    return new Poligono(newVertices);
+    return new Polygon(newVertices);
   }
 
   /**
@@ -221,7 +221,7 @@ public class Poligono {
    * @param anchor the fixed point to rotate the polygon around
    * @return a polygon with the rotation applied to it
    */
-  public Poligono rotateDegrees(double angle, VirtualPoint anchor) {
+  public Polygon rotateDegrees(double angle, VirtualPoint anchor) {
     return this.rotate(Math.toRadians(angle), anchor);
   }
 
@@ -231,7 +231,7 @@ public class Poligono {
    * @param angle the angle (in radians) to rotate the polygon by
    * @return a polygon with the rotation applied to it
    */
-  public Poligono rotate(double angle) {
+  public Polygon rotate(double angle) {
     return this.rotate(angle, getCentroid());
   }
 
@@ -241,7 +241,7 @@ public class Poligono {
    * @param angle the angle in degrees to rotate the polygon by
    * @return a polygon with the rotation applied to it
    */
-  public Poligono rotateDegrees(double angle) {
+  public Polygon rotateDegrees(double angle) {
     return this.rotate(Math.toRadians(angle));
   }
 
@@ -280,11 +280,11 @@ public class Poligono {
    * @param vector the vector to translate the polygon
    * @return the translated polygon
    */
-  public Poligono translate(Vector vector) {
+  public Polygon translate(Vector vector) {
     Point[] newPoints = new Point[this.vertices.length];
     for (int i = 0; i < this.vertices.length; i++)
       newPoints[i] = this.vertices[i].translate(vector);
-    return new Poligono(newPoints);
+    return new Polygon(newPoints);
   }
 
   /**
@@ -293,7 +293,7 @@ public class Poligono {
    * @param newCentroid the location where the centroid should be moved to
    * @return the translated polygon
    */
-  public Poligono moveCentroid(Point newCentroid) {
+  public Polygon moveCentroid(Point newCentroid) {
     return this.translate(new Vector(this.getCentroid(), newCentroid));
   }
 }

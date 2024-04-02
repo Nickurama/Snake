@@ -1,13 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class QuadradoTests
+public class SquareTests
 {
     @Test
     public void ShouldIncludeNameInString()
     {
         // Arrange
-        Quadrado s = new Quadrado(new Point[] {
+        Square s = new Square(new Point[] {
             new Point(1, 1),
             new Point(1, 2),
             new Point(2, 2),
@@ -30,7 +30,7 @@ public class QuadradoTests
         String expected = "Quadrado: [(1,1), (1,2), (2,2), (2,1)]";
 
         // Act
-        Quadrado s = new Quadrado(str);
+        Square s = new Square(str);
         String gen = s.toString();
 
         // Assert
@@ -41,13 +41,13 @@ public class QuadradoTests
     public void ShouldRotate()
     {
         // Arrange
-        Quadrado sq = new Quadrado(new Point[] {
+        Square sq = new Square(new Point[] {
             new Point(1, 1),
             new Point(1, 2),
             new Point(2, 2),
             new Point(2, 1),
         });
-        Quadrado expected = new Quadrado(new Point[] {
+        Square expected = new Square(new Point[] {
             new Point(2, 1),
             new Point(1, 1),
             new Point(1, 2),
@@ -55,8 +55,8 @@ public class QuadradoTests
         });
 
         // Act
-        Quadrado rotated0 = sq.rotate(Math.PI / 2);
-        Quadrado rotated1 = sq.rotateDegrees(90);
+        Square rotated0 = sq.rotate(Math.PI / 2);
+        Square rotated1 = sq.rotateDegrees(90);
 
         // Assert
         assertTrue(rotated0.equals(expected));
@@ -67,13 +67,13 @@ public class QuadradoTests
     public void ShouldTranslate()
     {
         // Assert
-        Quadrado sq = new Quadrado(new Point[] {
+        Square sq = new Square(new Point[] {
             new Point(1, 1),
             new Point(1, 2),
             new Point(2, 2),
             new Point(2, 1),
         });
-        Quadrado expected = new Quadrado(new Point[] {
+        Square expected = new Square(new Point[] {
             new Point(0, 0),
             new Point(0, 1),
             new Point(1, 1),
@@ -81,7 +81,7 @@ public class QuadradoTests
         });
 
         // Act
-        Quadrado translated = sq.translate(new Vector(-1, -1));
+        Square translated = sq.translate(new Vector(-1, -1));
 
         // Arrange
         assertTrue(translated.equals(expected));
@@ -91,14 +91,14 @@ public class QuadradoTests
     public void ShouldMoveCentroid()
     {
         // Assert
-        Quadrado sq = new Quadrado(new Point[] {
+        Square sq = new Square(new Point[] {
             new Point(1, 1),
             new Point(1, 2),
             new Point(2, 2),
             new Point(2, 1),
         });
         Point newCentroid = new Point(4, 5);
-        Quadrado expected = new Quadrado(new Point[] {
+        Square expected = new Square(new Point[] {
             new Point(3.5, 4.5),
             new Point(4.5, 4.5),
             new Point(4.5, 5.5),
@@ -106,7 +106,7 @@ public class QuadradoTests
         });
 
         // Act
-        Quadrado moved = sq.moveCentroid(newCentroid);
+        Square moved = sq.moveCentroid(newCentroid);
 
         // Arrange
         assertTrue(moved.equals(expected));

@@ -1,19 +1,19 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class PoligonoTests
+public class PolygonTests
 {
     @Test
     public void ShouldNotInterceptWhenPolygonsAreSeparated()
     {
         // Arrange
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
                 new Point(3, 1),
                 new Point(4, 1),
                 new Point(4, 2),
                 new Point(3, 2),
         });
-        Poligono poly2 = new Poligono(new Point[] {
+        Polygon poly2 = new Polygon(new Point[] {
                 new Point(1, 1),
                 new Point(2, 1),
                 new Point(2, 2),
@@ -31,13 +31,13 @@ public class PoligonoTests
     public void ShouldNotInterceptWhenPointsInPolygonsOverlap()
     {
         // Arrange
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
                 new Point(1, 1),
                 new Point(2, 1),
                 new Point(2, 2),
                 new Point(1, 2),
         });
-        Poligono poly2 = new Poligono(new Point[] {
+        Polygon poly2 = new Polygon(new Point[] {
                 new Point(1, 3),
                 new Point(3, 1),
                 new Point(3, 3),
@@ -54,12 +54,12 @@ public class PoligonoTests
     public void ShouldNotInterceptWhenPolygonSegmentsOverlap()
     {
         // Arrange
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
                 new Point(1, 1),
                 new Point(3, 1),
                 new Point(1, 3),
         });
-        Poligono poly2 = new Poligono(new Point[] {
+        Polygon poly2 = new Polygon(new Point[] {
                 new Point(1, 3),
                 new Point(3, 1),
                 new Point(3, 3),
@@ -76,13 +76,13 @@ public class PoligonoTests
     public void ShouldInterceptWhenSegmentOfPolygonIntercepts()
     {
         // Arrange
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
                 new Point(1, 1),
                 new Point(4, 1),
                 new Point(4, 4),
                 new Point(1, 4),
         });
-        Poligono poly2 = new Poligono(new Point[] {
+        Polygon poly2 = new Polygon(new Point[] {
                 new Point(3, 3),
                 new Point(5, 3),
                 new Point(5, 5),
@@ -100,7 +100,7 @@ public class PoligonoTests
     public void ShouldInterceptWhenSegmentIntercepts()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(1, 1),
             new Point(3, 1),
             new Point(2, 3),
@@ -118,7 +118,7 @@ public class PoligonoTests
     public void ShouldNotInterceptWhenSegmentOverlaps()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 1),
             new Point(4, 1),
             new Point(4, 3),
@@ -137,7 +137,7 @@ public class PoligonoTests
     public void ShouldNotInterceptWhenPointsOnSegmentOverlap()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 1),
             new Point(4, 1),
             new Point(4, 3),
@@ -156,7 +156,7 @@ public class PoligonoTests
     public void ShouldInterceptOnLastSide()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(2, 4),
             new Point(2, 1),
             new Point(5, 1),
@@ -174,7 +174,7 @@ public class PoligonoTests
     public void ShouldCalculatePerimeter()
     {
         // Arrange
-        Poligono poly0 = new Poligono(new Point[] {
+        Polygon poly0 = new Polygon(new Point[] {
             new Point(0, 0),
             new Point(0, 1),
             new Point(1, 1),
@@ -182,7 +182,7 @@ public class PoligonoTests
         });
         double expected0 = 4;
 
-        Poligono poly1 = new Poligono(new Point[] {
+        Polygon poly1 = new Polygon(new Point[] {
             new Point(0, 0),
             new Point(2, 2),
             new Point(0, 4),
@@ -192,7 +192,7 @@ public class PoligonoTests
         });
         double expected1 = 10.4852813742;
 
-        Poligono poly2 = new Poligono(new Point[] {
+        Polygon poly2 = new Polygon(new Point[] {
             new Point(0, 2),
             new Point(2, 2),
             new Point(6, 6),
@@ -202,7 +202,7 @@ public class PoligonoTests
         });
         double expected2 = 23.7989898732;
 
-        Poligono poly3 = new Poligono(new Point[] {
+        Polygon poly3 = new Polygon(new Point[] {
             new Point(0, 0),
             new Point(2, 0),
             new Point(1, 1),
@@ -214,7 +214,7 @@ public class PoligonoTests
         });
         double expected3 = 15.1529824451;
 
-        Poligono poly4 = new Poligono(new Point[] {
+        Polygon poly4 = new Polygon(new Point[] {
             new Point(0, 0),
             new Point(1, 1),
             new Point(2, 1),
@@ -245,7 +245,7 @@ public class PoligonoTests
         Point p1 = new Point(1, 2);
         Point p2 = new Point(2, 2);
         Point p3 = new Point(2, 1);
-        Poligono poly = new Poligono(new Point[] { p0, p1, p2, p3 });
+        Polygon poly = new Polygon(new Point[] { p0, p1, p2, p3 });
         LineSegment segment = new LineSegment(new Point(0, 4), new Point(3, 0));
 
         // Act
@@ -261,7 +261,7 @@ public class PoligonoTests
     @Test
     public void ShouldIncludeAllVerticesInString()
     {
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(3, 5),
             new Point(9, 312),
             new Point(512, 1024),
@@ -282,7 +282,7 @@ public class PoligonoTests
     public void ShouldTakeConstructorWithString()
     {
         // Arrange
-        Poligono poly = new Poligono("5 1 1 1 3 2 5 7 2 5 1");
+        Polygon poly = new Polygon("5 1 1 1 3 2 5 7 2 5 1");
         String expected = "Poligono de 5 vertices: [(1,1), (1,3), (2,5), (7,2), (5,1)]";
 
         // Act
@@ -296,14 +296,14 @@ public class PoligonoTests
     public void ShouldEquals()
     {
         // Arrange
-        Poligono p0 = new Poligono(new Point[] {
+        Polygon p0 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
             new Point(16, 16),
             new Point(16, 0),
         });
-        Poligono p1 = new Poligono(new Point[] {
+        Polygon p1 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
@@ -323,14 +323,14 @@ public class PoligonoTests
     public void ShouldEqualsWhenSamePolygonButInvertedOrderOfVertices()
     {
         // Arrange
-        Poligono p0 = new Poligono(new Point[] {
+        Polygon p0 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
             new Point(16, 16),
             new Point(16, 0),
         });
-        Poligono p1 = new Poligono(new Point[] {
+        Polygon p1 = new Polygon(new Point[] {
             new Point(16, 0),
             new Point(16, 16),
             new Point(10, 12),
@@ -351,14 +351,14 @@ public class PoligonoTests
     public void ShouldEqualsWhenSamePolygonButOffset()
     {
         // Arrange
-        Poligono p0 = new Poligono(new Point[] {
+        Polygon p0 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
             new Point(16, 16),
             new Point(16, 0),
         });
-        Poligono p1 = new Poligono(new Point[] {
+        Polygon p1 = new Polygon(new Point[] {
             new Point(7, 8),
             new Point(4, 5),
             new Point(16, 0),
@@ -379,14 +379,14 @@ public class PoligonoTests
     public void ShouldNotEqualsWhenDifferentValues()
     {
         // Arrange
-        Poligono p0 = new Poligono(new Point[] {
+        Polygon p0 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 16),
             new Point(16, 16),
             new Point(16, 0),
         });
-        Poligono p1 = new Poligono(new Point[] {
+        Polygon p1 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
@@ -405,14 +405,14 @@ public class PoligonoTests
     public void ShouldNotEqualsWhenDifferentNumberOfVertices()
     {
         // Arrange
-        Poligono p0 = new Poligono(new Point[] {
+        Polygon p0 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
             new Point(16, 16),
             new Point(16, 0),
         });
-        Poligono p1 = new Poligono(new Point[] {
+        Polygon p1 = new Polygon(new Point[] {
             new Point(4, 5),
             new Point(7, 8),
             new Point(10, 12),
@@ -430,7 +430,7 @@ public class PoligonoTests
     public void ShouldRotateAroundAnchor()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
@@ -438,7 +438,7 @@ public class PoligonoTests
             new Point(6, 2),
         });
         Point anchor = new Point(8, 12);
-        Poligono expected = new Poligono(new Point [] {
+        Polygon expected = new Polygon(new Point [] {
             new Point(13.7942286341, 4.03589838486),
             new Point(11.6961524227, 6.40192378865),
             new Point(12.1961524227, 7.26794919243),
@@ -447,7 +447,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono rotated = poly.rotate(Math.PI / 3, anchor);
+        Polygon rotated = poly.rotate(Math.PI / 3, anchor);
 
         // Arrange
         assertTrue(rotated.equals(expected));
@@ -457,7 +457,7 @@ public class PoligonoTests
     public void ShouldRotateAroundNegativeAnchor()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
@@ -465,7 +465,7 @@ public class PoligonoTests
             new Point(6, 2),
         });
         VirtualPoint anchor = new VirtualPoint(10, -12);
-        Poligono expected = new Poligono(new Point [] {
+        Polygon expected = new Polygon(new Point [] {
             new Point(5.60079557681, 3.54499921013),
             new Point(6.90890286198, 6.42403643297),
             new Point(7.90342475734, 6.3195079697),
@@ -474,7 +474,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono rotated = poly.rotate(-Math.PI / 30, anchor);
+        Polygon rotated = poly.rotate(-Math.PI / 30, anchor);
 
         // Arrange
         assertTrue(rotated.equals(expected));
@@ -484,14 +484,14 @@ public class PoligonoTests
     public void ShouldRotateAroundCentroid()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
             new Point(5, 5),
             new Point(6, 2),
         });
-        Poligono expected = new Poligono(new Point [] {
+        Polygon expected = new Polygon(new Point [] {
             new Point(3.36152236891, 4.25857864376),
             new Point(6.18994949366, 5.67279220614),
             new Point(6.89705627485, 4.96568542495),
@@ -500,7 +500,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono rotated = poly.rotate(-Math.PI / 4);
+        Polygon rotated = poly.rotate(-Math.PI / 4);
 
         // Arrange
         assertTrue(rotated.equals(expected));
@@ -510,14 +510,14 @@ public class PoligonoTests
     public void ShouldTakeDegrees()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
             new Point(5, 5),
             new Point(6, 2),
         });
-        Poligono expected = new Poligono(new Point [] {
+        Polygon expected = new Polygon(new Point [] {
             new Point(3.36152236891, 4.25857864376),
             new Point(6.18994949366, 5.67279220614),
             new Point(6.89705627485, 4.96568542495),
@@ -526,7 +526,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono rotated = poly.rotateDegrees(-45);
+        Polygon rotated = poly.rotateDegrees(-45);
 
         // Arrange
         assertTrue(rotated.equals(expected));
@@ -537,14 +537,14 @@ public class PoligonoTests
     public void ShouldBeImmutableWhenRotating()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
             new Point(5, 5),
             new Point(6, 2),
         });
-        Poligono replica = new Poligono(new Point[] {
+        Polygon replica = new Polygon(new Point[] {
             new Point(4, 3),
             new Point(5, 6),
             new Point(6, 6),
@@ -563,14 +563,14 @@ public class PoligonoTests
     public void ShouldTranslatePositionWithPositiveVector()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(3, 3),
             new Point(3, 4),
             new Point(4, 4),
             new Point(4, 3),
         });
         Vector v = new Vector(1, 3);
-        Poligono expected = new Poligono(new Point[] {
+        Polygon expected = new Polygon(new Point[] {
             new Point(4, 6),
             new Point(4, 7),
             new Point(5, 7),
@@ -578,7 +578,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono translated = poly.translate(v);
+        Polygon translated = poly.translate(v);
 
         // assert
         assertTrue(translated.equals(expected));
@@ -588,14 +588,14 @@ public class PoligonoTests
     public void ShouldTranslatePositionWithNegativeVector()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(3, 3),
             new Point(3, 4),
             new Point(4, 4),
             new Point(4, 3),
         });
         Vector v = new Vector(-2, -1);
-        Poligono expected = new Poligono(new Point[] {
+        Polygon expected = new Polygon(new Point[] {
             new Point(1,2),
             new Point(1,3),
             new Point(2,3),
@@ -603,7 +603,7 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono translated = poly.translate(v);
+        Polygon translated = poly.translate(v);
 
         // assert
         assertTrue(translated.equals(expected));
@@ -613,7 +613,7 @@ public class PoligonoTests
     public void ShouldMoveCentroid()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 4),
             new Point(5, 3),
             new Point(6, 4),
@@ -623,7 +623,7 @@ public class PoligonoTests
         });
         Point newCentroid0 = new Point(9, 6);
         Point newCentroid1 = new Point(1, 2);
-        Poligono expected0 = new Poligono(new Point[] {
+        Polygon expected0 = new Polygon(new Point[] {
             new Point(8, 5),
             new Point(9, 4),
             new Point(10, 5),
@@ -631,7 +631,7 @@ public class PoligonoTests
             new Point(9, 8),
             new Point(8, 7),
         });
-        Poligono expected1 = new Poligono(new Point[] {
+        Polygon expected1 = new Polygon(new Point[] {
             new Point(0, 1),
             new Point(1, 0),
             new Point(2, 1),
@@ -641,8 +641,8 @@ public class PoligonoTests
         });
 
         // Act
-        Poligono translated0 = poly.moveCentroid(newCentroid0);
-        Poligono translated1 = poly.moveCentroid(newCentroid1);
+        Polygon translated0 = poly.moveCentroid(newCentroid0);
+        Polygon translated1 = poly.moveCentroid(newCentroid1);
 
         // Assert
         assertTrue(translated0.equals(expected0));
@@ -653,7 +653,7 @@ public class PoligonoTests
     public void ShouldBeImmutableWhenMovingCentroid()
     {
         // Arrange
-        Poligono poly = new Poligono(new Point[] {
+        Polygon poly = new Polygon(new Point[] {
             new Point(4, 4),
             new Point(5, 3),
             new Point(6, 4),
@@ -661,7 +661,7 @@ public class PoligonoTests
             new Point(5, 7),
             new Point(5, 6),
         });
-        Poligono replica = new Poligono(new Point[] {
+        Polygon replica = new Polygon(new Point[] {
             new Point(4, 4),
             new Point(5, 3),
             new Point(6, 4),

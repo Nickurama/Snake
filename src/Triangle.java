@@ -5,7 +5,7 @@
  * @author Diogo Fonseca a79858
  * @version 18/03/2024
  */
-public class Triangulo extends Poligono
+public class Triangle extends Polygon
 {
     private static final String ERROR_MESSAGE = "Triangulo:vi";
     public static final int NUM_SIDES = 3;
@@ -16,7 +16,7 @@ public class Triangulo extends Poligono
      * 
      * @pre points.length = 3
      */
-    public Triangulo(Point[] points)
+    public Triangle(Point[] points)
     {
         super(points);
         validateTriangle(this.sides.length);
@@ -26,7 +26,7 @@ public class Triangulo extends Poligono
      * Initializes a triangle from a polygon
      * @param poly the polygon to initialize from
      */
-    public Triangulo(Poligono poly)
+    public Triangle(Polygon poly)
     {
         super(poly);
         validateTriangle(poly.getNumSides());
@@ -50,7 +50,7 @@ public class Triangulo extends Poligono
      * 
      * @pre must have 3 points
      */
-    public Triangulo(String str)
+    public Triangle(String str)
     {
         this(Point.parseToArray(str, NUM_SIDES));
     }
@@ -62,38 +62,38 @@ public class Triangulo extends Poligono
     }
 
     @Override
-    public Triangulo rotate(double angle, VirtualPoint anchor)
+    public Triangle rotate(double angle, VirtualPoint anchor)
     {
-        return new Triangulo(super.rotate(angle, anchor));
+        return new Triangle(super.rotate(angle, anchor));
     }
 
     @Override
-    public Triangulo rotate(double angle)
+    public Triangle rotate(double angle)
     {
-        return new Triangulo(super.rotate(angle));
+        return new Triangle(super.rotate(angle));
     }
 
     @Override
-    public Triangulo rotateDegrees(double angle, VirtualPoint anchor)
+    public Triangle rotateDegrees(double angle, VirtualPoint anchor)
     {
-        return new Triangulo(super.rotateDegrees(angle, anchor));
+        return new Triangle(super.rotateDegrees(angle, anchor));
     }
 
     @Override
-    public Triangulo rotateDegrees(double angle)
+    public Triangle rotateDegrees(double angle)
     {
-        return new Triangulo(super.rotateDegrees(angle));
+        return new Triangle(super.rotateDegrees(angle));
     }
 
     @Override
-    public Triangulo translate(Vector vector)
+    public Triangle translate(Vector vector)
     {
-        return new Triangulo(super.translate(vector));
+        return new Triangle(super.translate(vector));
     }
 
     @Override
-    public Triangulo moveCentroid(Point newCentroid)
+    public Triangle moveCentroid(Point newCentroid)
     {
-        return new Triangulo(super.moveCentroid(newCentroid));
+        return new Triangle(super.moveCentroid(newCentroid));
     }
 }
