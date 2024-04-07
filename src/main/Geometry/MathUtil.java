@@ -1,3 +1,5 @@
+package Geometry;
+
 /**
  * Holds math related tools for the other classes to use
  * 

@@ -1,3 +1,5 @@
+package Geometry;
+
 /**
  * Represents an exception of the geometric type.
  */

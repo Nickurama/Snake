@@ -1,3 +1,5 @@
+package Geometry;
+
 /**
  * Represents an immutable segment within a two dimensional line
  *

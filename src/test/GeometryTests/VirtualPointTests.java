@@ -1,3 +1,6 @@
+package GeometryTests;
+
+import Geometry.*;
 import java.io.*;
 import java.text.ParseException;
 

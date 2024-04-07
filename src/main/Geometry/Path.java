@@ -1,3 +1,5 @@
+package Geometry;
+
 /**
  * Represents a path on two dimensions
  * 

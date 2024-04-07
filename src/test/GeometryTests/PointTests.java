@@ -1,7 +1,8 @@
+package GeometryTests;
+
+import Geometry.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.text.ParseException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
