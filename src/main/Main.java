@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author Diogo Fonseca a79858
  * @version 18/03/2024
  */
-public class Client
+public class Main
 {
     /**
      * The main method
