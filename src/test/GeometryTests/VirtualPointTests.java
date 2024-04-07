@@ -1,6 +1,7 @@
 package GeometryTests;
 
 import Geometry.*;
+import TestUtil.*;
 import java.io.*;
 import java.text.ParseException;
 
