@@ -1,12 +1,33 @@
 ## To Do
 
+- Make command class
+- Make engine take input from stdin when in iterative mode
+- Make engine process input when in iterative mode
+- Make Start command
+- Make Stop command
+- Make Step command
+- Make engine execute command (class)
+- Remove step() function from engine?
+- Make setScene() engine function
+- Make IInputListener class
+- Adjust scene class for IInputListener
+- Make Logger class
+- Make Debug command
+- Make RenderData class
+- Make IRenderable interface
+- Update scene class for IRenderable
+- Make Polygon contains() function
+- Make Renderer
+- Make rasterization() in polygon
+- Make UI class
+- Updade scene class for UI
+- Make Renderer render UI
+- Make ICollider interface
+- Update scene class for ICollider
+- Make CollisionManager
 
 ## Doing
 
-- Do GameEngine
-    * [ ] Do GameEngine class
-    * [ ] Do GameEngine tests
-    * [ ] Do GameEngine documentation
 
 ## Done
 
@@ -22,3 +43,10 @@
     * [x] Do GameEngineFlags class
     * [x] Do GameEngineFlags tests
     * [x] Do GameEngineFlags documentation
+
+## On Hold
+
+- Do GameEngine
+    * [ ] Do GameEngine class
+    * [ ] Do GameEngine tests
+    * [ ] Do GameEngine documentation

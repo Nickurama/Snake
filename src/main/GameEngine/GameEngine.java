@@ -63,6 +63,8 @@ public class GameEngine
 	{
 		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
 			return;
+		if (!isRunning)
+			return;
 
 		long deltaT = updateTime();
 		update(deltaT);
