@@ -2,7 +2,7 @@ package GameEngineTests;
 
 import GameEngine.*;
 
-public class MockGameObject implements IGameObject
+public class MockGameObject extends GameObject
 {
 	public enum Operation {
 		NONE,
@@ -32,20 +32,20 @@ public class MockGameObject implements IGameObject
 		this(0);
 	}
 
-	public void onUpdate(int deltaT)
+	public void update(int deltaT)
 	{
 		lastDelta = deltaT;
 		updateCount++;
 		lastOperation = Operation.UPDATED;
 	}
 
-	public void onStart()
+	public void start()
 	{
 		hasStarted = true;
 		lastOperation = Operation.STARTED;
 	}
 
-	public void onStop()
+	public void stop()
 	{
 		hasStopped = true;
 		lastOperation = Operation.STOPPED;

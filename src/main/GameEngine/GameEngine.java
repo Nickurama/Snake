@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import javax.naming.OperationNotSupportedException;
-
 public class GameEngine
 {
 	private GameEngineFlags flags;
@@ -29,16 +27,23 @@ public class GameEngine
 			return;
 
 		this.isRunning = true;
+		currScene.setActive(true);
 
-		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
-			updateStepped();
-		else if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.AUTO)
+		switch (this.flags.updateMethod())
 		{
-			// TODO: implement
+			case GameEngineFlags.UpdateMethod.STEP:
+				updateStepped();
+				break;
+			case GameEngineFlags.UpdateMethod.CODE:
+				// TODO: remove
+				break;
+			case GameEngineFlags.UpdateMethod.AUTO:
+				// TODO: implement
+				break;
 		}
 
-		for (IGameObject obj : currScene)
-			obj.onStart();
+		for (GameObject obj : currScene)
+			obj.start();
 	}
 
 	private void updateStepped()
@@ -47,27 +52,16 @@ public class GameEngine
 		while(this.isRunning)
 		{
 			readStepped();
-			deltaT = updateTime();
+			deltaT = getDeltaT();
 			update(deltaT);
 		}
 	}
 
-	private long updateTime()
+	private long getDeltaT()
 	{
 		lastFrameMillis = currentFrameMillis;
 		currentFrameMillis = System.currentTimeMillis();
 		return currentFrameMillis - lastFrameMillis;
-	}
-
-	public void step()
-	{
-		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
-			return;
-		if (!isRunning)
-			return;
-
-		long deltaT = updateTime();
-		update(deltaT);
 	}
 
 	private void readStepped()
@@ -83,10 +77,20 @@ public class GameEngine
 		}
 	}
 
+	public void update() throws GameEngineException
+	{
+		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
+			throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
+		if (!isRunning)
+			return;
+
+		long deltaT = getDeltaT();
+		update(deltaT);
+	}
+
 	private void update(long deltaT)
 	{
-		for (IGameObject obj : currScene)
-			obj.onUpdate((int)deltaT);
+		for (GameObject obj : currScene)
+			obj.update((int)deltaT);
 	}
-	
 }

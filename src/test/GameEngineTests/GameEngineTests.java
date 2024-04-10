@@ -27,7 +27,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldUpdateGameObjects()
+	public void ShouldUpdateGameObjects() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -39,14 +39,14 @@ public class GameEngineTests
 
 		// Act
 		engine.start();
-		engine.step();
+		engine.update();
 
 		// Arrange
 		assertEquals(MockGameObject.Operation.UPDATED, obj.lastOperation());
 	}
 	
 	@Test
-	public void ShouldNotUpdateWhenNotStarted()
+	public void ShouldNotUpdateWhenNotStarted() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -57,7 +57,7 @@ public class GameEngineTests
 		GameEngine engine = new GameEngine(flags, scene);
 
 		// Act
-		engine.step();
+		engine.update();
 
 		// Arrange
 		assertEquals(MockGameObject.Operation.NONE, obj.lastOperation());
@@ -76,7 +76,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldNotStartWhenAlreadyRunning()
+	public void ShouldNotStartWhenAlreadyRunning() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -88,10 +88,28 @@ public class GameEngineTests
 
 		// Act
 		engine.start();
-		engine.step();
+		engine.update();
 		engine.start();
 
 		// Arrange
 		assertEquals(MockGameObject.Operation.UPDATED, obj.lastOperation());
+	}
+
+	@Test
+	public void ShouldCallStartOnGameObjectWhenObjectIsInstantiatedAfterStart()
+	{
+		// Arrange
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		MockGameObject obj = new MockGameObject();
+		Scene scene = new Scene();
+		GameEngine engine = new GameEngine(flags, scene);
+
+		// Act
+		engine.start();
+		scene.add(obj);
+
+		// Arrange
+		assertEquals(MockGameObject.Operation.STARTED, obj.lastOperation());
 	}
 }

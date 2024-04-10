@@ -15,10 +15,10 @@ public class SceneTests
 		int obj1number = 12;
 		int obj2number = 13;
 		int obj3number = 14;
-		IGameObject obj0 = new MockGameObject(obj0number);
-		IGameObject obj1 = new MockGameObject(obj1number);
-		IGameObject obj2 = new MockGameObject(obj2number);
-		IGameObject obj3 = new MockGameObject(obj3number);
+		GameObject obj0 = new MockGameObject(obj0number);
+		GameObject obj1 = new MockGameObject(obj1number);
+		GameObject obj2 = new MockGameObject(obj2number);
+		GameObject obj3 = new MockGameObject(obj3number);
 
 		// Act
 		s.add(obj0);
@@ -42,10 +42,10 @@ public class SceneTests
 		int obj1number = 12;
 		int obj2number = 13;
 		int obj3number = 14;
-		IGameObject obj0 = new MockGameObject(obj0number);
-		IGameObject obj1 = new MockGameObject(obj1number);
-		IGameObject obj2 = new MockGameObject(obj2number);
-		IGameObject obj3 = new MockGameObject(obj3number);
+		GameObject obj0 = new MockGameObject(obj0number);
+		GameObject obj1 = new MockGameObject(obj1number);
+		GameObject obj2 = new MockGameObject(obj2number);
+		GameObject obj3 = new MockGameObject(obj3number);
 		int[] ints = new int[4];
 		int i = 0;
 		s.add(obj0);
@@ -54,7 +54,7 @@ public class SceneTests
 		s.add(obj3);
 
 		// Act
-		for (IGameObject obj : s)
+		for (GameObject obj : s)
 			ints[i++] = ((MockGameObject)obj).getNumber();
 
 		// Assert
@@ -80,5 +80,56 @@ public class SceneTests
 		// Arrange
 		assertEquals(0, sizeBefore);
 		assertEquals(expectedLen, sizeAfter);
+	}
+
+	@Test
+	public void ShouldCallOnStartWhenAddingToActiveScene()
+	{
+		// Arrange
+		MockGameObject obj = new MockGameObject();
+		Scene sc = new Scene();
+		sc.setActive(true);
+
+		// Act
+		sc.add(obj);
+
+		// Assert
+		assertEquals(obj.lastOperation(), MockGameObject.Operation.STARTED);
+	}
+
+	@Test
+	public void ShouldRemove()
+	{
+		// Arrange
+		MockGameObject mock = new MockGameObject();
+		Scene sc = new Scene();
+		sc.add(mock);
+		int sizeBefore = sc.size();
+
+		// Act
+		sc.remove(mock);
+		for (GameObject obj : sc)
+			obj.update(0);
+		int sizeAfter = sc.size();
+
+		// Assert
+		assertEquals(mock.lastOperation(), MockGameObject.Operation.NONE);
+		assertEquals(1, sizeBefore);
+		assertEquals(0, sizeAfter);
+	}
+
+	@Test
+	public void ShouldCallOnStopWhenRemovingFromActiveScene()
+	{
+		// Arrange
+		MockGameObject obj = new MockGameObject();
+		Scene sc = new Scene();
+		sc.setActive(true);
+
+		// Act
+		sc.remove(obj);
+
+		// Assert
+		assertEquals(obj.lastOperation(), MockGameObject.Operation.STOPPED);
 	}
 }
