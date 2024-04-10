@@ -11,14 +11,10 @@ public class SceneTests
 	{
 		// Arrange
 		Scene s = new Scene();
-		int obj0number = 11;
-		int obj1number = 12;
-		int obj2number = 13;
-		int obj3number = 14;
-		GameObject obj0 = new MockGameObject(obj0number);
-		GameObject obj1 = new MockGameObject(obj1number);
-		GameObject obj2 = new MockGameObject(obj2number);
-		GameObject obj3 = new MockGameObject(obj3number);
+		GameObject obj0 = new MockGameObject();
+		GameObject obj1 = new MockGameObject();
+		GameObject obj2 = new MockGameObject();
+		GameObject obj3 = new MockGameObject();
 
 		// Act
 		s.add(obj0);
@@ -27,10 +23,10 @@ public class SceneTests
 		s.add(obj3);
 
 		// Assert
-		assertEquals(((MockGameObject) s.get(0)).getNumber(), obj0number);
-		assertEquals(((MockGameObject) s.get(1)).getNumber(), obj1number);
-		assertEquals(((MockGameObject) s.get(2)).getNumber(), obj2number);
-		assertEquals(((MockGameObject) s.get(3)).getNumber(), obj3number);
+		assertTrue(s.contains(obj0));
+		assertTrue(s.contains(obj1));
+		assertTrue(s.contains(obj2));
+		assertTrue(s.contains(obj3));
 	}
 
 	@Test
@@ -131,5 +127,28 @@ public class SceneTests
 
 		// Assert
 		assertEquals(obj.lastOperation(), MockGameObject.Operation.STOPPED);
+	}
+
+	@Test
+	public void ShouldAddInputListenersToDedicatedList()
+	{
+		// Arrange
+		class MockInputListener extends GameObject implements IInputListener
+		{
+			private String inputReceived;
+			public MockInputListener() { this.inputReceived = ""; }
+			public void onInputReceived(String input) { this.inputReceived = input; }
+			public String inputReceived() { return this.inputReceived; }
+		}
+		MockInputListener mockListener = new MockInputListener();
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(mockListener);
+		for (IInputListener listener : sc.inputListeners())
+			listener.onInputReceived("mock input");
+
+		// Assert
+		assertEquals("mock input", mockListener.inputReceived());
 	}
 }

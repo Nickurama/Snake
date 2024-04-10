@@ -1,8 +1,6 @@
 package GameEngine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class GameEngine
 {
@@ -14,7 +12,7 @@ public class GameEngine
 
 	public GameEngine(GameEngineFlags flags, Scene scene)
 	{
-		this.flags = flags;
+		this.flags = new GameEngineFlags(flags);
 		this.currScene = scene;
 		this.isRunning = false;
 		this.lastFrameMillis = System.currentTimeMillis();
@@ -29,32 +27,73 @@ public class GameEngine
 		this.isRunning = true;
 		currScene.setActive(true);
 
-		switch (this.flags.updateMethod())
-		{
-			case GameEngineFlags.UpdateMethod.STEP:
-				updateStepped();
-				break;
-			case GameEngineFlags.UpdateMethod.CODE:
-				// TODO: remove
-				break;
-			case GameEngineFlags.UpdateMethod.AUTO:
-				// TODO: implement
-				break;
-		}
-
 		for (GameObject obj : currScene)
 			obj.start();
+
+		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
+			updateStepped();
+		else if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.AUTO)
+		{
+			// TODO: implement
+		}
+	}
+
+	public void stop()
+	{
+		if (!this.isRunning)
+			return;
+
+		this.isRunning = false;
+		currScene.setActive(false);
+
+		for (GameObject obj : currScene)
+			obj.stop();
 	}
 
 	private void updateStepped()
 	{
-		long deltaT;
+		Scanner reader = new Scanner(System.in);
 		while(this.isRunning)
 		{
-			readStepped();
-			deltaT = getDeltaT();
-			update(deltaT);
+			String command = reader.nextLine();
+			executeCommand(command);
 		}
+		reader.close();
+	}
+
+	private void executeCommand(String command)
+	{
+		if (command == null || command.isEmpty())
+		{
+			System.out.println("Command cannot be null.");
+			return;
+		}
+
+		switch (command)
+		{
+			case "step":
+				System.out.println("Stepping...");
+				update();
+				break;
+			case "stop":
+				System.out.println("Stopping...");
+				stop();
+				break;
+			default:
+				for (IInputListener listener : currScene.inputListeners())
+					listener.onInputReceived(command);
+				break;
+		}
+	}
+
+	public void step() throws GameEngineException
+	{
+		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
+			throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
+		if (!isRunning)
+			return;
+
+		update();
 	}
 
 	private long getDeltaT()
@@ -64,28 +103,9 @@ public class GameEngine
 		return currentFrameMillis - lastFrameMillis;
 	}
 
-	private void readStepped()
+	private void update()
 	{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		try
-		{
-			reader.readLine();
-		}
-		catch (IOException e)
-		{
-			//! LOG
-		}
-	}
-
-	public void update() throws GameEngineException
-	{
-		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
-			throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
-		if (!isRunning)
-			return;
-
-		long deltaT = getDeltaT();
-		update(deltaT);
+		update(getDeltaT());
 	}
 
 	private void update(long deltaT)

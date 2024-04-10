@@ -1,15 +1,6 @@
 ## To Do
 
-- Make engine take input from stdin when in iterative mode
-- Make engine process input when in iterative mode
-- Make Start command
-- Make Stop command
-- Make Step command
-- Make engine execute command (class)
-- Remove step() function from engine?
 - Make setScene() engine function
-- Make IInputListener class
-- Adjust scene class for IInputListener
 - Make Logger class
 - Make Debug command
 - Make RenderData class
@@ -43,6 +34,13 @@
     * [x] Do Scene class
     * [x] Do Scene tests
     * [x] Do Scene documentation
+- Make stop() on GameEngine
+- Make engine take input from stdin when in iterative mode
+- Make engine process input when in iterative mode
+- Make Stop command
+- Make Step command
+- Make IInputListener class
+- Adjust scene class for IInputListener
 
 ## On Hold
 
@@ -74,3 +72,6 @@
 ## Scrapped
 
 - GameObject should be class and have variable "hasStarted" (for events to know if they should execute)
+- Make Start command
+- Make engine execute command (class)
+- Remove step() function from engine?

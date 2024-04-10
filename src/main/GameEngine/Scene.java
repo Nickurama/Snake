@@ -30,7 +30,7 @@ public class Scene implements Iterable<GameObject>
 	}
 
 	private HashMap<Integer, GameObject> objects;
-	// private ArrayList<GameObject> objects;
+	private ArrayList<IInputListener> inputListeners;
 	boolean isActive;
 
 	/**
@@ -39,6 +39,7 @@ public class Scene implements Iterable<GameObject>
 	public Scene()
 	{
 		this.objects = new HashMap<Integer, GameObject>();
+		this.inputListeners = new ArrayList<IInputListener>();
 		this.isActive = false;
 	}
 
@@ -50,8 +51,17 @@ public class Scene implements Iterable<GameObject>
 	public void add(GameObject object)
 	{
 		this.objects.put(object.id(), object);
+
+		categorize(object);
+
 		if (this.isActive)
 			object.start();
+	}
+
+	private void categorize(GameObject object)
+	{
+		if (object instanceof IInputListener)
+			this.inputListeners.add((IInputListener) object);
 	}
 
 	public void remove(GameObject object)
@@ -61,15 +71,9 @@ public class Scene implements Iterable<GameObject>
 			object.stop();
 	}
 
-	/**
-	 * Returns a game object in the scene at an index
-	 * @param i The index to return
-	 * @return the game object at index i in the scene
-	 * @pre i < scene.size() - 1
-	 */
-	public GameObject get(int i)
+	public boolean contains(GameObject obj)
 	{
-		return objects.get(i);
+		return objects.containsKey(obj.id());
 	}
 
 	/**
@@ -84,6 +88,14 @@ public class Scene implements Iterable<GameObject>
 	public Iterator<GameObject> iterator()
 	{
 		return new SceneIterator();
+	}
+
+	public Iterable<IInputListener> inputListeners()
+	{
+		return new Iterable<IInputListener>()
+		{
+			public Iterator<IInputListener> iterator() { return inputListeners.iterator(); }
+		};
 	}
 
 	public boolean isActive() { return this.isActive; }

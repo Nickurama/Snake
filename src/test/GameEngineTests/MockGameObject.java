@@ -2,7 +2,7 @@ package GameEngineTests;
 
 import GameEngine.*;
 
-public class MockGameObject extends GameObject
+public class MockGameObject extends GameObject implements IInputListener
 {
 	public enum Operation {
 		NONE,
@@ -18,13 +18,16 @@ public class MockGameObject extends GameObject
 	private boolean hasStopped;
 	private int updateCount;
 
+	private String inputReceived;
+
 	public MockGameObject(int startNumber)
 	{
-		number = startNumber;
-		hasStarted = false;
-		hasStopped = false;
-		updateCount = 0;
-		lastOperation = Operation.NONE;
+		this.number = startNumber;
+		this.hasStarted = false;
+		this.hasStopped = false;
+		this.updateCount = 0;
+		this.lastOperation = Operation.NONE;
+		this.inputReceived = null;
 	}
 
 	public MockGameObject()
@@ -51,6 +54,11 @@ public class MockGameObject extends GameObject
 		lastOperation = Operation.STOPPED;
 	}
 
+	public void onInputReceived(String input)
+	{
+		this.inputReceived = input;
+	}
+
 	public int getNumber() { return number; }
 
 	public Operation lastOperation() { return lastOperation; }
@@ -62,4 +70,6 @@ public class MockGameObject extends GameObject
 	public boolean hasStopped() { return hasStopped; }
 
 	public int updateCount() { return updateCount; }
+
+	public String inputReceived() { return inputReceived; }
 }

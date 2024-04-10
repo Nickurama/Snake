@@ -25,6 +25,13 @@ public class GameEngineFlags
 		updateMethod = UpdateMethod.STEP;
 	}
 
+	public GameEngineFlags(GameEngineFlags that)
+	{
+		this.updateMethod = that.updateMethod();
+		this.isTextual = that.isTextual();
+		this.isRasterized = that.isRasterized();
+	}
+
 	/**
 	 * If the screen is to be rendered textually or graphically
 	 * @return If the screen is to be rendered textually or graphically
