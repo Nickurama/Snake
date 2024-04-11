@@ -12,7 +12,7 @@ import TestUtil.TestUtil;
 public class GameEngineTests
 {
 	@Test
-	public void ShouldInitializeGameObjects()
+	public void ShouldInitializeGameObjects() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -67,7 +67,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldNotChangeFlagsWhenUpdatingFlagsReference()
+	public void ShouldNotChangeFlagsWhenUpdatingFlagsReference() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -85,7 +85,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldNotUpdateThroughCodeIfFlagIsSetDifferently()
+	public void ShouldNotUpdateThroughCodeIfFlagIsSetDifferently() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -121,7 +121,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldCallStartOnGameObjectWhenObjectIsInstantiatedAfterStart()
+	public void ShouldCallStartOnGameObjectWhenObjectIsInstantiatedAfterStart() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -139,7 +139,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldUpdateStepped()
+	public void ShouldUpdateStepped() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -162,7 +162,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldStop()
+	public void ShouldStop() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -181,7 +181,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldNotTriggerInputListenerOnStepModeWhenOnlyEngineCommands()
+	public void ShouldNotTriggerInputListenerOnStepModeWhenOnlyEngineCommands() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -203,7 +203,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void ShouldTriggerInputListenerOnStepMode()
+	public void ShouldTriggerInputListenerOnStepMode() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -222,5 +222,63 @@ public class GameEngineTests
 
 		// Arrange
 		assertEquals("test input 137", obj.inputReceived());
+	}
+
+	@Test
+	public void ShouldSetScene() throws GameEngineException
+	{
+		// Arrange
+		Scene s0 = new Scene();
+		Scene s1 = new Scene();
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = new GameEngine(flags, s0);
+		engine.start();
+
+		// Act
+		engine.stop();
+		engine.setScene(s1);
+		engine.start();
+
+		// Assert
+		assertTrue(s1.isActive());
+		assertFalse(s0.isActive());
+	}
+
+	@Test
+	public void ShouldNotSetSceneIfEngineIsNotStopped() throws GameEngineException
+	{
+		// Arrange
+		Scene s0 = new Scene();
+		Scene s1 = new Scene();
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = new GameEngine(flags, s0);
+		engine.start();
+
+		// Act
+		// Assert
+		assertThrows(GameEngineException.class, () -> engine.setScene(s1));
+	}
+
+	@Test
+	public void ShouldTakeDebugCommandInStepMode()
+	{
+		// Arrange
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
+		MockGameObject obj = new MockGameObject();
+		Scene scene = new Scene();
+		GameEngine engine = new GameEngine(flags, scene);
+
+		String input0 = "debug\n";
+		String input1 = "stop\n";
+        ByteArrayOutputStream os = TestUtil.setIOstreams(input0 + input1);
+
+		// Act
+		engine.start();
+
+		// Arrange
+		assertTrue(os.toString().contains("Started debugging"));
 	}
 }

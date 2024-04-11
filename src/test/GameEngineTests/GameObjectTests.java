@@ -7,49 +7,66 @@ import org.junit.jupiter.api.Test;
 
 public class GameObjectTests
 {
-	// Must be first test!
+	// @Test
+	// public void ShouldHaveHashCodePerInstantiationOrder()
+	// {
+	// 	// Arrange
+	// 	GameObject obj0 = new GameObject();
+	// 	GameObject obj1 = new GameObject();
+	// 	GameObject obj2 = new GameObject();
+	// 	GameObject obj3 = new GameObject();
+	//
+	// 	// Act
+	// 	int hash0 = obj0.hashCode();
+	// 	int hash1 = obj1.hashCode();
+	// 	int hash2 = obj2.hashCode();
+	// 	int hash3 = obj3.hashCode();
+	//
+	// 	// Assert
+	// 	assertEquals(hash0 + 1, hash1);
+	// 	assertEquals(hash0 + 2, hash2);
+	// 	assertEquals(hash0 + 3, hash3);
+	// }
+
 	@Test
-	public void ShouldHaveHashCodePerInstantiationOrder()
+	public void ShouldHaveSceneHandle() throws GameEngineException
 	{
 		// Arrange
-		GameObject obj0 = new GameObject();
-		GameObject obj1 = new GameObject();
-		GameObject obj2 = new GameObject();
-		GameObject obj3 = new GameObject();
+		Scene sc = new Scene();
+		GameObject obj = new GameObject()
+		{
+			@Override
+			public void start()
+			{
+				try
+				{
+					this.sceneHandle.add(new GameObject());
+				}
+				catch (GameEngineException e) {}
+			}
+		};
 
 		// Act
-		int hash0 = obj0.hashCode();
-		int hash1 = obj1.hashCode();
-		int hash2 = obj2.hashCode();
-		int hash3 = obj3.hashCode();
+		sc.add(obj);
+		for (GameObject scObj : sc)
+			scObj.start();
 
 		// Assert
-		assertEquals(hash0 + 1, hash1);
-		assertEquals(hash0 + 2, hash2);
-		assertEquals(hash0 + 3, hash3);
+		assertEquals(2, sc.size());
 	}
 
 	@Test
-	public void ShouldOnlyBeEqualsIfSameID()
+	public void ShouldThrowExceptionWhenSettingSceneMoreThanOnce() throws GameEngineException
 	{
 		// Arrange
-		GameObject obj0 = new GameObject();
-		GameObject obj1 = new GameObject();
-		GameObject obj2 = new GameObject();
-		GameObject obj3 = new GameObject();
+		Scene s0 = new Scene();
+		Scene s1 = new Scene();
+		GameObject obj = new GameObject();
 
 		// Act
-		boolean eq0 = obj0.equals(obj0);
-		boolean eq1 = obj2.equals(obj2);
-		boolean eq2 = obj0.equals(obj1);
-		boolean eq3 = obj0.equals(obj2);
-		boolean eq4 = obj3.equals(obj1);
+		obj.setScene(s0, 0);
 
 		// Assert
-		assertTrue(eq0);
-		assertTrue(eq1);
-		assertFalse(eq2);
-		assertFalse(eq3);
-		assertFalse(eq4);
+		assertThrows(GameEngineException.class, () -> obj.setScene(s1, 0));
 	}
 }

@@ -1,7 +1,5 @@
 ## To Do
 
-- Make setScene() engine function
-- Make Logger class
 - Make Debug command
 - Make RenderData class
 - Make IRenderable interface
@@ -41,6 +39,11 @@
 - Make Step command
 - Make IInputListener class
 - Adjust scene class for IInputListener
+- Scene updates id on GameObject when it's added to the scene
+- A GameObject can only be instantiated in one scene
+- GameObjects should have a reference to their scenes
+- Make setScene() engine function
+- Make Logger class
 
 ## On Hold
 
@@ -51,11 +54,9 @@
 
 ## Major Tasks
 
-- Game Object
 - Scene
 - Engine
 - Logger
-- Input
 - Renderer
 - UI
 - Collisions
@@ -68,6 +69,8 @@
 
 ## Major Done
 
+- Input
+- Game Object
 
 ## Scrapped
 
@@ -75,3 +78,5 @@
 - Make Start command
 - Make engine execute command (class)
 - Remove step() function from engine?
+- Equals should see if gameObjects are in the same scene
+- Write down the meaning of all of this

@@ -8,23 +8,23 @@ package GameEngine;
  */
 public class GameObject
 {
-	private static int counter = 0;
-	private final int id = counter++;
+	// private static int counter = 0;
+	// private final int id = counter++;
+	private int id = -1; // set to -1 here since constructor wouldn't be inherited
+	protected Scene sceneHandle;
 
-	@Override
-	public final int hashCode()
+	public final void setScene(Scene scene, int id) throws GameEngineException
 	{
-		return this.id();
+		if (hasSceneBeenSet())
+			throw new GameEngineException("Tried to set GameObject scene after it has already been set.");
+
+		this.sceneHandle = scene;
+		this.id = id;
 	}
 
-	@Override
-	public final boolean equals(Object other)
+	private final boolean hasSceneBeenSet()
 	{
-		if (this == other) return true;
-        if (other == null) return false;
-        if (this.getClass() != other.getClass()) return false;
-		GameObject that = (GameObject)other;
-		return this.id() == that.id();
+		return id != -1;
 	}
 
 	public final Integer id()

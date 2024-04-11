@@ -3,7 +3,7 @@ package GameEngine;
 import java.util.*;
 
 /**
- * Represents a collection of game objects
+ * Represents a collection of managed game objects
  */
 public class Scene implements Iterable<GameObject>
 {
@@ -31,7 +31,8 @@ public class Scene implements Iterable<GameObject>
 
 	private HashMap<Integer, GameObject> objects;
 	private ArrayList<IInputListener> inputListeners;
-	boolean isActive;
+	private boolean isActive;
+	private int idCounter;
 
 	/**
 	 * Initializes a scene
@@ -45,17 +46,23 @@ public class Scene implements Iterable<GameObject>
 
 	/**
 	 * Adds a game object to the scene
-	 * and calls onStart() if the scene is already active
+	 * and calls start() if the scene is already active
 	 * @param object the object to add to the scene
 	 */
-	public void add(GameObject object)
+	public void add(GameObject object) throws GameEngineException
 	{
+		object.setScene(this, nextId());
 		this.objects.put(object.id(), object);
 
 		categorize(object);
 
 		if (this.isActive)
 			object.start();
+	}
+
+	private int nextId()
+	{
+		return idCounter++;
 	}
 
 	private void categorize(GameObject object)

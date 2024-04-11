@@ -1,13 +1,15 @@
 package GameEngineTests;
 
 import GameEngine.*;
+
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class SceneTests
 {
 	@Test
-	public void ShouldAddGameObjects()
+	public void ShouldAddGameObjects() throws GameEngineException
 	{
 		// Arrange
 		Scene s = new Scene();
@@ -30,7 +32,7 @@ public class SceneTests
 	}
 
 	@Test
-	public void ShouldIterateInForLoop()
+	public void ShouldIterateInForLoop() throws GameEngineException
 	{
 		// Arrange
 		Scene s = new Scene();
@@ -61,7 +63,7 @@ public class SceneTests
 	}
 
 	@Test
-	public void ShouldGetSceneSize()
+	public void ShouldGetSceneSize() throws GameEngineException
 	{
 		// Arrange
 		Scene s = new Scene();
@@ -79,7 +81,7 @@ public class SceneTests
 	}
 
 	@Test
-	public void ShouldCallOnStartWhenAddingToActiveScene()
+	public void ShouldCallOnStartWhenAddingToActiveScene() throws GameEngineException
 	{
 		// Arrange
 		MockGameObject obj = new MockGameObject();
@@ -94,7 +96,7 @@ public class SceneTests
 	}
 
 	@Test
-	public void ShouldRemove()
+	public void ShouldRemove() throws GameEngineException
 	{
 		// Arrange
 		MockGameObject mock = new MockGameObject();
@@ -130,7 +132,7 @@ public class SceneTests
 	}
 
 	@Test
-	public void ShouldAddInputListenersToDedicatedList()
+	public void ShouldAddInputListenersToDedicatedList() throws GameEngineException
 	{
 		// Arrange
 		class MockInputListener extends GameObject implements IInputListener
@@ -150,5 +152,56 @@ public class SceneTests
 
 		// Assert
 		assertEquals("mock input", mockListener.inputReceived());
+	}
+
+	@Test
+	public void ShouldNotBeAbleToShareGameObjectBetweenScenes() throws GameEngineException
+	{
+		// Arrange
+		Scene s0 = new Scene();
+		Scene s1 = new Scene();
+		GameObject obj = new GameObject();
+
+		// Act
+		s0.add(obj);
+
+		// Assert
+		assertThrows(GameEngineException.class, () -> s1.add(obj));
+	}
+
+	@Test
+	public void ShouldNotBeAbleToAddGameObjectEvenIfRemovedFromOtherScene() throws GameEngineException
+	{
+		// Arrange
+		Scene s0 = new Scene();
+		Scene s1 = new Scene();
+		GameObject obj = new GameObject();
+
+		// Act
+		s0.add(obj);
+		s0.remove(obj);
+
+		// Assert
+		assertThrows(GameEngineException.class, () -> s1.add(obj));
+	}
+
+	@Test
+	public void ShouldGenerateObjectIdsPerOrder() throws GameEngineException
+	{
+		// Arrange
+		Scene sc = new Scene();
+		GameObject obj0 = new GameObject();
+		GameObject obj1 = new GameObject();
+		GameObject obj2 = new GameObject();
+
+		// Act
+		sc.add(obj0);
+		sc.add(obj1);
+		sc.add(obj2);
+
+		// Arrange
+		assertEquals(0, obj0.id());
+		assertEquals(1, obj1.id());
+		assertEquals(2, obj2.id());
 	}
 }

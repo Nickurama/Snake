@@ -79,6 +79,10 @@ public class GameEngine
 				System.out.println("Stopping...");
 				stop();
 				break;
+			case "debug":
+				Logger.startLogging(Logger.Level.DEBUG);
+				Logger.log(Logger.Level.INFO, "Started debugging.");
+				break;
 			default:
 				for (IInputListener listener : currScene.inputListeners())
 					listener.onInputReceived(command);
@@ -94,6 +98,14 @@ public class GameEngine
 			return;
 
 		update();
+	}
+
+	public void setScene(Scene newScene) throws GameEngineException
+	{
+		if (isRunning)
+			throw new GameEngineException("Can't set scene while engine is still running!");
+
+		this.currScene = newScene;
 	}
 
 	private long getDeltaT()
