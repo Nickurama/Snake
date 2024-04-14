@@ -31,6 +31,7 @@ public class Scene implements Iterable<GameObject>
 
 	private HashMap<Integer, GameObject> objects;
 	private ArrayList<IInputListener> inputListeners;
+	private ArrayList<IRenderable> renderables;
 	private boolean isActive;
 	private int idCounter;
 
@@ -41,6 +42,7 @@ public class Scene implements Iterable<GameObject>
 	{
 		this.objects = new HashMap<Integer, GameObject>();
 		this.inputListeners = new ArrayList<IInputListener>();
+		this.renderables = new ArrayList<IRenderable>();
 		this.isActive = false;
 	}
 
@@ -69,6 +71,8 @@ public class Scene implements Iterable<GameObject>
 	{
 		if (object instanceof IInputListener)
 			this.inputListeners.add((IInputListener) object);
+		if (object instanceof IRenderable)
+			this.renderables.add((IRenderable) object);
 	}
 
 	public void remove(GameObject object)
@@ -102,6 +106,14 @@ public class Scene implements Iterable<GameObject>
 		return new Iterable<IInputListener>()
 		{
 			public Iterator<IInputListener> iterator() { return inputListeners.iterator(); }
+		};
+	}
+
+	public Iterable<IRenderable> renderables()
+	{
+		return new Iterable<IRenderable>()
+		{
+			public Iterator<IRenderable> iterator() { return renderables.iterator(); }
 		};
 	}
 

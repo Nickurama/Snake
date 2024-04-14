@@ -1,6 +1,7 @@
 package GameEngineTests;
 
 import GameEngine.*;
+import Geometry.*;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
@@ -155,6 +156,40 @@ public class SceneTests
 	}
 
 	@Test
+	public void ShouldIterateOverInputListeners() throws GameEngineException
+	{
+		// Arrange
+		class MockInputListener extends GameObject implements IInputListener
+		{
+			private String inputReceived;
+			public MockInputListener() { this.inputReceived = ""; }
+			public void onInputReceived(String input) { this.inputReceived = input; }
+			public String inputReceived() { return this.inputReceived; }
+		}
+		MockInputListener mockListener0 = new MockInputListener();
+		MockInputListener mockListener1 = new MockInputListener();
+		MockInputListener mockListener2 = new MockInputListener();
+		MockInputListener mockListener3 = new MockInputListener();
+		MockInputListener mockListener4 = new MockInputListener();
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(mockListener0);
+		sc.add(mockListener1);
+		sc.add(mockListener2);
+		sc.add(mockListener3);
+		sc.add(mockListener4);
+		int i = 0;
+		for (IInputListener listener : sc.inputListeners())
+			listener.onInputReceived("mock input " + (i++));
+
+		// Assert
+		i = 0;
+		for (IInputListener listener : sc.inputListeners())
+			assertEquals("mock input " + (i++), ((MockInputListener)listener).inputReceived());
+	}
+
+	@Test
 	public void ShouldNotBeAbleToShareGameObjectBetweenScenes() throws GameEngineException
 	{
 		// Arrange
@@ -203,5 +238,93 @@ public class SceneTests
 		assertEquals(0, obj0.id());
 		assertEquals(1, obj1.id());
 		assertEquals(2, obj2.id());
+	}
+
+	@Test
+	public void ShouldAddRenderablesToDedicatedList() throws GeometricException, GameEngineException	{
+		// Arrange
+		class MockRenderable extends GameObject implements IRenderable
+		{
+			private RenderData rData;
+			public MockRenderable(RenderData data)
+			{
+				this.rData = data;
+			}
+			public RenderData getRenderData() { return this.rData; }
+		}
+
+		Polygon expectedShape = new Polygon(new Point[]
+		{
+			new Point(0, 0),
+			new Point(0, 1),
+			new Point(1, 0),
+		});
+		boolean expectedIsRasterized = false;
+		int expectedLayer = 6;
+		Character expectedChar = 'f';
+		RenderData expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer, expectedChar);
+		MockRenderable mockRenderable = new MockRenderable(expected);
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(mockRenderable);
+		RenderData got = null;
+		for (IRenderable renderable : sc.renderables())
+			got = renderable.getRenderData();
+
+		// Assert
+		assertEquals(expectedShape, got.getShape());
+		assertEquals(expectedIsRasterized, got.isRasterized());
+		assertEquals(expectedLayer, got.getLayer());
+		assertEquals(expectedChar, got.getCharacter());
+	}
+
+	@Test
+	public void ShouldIterateOverRenderables() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		class MockRenderable extends GameObject implements IRenderable
+		{
+			private RenderData rData;
+			public MockRenderable(RenderData data)
+			{
+				this.rData = data;
+			}
+			public RenderData getRenderData() { return this.rData; }
+		}
+
+		Polygon expectedShape = new Polygon(new Point[]
+		{
+			new Point(0, 0),
+			new Point(0, 1),
+			new Point(1, 0),
+		});
+		boolean expectedIsRasterized = false;
+		int startLayer = 2;
+		int expectedLayer = startLayer;
+		Character expectedChar = 'f';
+		RenderData expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer++, expectedChar);
+		MockRenderable mockRenderable0 = new MockRenderable(expected);
+		expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer++, expectedChar);
+		MockRenderable mockRenderable1 = new MockRenderable(expected);
+		expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer++, expectedChar);
+		MockRenderable mockRenderable2 = new MockRenderable(expected);
+		expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer++, expectedChar);
+		MockRenderable mockRenderable3 = new MockRenderable(expected);
+		expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer++, expectedChar);
+		MockRenderable mockRenderable4 = new MockRenderable(expected);
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(mockRenderable0);
+		sc.add(mockRenderable1);
+		sc.add(mockRenderable2);
+		sc.add(mockRenderable3);
+		sc.add(mockRenderable4);
+
+		// Assert
+		int i = startLayer;
+		for (IRenderable renderable : sc.renderables())
+			assertEquals(i++, ((MockRenderable)renderable).getRenderData().getLayer());
 	}
 }

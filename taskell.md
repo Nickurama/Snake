@@ -1,6 +1,5 @@
 ## To Do
 
-- Make Debug command
 - Make RenderData class
 - Make IRenderable interface
 - Update scene class for IRenderable
@@ -44,6 +43,7 @@
 - GameObjects should have a reference to their scenes
 - Make setScene() engine function
 - Make Logger class
+- Make Debug command
 
 ## On Hold
 
