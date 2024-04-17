@@ -54,7 +54,7 @@ public class RenderDataTests
 		RenderData rData = new RenderData(shape, isRasterized, layer, character);
 
 		// Assert
-		assertTrue(rData.isRasterized());
+		assertTrue(rData.isFilled());
 	}
 
 	@Test

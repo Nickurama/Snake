@@ -87,7 +87,8 @@ public class VirtualPoint
     @Override
     public int hashCode()
     {
-        throw new UnsupportedOperationException();
+		return Double.valueOf(this.x).hashCode() * 31 + Double.valueOf(this.y).hashCode();
+        // throw new UnsupportedOperationException();
     }
 
     @Override

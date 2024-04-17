@@ -1,11 +1,9 @@
 ## To Do
 
-- Make RenderData class
-- Make IRenderable interface
-- Update scene class for IRenderable
-- Make Polygon contains() function
 - Make Renderer
+- Make Polygon contains() function
 - Make rasterization() in polygon
+- Add Renderer to GameEngine
 - --- MILESTONE ---
 - Make UI class
 - Updade scene class for UI
@@ -44,6 +42,9 @@
 - Make setScene() engine function
 - Make Logger class
 - Make Debug command
+- Make RenderData class
+- Make IRenderable interface
+- Update scene class for IRenderable
 
 ## On Hold
 

@@ -274,7 +274,7 @@ public class SceneTests
 
 		// Assert
 		assertEquals(expectedShape, got.getShape());
-		assertEquals(expectedIsRasterized, got.isRasterized());
+		assertEquals(expectedIsRasterized, got.isFilled());
 		assertEquals(expectedLayer, got.getLayer());
 		assertEquals(expectedChar, got.getCharacter());
 	}

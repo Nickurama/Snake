@@ -3,6 +3,8 @@ package GeometryTests;
 import Geometry.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.text.ParseException;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 public class PolygonTests
@@ -837,5 +839,51 @@ public class PolygonTests
 		// Act
 		// Arrange
 		assertThrows(GeometricException.class, () -> new Polygon(parseStr));
+	}
+
+	@Test
+	public void ShouldRasterizeSides() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(0, 5),
+			new Point(5, 7),
+			new Point(7, 2),
+			new Point(2, 0),
+		});
+		Point[] expected = new Point[]
+		{
+			new Point(0, 5),
+			new Point(1, 5),
+			new Point(2, 6),
+			new Point(3, 6),
+			new Point(4, 7),
+			new Point(5, 7),
+			new Point(5, 6),
+			new Point(6, 5),
+			new Point(6, 4),
+			new Point(7, 3),
+			new Point(7, 2),
+			new Point(6, 2),
+			new Point(5, 1),
+			new Point(4, 1),
+			new Point(3, 0),
+			new Point(2, 0),
+			new Point(2, 1),
+			new Point(1, 2),
+			new Point(1, 3),
+			new Point(0, 4),
+		};
+
+		// Act
+		Point[] points = poly.rasterizeSides();
+
+		// Arrange
+		// NOTE: the length might not be the same, as there may be repeating points
+		for (Point p : expected)
+			assertTrue(Arrays.asList(points).contains(p));
+		for (Point p : points)
+			assertTrue(Arrays.asList(expected).contains(p));
 	}
 }

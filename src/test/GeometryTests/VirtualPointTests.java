@@ -315,4 +315,35 @@ public class VirtualPointTests
 		assertThrows(ParseException.class, () -> VirtualPoint.parseToArray(s1));
 		assertThrows(ParseException.class, () -> VirtualPoint.parseToArray(s2));
 	}
+
+	@Test
+	public void ShouldHaveUniqueHashCode() throws GeometricException
+	{
+		// Arrange
+		Point p0 = new Point(1, 2);
+		Point p1 = new Point(1, 2);
+		Point p2 = new Point(2, 1);
+		Point p3 = new Point(3, 5);
+		Point p4 = new Point(1.2, 2.1);
+		Point p5 = new Point(1.2, 2.1);
+		Point p6 = new Point(2.1, 1.2);
+
+		// Act
+		int hash0 = p0.hashCode();
+		int hash1 = p1.hashCode();
+		int hash2 = p2.hashCode();
+		int hash3 = p3.hashCode();
+		int hash4 = p4.hashCode();
+		int hash5 = p5.hashCode();
+		int hash6 = p6.hashCode();
+
+		// Arrange
+		assertEquals(hash0, hash0);
+		assertEquals(hash0, hash1);
+		assertNotEquals(hash0, hash2);
+		assertNotEquals(hash0, hash3);
+		assertNotEquals(hash0, hash4);
+		assertEquals(hash4, hash5);
+		assertNotEquals(hash4, hash6);
+	}
 }

@@ -1,6 +1,11 @@
 package Geometry;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Represents an immutable simple polygon
@@ -14,6 +19,7 @@ import java.text.ParseException;
 public class Polygon
 {
 	private static final String ERROR_MESSAGE = "Poligono:vi";
+	private static final String ArrayList = null;
 	protected LineSegment[] sides;
 	protected Point[] vertices;
 
@@ -357,5 +363,18 @@ public class Polygon
 	public Polygon moveCentroid(Point newCentroid) throws GeometricException
 	{
 		return this.translate(new Vector(this.getCentroid(), newCentroid));
+	}
+
+	public Point[] rasterizeSides() throws GeometricException
+	{
+		java.util.ArrayList<Point> points = new ArrayList<Point>();
+
+		for (LineSegment side : this.sides)
+			points.addAll(Arrays.asList(side.rasterize()));
+
+		Point[] result = new Point[points.size()];
+		points.toArray(result);
+
+		return result;
 	}
 }
