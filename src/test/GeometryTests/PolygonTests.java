@@ -842,48 +842,24 @@ public class PolygonTests
 	}
 
 	@Test
-	public void ShouldRasterizeSides() throws GeometricException
+	public void ShouldGetSides() throws GeometricException
 	{
 		// Arrange
-		Polygon poly = new Polygon(new Point[]
-		{
+		Polygon poly = new Polygon(new Point[] {
 			new Point(0, 5),
-			new Point(5, 7),
-			new Point(7, 2),
-			new Point(2, 0),
+			new Point(2, 5),
+			new Point(1, 1),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(0, 5),
-			new Point(1, 5),
-			new Point(2, 6),
-			new Point(3, 6),
-			new Point(4, 7),
-			new Point(5, 7),
-			new Point(5, 6),
-			new Point(6, 5),
-			new Point(6, 4),
-			new Point(7, 3),
-			new Point(7, 2),
-			new Point(6, 2),
-			new Point(5, 1),
-			new Point(4, 1),
-			new Point(3, 0),
-			new Point(2, 0),
-			new Point(2, 1),
-			new Point(1, 2),
-			new Point(1, 3),
-			new Point(0, 4),
-		};
 
 		// Act
-		Point[] points = poly.rasterizeSides();
+		LineSegment[] sides = poly.getSides();
+		Point[] points = new Point[sides.length];
+		int i = 0;
+		for (LineSegment side : sides)
+			points[i++] = side.getFirstPoint();
+		Polygon newPoly = new Polygon(points);
 
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(poly, newPoly);
 	}
 }

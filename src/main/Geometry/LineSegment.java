@@ -52,6 +52,46 @@ public class LineSegment
         return this.containsPointOnSegment(intersection) && that.containsPointOnSegment(intersection);
     }
 
+    public boolean intersectsInclusive(LineSegment that)
+    {
+        if (this.line.isParalel(that.line))
+            return false;
+            // return doParalelSegmentsCollide(that);
+        VirtualPoint intersection = this.line.intersection(that.line);
+
+        // checks if a point is exactly on one of the bounds of the segment
+        if (isPointOnBounds(intersection) || that.isPointOnBounds(intersection))
+            return true;
+
+        return this.containsPointOnSegment(intersection) && that.containsPointOnSegment(intersection);
+    }
+
+	public boolean intersects(Line that)
+	{
+		if (this.line.isParalel(that))
+			return false;
+
+		VirtualPoint intersection = this.line.intersection(that);
+
+		if (isPointOnBounds(intersection))
+			return false;
+
+		return containsPointOnSegment(intersection);
+	}
+
+	public boolean intersectsInclusive(Line that)
+	{
+		if (this.line.isParalel(that))
+			return false;
+
+		VirtualPoint intersection = this.line.intersection(that);
+
+		if (isPointOnBounds(intersection))
+			return true;
+
+		return containsPointOnSegment(intersection);
+	}
+
     /**
      * checks if two paralel segments overlap
      * @param that the other paralel segment
@@ -105,72 +145,6 @@ public class LineSegment
     {
         return point1.dist(point2);
     }
-
-	public Point[] rasterize() throws GeometricException
-	{
-		int x = (int)Math.round(this.point1.X());
-		int y = (int)Math.round(this.point1.Y());
-		int x1 = (int)Math.round(this.point2.X());
-		int y1 = (int)Math.round(this.point2.Y());
-
-		int dx = Math.abs(x1 - x);
-		int dy = Math.abs(y1 - y);
-		int len = Math.max(dx, dy) + 1;
-
-		boolean isRight = x1 > x;
-		boolean isUp = y1 >= y;
-		boolean isCloserToVerticalCenter = dy >= dx;
-
-		if (x1 == 0 && y1 == 19)
-		{
-			System.out.println("isRight: " + isRight);
-			System.out.println("isUp: " + isUp);
-			System.out.println("isCloserToVerticalCenter: " + isCloserToVerticalCenter);
-			System.out.println("x: " + dx);
-			System.out.println("y: " + dy);
-		}
-
-		if (isRight && isUp && !isCloserToVerticalCenter) // first octave
-			return rasterizeFirstOctave(x, y, dx, dy, len, false, false);
-		else if (isRight && isUp && isCloserToVerticalCenter) // second octave
-			return rasterizeFirstOctave(y, x, dy, dx, len, true, false);
-		else if (!isRight && isUp && isCloserToVerticalCenter) // third octave
-			return rasterizeFirstOctave(y, x, dy, dx, len, true, true);
-		else if (!isRight && isUp && !isCloserToVerticalCenter) // fourth octave
-			return rasterizeFirstOctave(x1, y1, dx, dy, len, false, true);
-		else if (!isRight && !isUp && !isCloserToVerticalCenter) // fifth octave
-			return rasterizeFirstOctave(x1, y1, dx, dy, len, false, false);
-		else if (!isRight && !isUp && isCloserToVerticalCenter) // sixth octave
-			return rasterizeFirstOctave(y1, x1, dy, dx, len, true, false);
-		else if (isRight && !isUp && isCloserToVerticalCenter) // seventh octave
-			return rasterizeFirstOctave(y1, x1, dy, dx, len, true, true);
-		else // eith octave
-			return rasterizeFirstOctave(x, y, dx, dy, len, false, true);
-	}
-
-	private Point[] rasterizeFirstOctave(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
-	{
-		Point[] result = new Point[len];
-
-		int P = 2 * dy - dx;
-
-		for (int i = 0; i < len; i++)
-		{
-			result[i] = swapAxis ? new Point(y, x) : new Point(x, y);
-
-			x++;
-			if (P < 0)
-				P = P + 2 * dy;
-			else
-			{
-				P = P + 2 * dy - 2 * dx;
-				y += decrementY ? -1 : 1;
-			}
-		}
-
-		return result;
-	}
-
 
     /**
      * Accessor method to return the first bound of the segment

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Represents an immutable simple polygon
@@ -365,16 +366,7 @@ public class Polygon
 		return this.translate(new Vector(this.getCentroid(), newCentroid));
 	}
 
-	public Point[] rasterizeSides() throws GeometricException
-	{
-		java.util.ArrayList<Point> points = new ArrayList<Point>();
+	public LineSegment[] getSides() { return this.sides; }
 
-		for (LineSegment side : this.sides)
-			points.addAll(Arrays.asList(side.rasterize()));
-
-		Point[] result = new Point[points.size()];
-		points.toArray(result);
-
-		return result;
-	}
+	public Point[] getVertices() { return this.vertices; }
 }

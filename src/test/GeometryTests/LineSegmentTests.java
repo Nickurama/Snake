@@ -132,467 +132,100 @@ public class LineSegmentTests
 	}
 
 	@Test
-	public void ShouldRasterizeHorizontalLines() throws GeometricException
+	public void ShouldIntersectWithLine() throws GeometricException
 	{
 		// Arrange
-		LineSegment s0 = new LineSegment(new Point(10, 10), new Point(20, 10));
-		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(0, 10));
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 10),
-			new Point(12, 10),
-			new Point(13, 10),
-			new Point(14, 10),
-			new Point(15, 10),
-			new Point(16, 10),
-			new Point(17, 10),
-			new Point(18, 10),
-			new Point(19, 10),
-			new Point(20, 10),
-		};
-
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 10),
-			new Point(8, 10),
-			new Point(7, 10),
-			new Point(6, 10),
-			new Point(5, 10),
-			new Point(4, 10),
-			new Point(3, 10),
-			new Point(2, 10),
-			new Point(1, 10),
-			new Point(0, 10),
-		};
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(6, 3));
+		Line line = new Line(new Point(0, 4), new Point(1, 3));
 
 		// Act
-		Point[] points0 = s0.rasterize();
-		Point[] points1 = s1.rasterize();
+		boolean intercepts = segment.intersects(line);
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
+		assertTrue(intercepts);
 	}
 
 	@Test
-	public void ShouldRasterizeVerticalLines() throws GeometricException
+	public void ShouldNotIntersectWithLine() throws GeometricException
 	{
 		// Arrange
-		LineSegment s0 = new LineSegment(new Point(10, 10), new Point(10, 20));
-		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(10, 0));
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 11),
-			new Point(10, 12),
-			new Point(10, 13),
-			new Point(10, 14),
-			new Point(10, 15),
-			new Point(10, 16),
-			new Point(10, 17),
-			new Point(10, 18),
-			new Point(10, 19),
-			new Point(10, 20),
-		};
-
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(10, 8),
-			new Point(10, 7),
-			new Point(10, 6),
-			new Point(10, 5),
-			new Point(10, 4),
-			new Point(10, 3),
-			new Point(10, 2),
-			new Point(10, 1),
-			new Point(10, 0),
-		};
+		LineSegment segment = new LineSegment(new Point(2, 3), new Point(2, 5));
+		Line line = new Line(new Point(0, 2), new Point(1, 2));
 
 		// Act
-		Point[] points0 = s0.rasterize();
-		Point[] points1 = s1.rasterize();
+		boolean intercepts = segment.intersects(line);
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
+		assertFalse(intercepts);
 	}
 
 	@Test
-	public void ShouldRasterizeOverDiagonalLines() throws GeometricException
+	public void ShouldIntersectWithHorizontalLineWhenVerticalSegment() throws GeometricException
 	{
 		// Arrange
-		LineSegment s0 = new LineSegment(new Point(10, 10), new Point(20, 20));
-		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(0, 20));
-		LineSegment s2 = new LineSegment(new Point(10, 10), new Point(0, 0));
-		LineSegment s3 = new LineSegment(new Point(10, 10), new Point(20, 0));
-
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 12),
-			new Point(13, 13),
-			new Point(14, 14),
-			new Point(15, 15),
-			new Point(16, 16),
-			new Point(17, 17),
-			new Point(18, 18),
-			new Point(19, 19),
-			new Point(20, 20),
-		};
-
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 11),
-			new Point(8, 12),
-			new Point(7, 13),
-			new Point(6, 14),
-			new Point(5, 15),
-			new Point(4, 16),
-			new Point(3, 17),
-			new Point(2, 18),
-			new Point(1, 19),
-			new Point(0, 20),
-		};
-
-		Point[] expected2 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 9),
-			new Point(8, 8),
-			new Point(7, 7),
-			new Point(6, 6),
-			new Point(5, 5),
-			new Point(4, 4),
-			new Point(3, 3),
-			new Point(2, 2),
-			new Point(1, 1),
-			new Point(0, 0),
-		};
-
-		Point[] expected3 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 9),
-			new Point(12, 8),
-			new Point(13, 7),
-			new Point(14, 6),
-			new Point(15, 5),
-			new Point(16, 4),
-			new Point(17, 3),
-			new Point(18, 2),
-			new Point(19, 1),
-			new Point(20, 0),
-		};
+		LineSegment segment = new LineSegment(new Point(2, 1), new Point(2, 5));
+		Line line = new Line(new Point(0, 2), new Point(1, 2));
 
 		// Act
-		Point[] points0 = s0.rasterize();
-		Point[] points1 = s1.rasterize();
-		Point[] points2 = s2.rasterize();
-		Point[] points3 = s3.rasterize();
+		boolean intercepts = segment.intersects(line);
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
-		assertEquals(expected2.length, points2.length);
-		for (Point p : expected2)
-			assertTrue(Arrays.asList(points2).contains(p));
-		assertEquals(expected3.length, points3.length);
-		for (Point p : expected3)
-			assertTrue(Arrays.asList(points3).contains(p));
+		assertTrue(intercepts);
 	}
 
 	@Test
-	public void ShouldRasterizeOverFirstOctant() throws GeometricException
+	public void ShouldIntersectWithVerticalLineWhenHorizontalSegment() throws GeometricException
 	{
 		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(20, 15));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 11),
-			new Point(13, 12),
-			new Point(14, 12),
-			new Point(15, 13),
-			new Point(16, 13),
-			new Point(17, 14),
-			new Point(18, 14),
-			new Point(19, 15),
-			new Point(20, 15),
-		};
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(4, 1));
+		Line line = new Line(new Point(3, 5), new Point(3, 2));
 
 		// Act
-		Point[] points = segment.rasterize();
+		boolean intercepts = segment.intersects(line);
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertTrue(intercepts);
 	}
 
 	@Test
-	public void ShouldRasterizeOverSecondOctant() throws GeometricException
+	public void ShouldNotIntersectWhenOnlyIntersectsPoint() throws GeometricException
 	{
 		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(18, 20));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 12),
-			new Point(12, 13),
-			new Point(13, 14),
-			new Point(14, 15),
-			new Point(15, 16),
-			new Point(16, 17),
-			new Point(16, 18),
-			new Point(17, 19),
-			new Point(18, 20),
-		};
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(4, 1));
+		Line line = new Line(new Point(4, 5), new Point(4, 2));
 
 		// Act
-		Point[] points = segment.rasterize();
+		boolean intercepts = segment.intersects(line);
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertFalse(intercepts);
 	}
 
 	@Test
-	public void ShouldRasterizeOverThirdOctant() throws GeometricException
+	public void ShouldIntersectInclusiveWhenOnlyIntersectsPointOnLine() throws GeometricException
 	{
 		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(8, 20));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 11),
-			new Point(10, 12),
-			new Point(9, 13),
-			new Point(9, 14),
-			new Point(9, 15),
-			new Point(9, 16),
-			new Point(9, 17),
-			new Point(8, 18),
-			new Point(8, 19),
-			new Point(8, 20),
-		};
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(4, 1));
+		Line line = new Line(new Point(4, 5), new Point(4, 2));
 
 		// Act
-		Point[] points = segment.rasterize();
+		boolean intercepts = segment.intersectsInclusive(line);
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertTrue(intercepts);
 	}
-
+	
 	@Test
-	public void ShouldRasterizeOverFourthOctant() throws GeometricException
+	public void ShouldIntersectInclusiveWhenOnlyIntersectsPointOnLineSegment() throws GeometricException
 	{
 		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(0, 19));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 11),
-			new Point(8, 12),
-			new Point(7, 13),
-			new Point(6, 14),
-			new Point(5, 14),
-			new Point(4, 15),
-			new Point(3, 16),
-			new Point(2, 17),
-			new Point(1, 18),
-			new Point(0, 19),
-		};
+		LineSegment segment0 = new LineSegment(new Point(1, 1), new Point(4, 1));
+		LineSegment segment1 = new LineSegment(new Point(4, 1), new Point(3, 3));
 
 		// Act
-		Point[] points = segment.rasterize();
+		boolean intercepts = segment0.intersectsInclusive(segment1);
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeOverFifthOctant() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(0, 6));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 10),
-			new Point(8, 9),
-			new Point(7, 9),
-			new Point(6, 8),
-			new Point(5, 8),
-			new Point(4, 8),
-			new Point(3, 7),
-			new Point(2, 7),
-			new Point(1, 6),
-			new Point(0, 6),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeOverSixthOctant() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(9, 0));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(10, 8),
-			new Point(10, 7),
-			new Point(10, 6),
-			new Point(10, 5),
-			new Point(9, 4),
-			new Point(9, 3),
-			new Point(9, 2),
-			new Point(9, 1),
-			new Point(9, 0),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeOverSeventhOctant() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(13, 0));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(11, 8),
-			new Point(11, 7),
-			new Point(11, 6),
-			new Point(11, 5),
-			new Point(12, 4),
-			new Point(12, 3),
-			new Point(12, 2),
-			new Point(13, 1),
-			new Point(13, 0),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeOverEightOctant() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(10, 10), new Point(20, 7));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 10),
-			new Point(12, 9),
-			new Point(13, 9),
-			new Point(14, 9),
-			new Point(15, 8),
-			new Point(16, 8),
-			new Point(17, 8),
-			new Point(18, 8),
-			new Point(19, 7),
-			new Point(20, 7),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeWithFloats() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(25.2, 28.9), new Point(21.5, 23.1));
-		Point[] expected = new Point[] 
-		{
-			new Point(25, 29),
-			new Point(25, 28),
-			new Point(24, 27),
-			new Point(24, 26),
-			new Point(23, 25),
-			new Point(23, 24),
-			new Point(22, 23),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-	}
-
-	@Test
-	public void ShouldRasterizeWithSamePoint() throws GeometricException
-	{
-		// Arrange
-		LineSegment segment = new LineSegment(new Point(10.1, 10.1), new Point(9.9, 9.9));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-		};
-
-		// Act
-		Point[] points = segment.rasterize();
-
-		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertTrue(intercepts);
 	}
 }
