@@ -71,6 +71,8 @@ public class Renderer
 			// add all raster points to list
 			RasterPoint last = null;
 			boolean isPrinting = false;
+			boolean isHorizontal = false;
+			boolean lastHorizontalMin = false;
 			for (RasterPoint curr : intersections)
 			{
 				if (last == null)
@@ -89,6 +91,45 @@ public class Renderer
 
 					boolean isMinPointOfLastSegment = intersection.equals(minPointLast);
 					boolean isMinPointOfCurrSegment = intersection.equals(minPointCurr);
+					if (scanLine.isParalel(last.segment().line()) || scanLine.isParalel(curr.segment().line()))
+					{
+						// if intersection contains horizontal line
+						// if (isPrinting)
+						// {
+						if (!isHorizontal)
+						{
+							isHorizontal = true;
+							lastHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
+							continue;
+						}
+						else
+						{
+							isHorizontal = false;
+							boolean currHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
+							boolean changedDirection = currHorizontalMin == lastHorizontalMin;
+
+							if (isPrinting)
+							{
+								if (changedDirection)
+									isPrinting = false;
+								// else
+								// 	isPrinting = true;
+							}
+							else
+							{
+								if (changedDirection)
+									isPrinting = true;
+								// else
+								// 	isPrinting = false;
+							}
+						}
+						// else if (isHorizontal)
+						// {
+						// 	isHorizontal = false;
+						// 	boolean currHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
+						// 	if (lastHorizontalMin == currHorizontalMin)
+						// }
+					}
 
 					if ((!isMinPointOfLastSegment && isMinPointOfCurrSegment) || (isMinPointOfLastSegment && !isMinPointOfCurrSegment))
 					{
