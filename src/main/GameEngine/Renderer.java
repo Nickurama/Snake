@@ -93,9 +93,6 @@ public class Renderer
 					boolean isMinPointOfCurrSegment = intersection.equals(minPointCurr);
 					if (scanLine.isParalel(last.segment().line()) || scanLine.isParalel(curr.segment().line()))
 					{
-						// if intersection contains horizontal line
-						// if (isPrinting)
-						// {
 						if (!isHorizontal)
 						{
 							isHorizontal = true;
@@ -123,12 +120,6 @@ public class Renderer
 								// 	isPrinting = false;
 							}
 						}
-						// else if (isHorizontal)
-						// {
-						// 	isHorizontal = false;
-						// 	boolean currHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
-						// 	if (lastHorizontalMin == currHorizontalMin)
-						// }
 					}
 
 					if ((!isMinPointOfLastSegment && isMinPointOfCurrSegment) || (isMinPointOfLastSegment && !isMinPointOfCurrSegment))
