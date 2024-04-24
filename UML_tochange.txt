@@ -1,8 +1,12 @@
 Geometry.IGeometricShape
 	+ equals()
-
+Geometry.VirtualPoint
+	- generic
+GameEngine.Renderer
+	+ renderSides()
 
 
 
 * DELETE NaturalPoint
 * change Engine to be singleton on tests
+* change Renderer to be singleton on tests

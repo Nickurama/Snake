@@ -6,6 +6,7 @@ import Geometry.*;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 
 public class SceneTests
 {
@@ -326,5 +327,120 @@ public class SceneTests
 		int i = startLayer;
 		for (IRenderable renderable : sc.renderables())
 			assertEquals(i++, ((MockRenderable)renderable).getRenderData().getLayer());
+	}
+
+	@Test
+	public void ShouldIterateOverColliders() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		class MockCollider extends GameObject implements ICollider
+		{
+			private Polygon collider;
+			boolean onCollisionCalled;
+			public MockCollider(Polygon collider)
+			{
+				this.collider = collider;
+				this.onCollisionCalled = false;
+			}
+
+			public void onCollision(GameObject other)
+			{
+				this.onCollisionCalled = true;
+			}
+
+			public Polygon getCollider()
+			{
+				return this.collider;
+			}
+		}
+
+		Polygon[] colliders = {
+			new Polygon(new Point[] { new Point(0, 0), new Point(0, 1), new Point(1, 0), }),
+			new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 1), }),
+			new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 2), })
+		};
+		MockCollider mockCollider0 = new MockCollider(colliders[0]);
+		MockCollider mockCollider1 = new MockCollider(colliders[1]);
+		MockCollider mockCollider2 = new MockCollider(colliders[2]);
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(mockCollider0);
+		sc.add(mockCollider1);
+		sc.add(mockCollider2);
+
+		// Assert
+		int i = 0;
+		for (ICollider collider : sc.colliders())
+			assertEquals(collider[i++], ((MockCollider)collider).getCollider());
+	}
+
+	@Test
+	public void ShouldGetOverlay()
+	{
+		// Arrange
+		class MockOverlay extends GameObject implements IOverlay
+		{
+			private Character[][] overlay;
+			public MockOverlay(Character[][] overlay)
+			{
+				this.overlay = overlay;
+			}
+
+			public Character[][] getOverlayArray()
+			{
+				return this.overlay;
+			}
+		}
+
+		Character[][] overlay = new Character[][] { {0, 1}, {2, 3} };
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		GameObject obj0 = new GameObject();
+		GameObject obj1 = new GameObject();
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(obj0);
+		sc.add(mockOverlay);
+		sc.add(obj1);
+
+		// Assert
+		int i = 0;
+		assertTrue(Arrays.equals(sc.getOverlay().getOverlayArray(), overlay));
+	}
+
+	@Test
+	public void ShouldGetLatestOverlayOnly()
+	{
+		// Arrange
+		class MockOverlay extends GameObject implements IOverlay
+		{
+			private Character[][] overlay;
+			public MockOverlay(Character[][] overlay)
+			{
+				this.overlay = overlay;
+			}
+
+			public Character[][] getOverlayArray()
+			{
+				return this.overlay;
+			}
+		}
+
+		Character[][] overlay0 = new Character[][] { {0, 1}, {2, 3} };
+		Character[][] overlay1 = new Character[][] { {2, 3}, {4, 5} };
+		MockOverlay mockOverlay0 = new MockOverlay(overlay0);
+		MockOverlay mockOverlay1 = new MockOverlay(overlay1);
+		GameObject obj0 = new GameObject();
+		Scene sc = new Scene();
+
+		// Act
+		sc.add(obj0);
+		sc.add(mockOverlay0);
+		sc.add(mockOverlay1);
+
+		// Assert
+		int i = 0;
+		assertTrue(Arrays.equals(sc.getOverlay().getOverlayArray(), overlay1));
 	}
 }

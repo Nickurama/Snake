@@ -7,26 +7,6 @@ import org.junit.jupiter.api.Test;
 
 public class GameObjectTests
 {
-	// @Test
-	// public void ShouldHaveHashCodePerInstantiationOrder()
-	// {
-	// 	// Arrange
-	// 	GameObject obj0 = new GameObject();
-	// 	GameObject obj1 = new GameObject();
-	// 	GameObject obj2 = new GameObject();
-	// 	GameObject obj3 = new GameObject();
-	//
-	// 	// Act
-	// 	int hash0 = obj0.hashCode();
-	// 	int hash1 = obj1.hashCode();
-	// 	int hash2 = obj2.hashCode();
-	// 	int hash3 = obj3.hashCode();
-	//
-	// 	// Assert
-	// 	assertEquals(hash0 + 1, hash1);
-	// 	assertEquals(hash0 + 2, hash2);
-	// 	assertEquals(hash0 + 3, hash3);
-	// }
 
 	@Test
 	public void ShouldHaveSceneHandle() throws GameEngineException

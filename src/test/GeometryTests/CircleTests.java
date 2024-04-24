@@ -325,6 +325,7 @@ public class CircleTests
 		IGeometricShape rotatedDegrees = circle.rotateDegrees(180, new Point(5, 4));
 		IGeometricShape translated = circle.translate(new Vector(1, 1));
 		IGeometricShape moveCentroid = circle.moveCentroid(new Point(6, 4));
+		boolean equals = circle.equals(new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 1) }));
 
 		// Assert
 		assertTrue(MathUtil.areEqual(expectedPerimeter, perimeter));
@@ -333,6 +334,7 @@ public class CircleTests
 		assertEquals(expectedRotated, rotatedDegrees);
 		assertEquals(expectedTranslated, translated);
 		assertEquals(expectedMoveCentroid, moveCentroid);
+		assertFalse(equals);
 	}
 
 	@Test

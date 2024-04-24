@@ -924,6 +924,7 @@ public class PolygonTests
 		IGeometricShape rotatedDegrees = poly.rotateDegrees(90, new Point(2, 1));
 		IGeometricShape translated = poly.translate(new Vector(1, 1));
 		IGeometricShape moveCentroid = poly.moveCentroid(new Point(2.5, 1.5));
+		boolean equals = poly.equals(new Circle(new Point(1, 1), 1));
 
 		// Assert
 		assertEquals(expectedPerimeter, perimeter);
@@ -932,6 +933,7 @@ public class PolygonTests
 		assertEquals(expectedRotated, rotatedDegrees);
 		assertEquals(expectedTranslated, translated);
 		assertEquals(expectedMoveCentroid, moveCentroid);
+		assertFalse(equals);
 	}
 
 	@Test

@@ -2,6 +2,7 @@ package GameEngineTests;
 
 import GameEngine.*;
 import Geometry.*;
+import TestUtil.*;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,53 +14,46 @@ import org.junit.jupiter.api.Test;
 
 public class RendererTests
 {
+	class MockRenderable extends GameObject implements IRenderable
+	{
+		private RenderData rData;
+		public MockRenderable(RenderData rData) throws GeometricException
+		{
+			this.rData = rData;
+		}
+		public RenderData getRenderData() { return this.rData; }
+	}
+
 	@Test
 	public void ShouldRasterizeHorizontalLines() throws GeometricException
 	{
 		// Arrange
 		LineSegment s0 = new LineSegment(new Point(10, 10), new Point(20, 10));
 		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(0, 10));
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 10),
-			new Point(12, 10),
-			new Point(13, 10),
-			new Point(14, 10),
-			new Point(15, 10),
-			new Point(16, 10),
-			new Point(17, 10),
-			new Point(18, 10),
-			new Point(19, 10),
-			new Point(20, 10),
-		};
+		Rectangle camera0 = new Rectangle(new Point[] { new Point(9, 9), new Point(9, 11), new Point(21, 11), new Point(21, 9)});
+		Rectangle camera1 = new Rectangle(new Point[] { new Point(0, 9), new Point(0, 11), new Point(10, 11), new Point(10, 9)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 10),
-			new Point(8, 10),
-			new Point(7, 10),
-			new Point(6, 10),
-			new Point(5, 10),
-			new Point(4, 10),
-			new Point(3, 10),
-			new Point(2, 10),
-			new Point(1, 10),
-			new Point(0, 10),
-		};
+		String expected0 =	"------------\r\n" +
+							"-xxxxxxxxxx-\r\n" +
+							"------------\r\n";
+
+		String expected1 =	"-----------\r\n" +
+							"xxxxxxxxxx-\r\n" +
+							"-----------\r\n";
 
 		// Act
-		Point[] points0 = Renderer.rasterize(s0);
-		Point[] points1 = Renderer.rasterize(s1);
+		Renderer.getInstance().render(s0, camera0, '-', 'x');
+		String render0 = out.toString();
+		out.reset();
+
+		Renderer.getInstance().render(s1, camera1, '-', 'x');
+		String render1 = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
+		assertEquals(expected0, render0);
+		assertEquals(expected1, render1);
 	}
 
 	@Test
@@ -99,8 +93,8 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points0 = Renderer.rasterize(s0);
-		Point[] points1 = Renderer.rasterize(s1);
+		Point[] points0 = Renderer.getInstance().render(s0);
+		Point[] points1 = Renderer.getInstance().render(s1);
 
 		// Assert
 		assertEquals(expected0.length, points0.length);
@@ -181,10 +175,10 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points0 = Renderer.rasterize(s0);
-		Point[] points1 = Renderer.rasterize(s1);
-		Point[] points2 = Renderer.rasterize(s2);
-		Point[] points3 = Renderer.rasterize(s3);
+		Point[] points0 = Renderer.getInstance().render(s0);
+		Point[] points1 = Renderer.getInstance().render(s1);
+		Point[] points2 = Renderer.getInstance().render(s2);
+		Point[] points3 = Renderer.getInstance().render(s3);
 
 		// Assert
 		assertEquals(expected0.length, points0.length);
@@ -222,7 +216,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -251,7 +245,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -280,7 +274,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -309,7 +303,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -338,7 +332,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -367,7 +361,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -396,7 +390,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -425,7 +419,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -450,7 +444,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 
@@ -470,7 +464,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(segment);
+		Point[] points = Renderer.getInstance().render(segment);
 
 		// Assert
 		assertEquals(expected.length, points.length);
@@ -514,7 +508,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterizeSides(poly);
+		Point[] points = Renderer.getInstance().renderSides(poly);
 
 		// Arrange
 		// NOTE: the length might not be the same, as there may be repeating points
@@ -548,7 +542,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(poly);
+		Point[] points = Renderer.getInstance().render(poly);
 
 		// Arrange
 		// NOTE: the length might not be the same, as there may be repeating points
@@ -591,7 +585,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(poly);
+		Point[] points = Renderer.getInstance().render(poly);
 
 		// Arrange
 		// NOTE: the length might not be the same, as there may be repeating points
@@ -631,7 +625,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(poly);
+		Point[] points = Renderer.getInstance().render(poly);
 
 		// Arrange
 		// NOTE: the length might not be the same, as there may be repeating points
@@ -683,7 +677,7 @@ public class RendererTests
 		};
 
 		// Act
-		Point[] points = Renderer.rasterize(poly);
+		Point[] points = Renderer.getInstance().render(poly);
 
 		System.out.println("Gotten:");
 		for (Point p : points)
@@ -699,6 +693,13 @@ public class RendererTests
 		for (Point p : points)
 			assertTrue(Arrays.asList(expected).contains(p));
 	}
+
+	@Test
+	public void ShouldDrawWhenOffCamera()
+	{
+
+	}
+
 	// @Test
 	// public void ShouldSwitchBetweenTextualAndGraphical()
 	// {
