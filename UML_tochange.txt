@@ -1,0 +1,8 @@
+Geometry.IGeometricShape
+	+ equals()
+
+
+
+
+* DELETE NaturalPoint
+* change Engine to be singleton on tests

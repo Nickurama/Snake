@@ -862,4 +862,117 @@ public class PolygonTests
 		// Assert
 		assertEquals(poly, newPoly);
 	}
+
+	@Test
+	public void ShouldContainPoint() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Point p = new Point(2, 2);
+
+		// Act
+		boolean contains = poly.contains(p);
+
+		// Assert
+		assertTrue(contains);
+	}
+
+	@Test
+	public void ShouldNotContainPoint() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Point p = new Point(5, 5);
+
+		// Act
+		boolean contains = poly.contains(p);
+
+		// Assert
+		assertFalse(contains);
+	}
+
+	@Test
+	public void ShouldContainPointOnEdge() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Point p = new Point(1, 2);
+
+		// Act
+		boolean contains = poly.contains(p);
+
+		// Assert
+		assertTrue(contains);
+	}
+
+	@Test
+	public void ShouldBeGeometricShape() throws GeometricException
+	{
+		// Arrange
+		IGeometricShape poly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 2), new Point(2, 1) });
+		double expectedPerimeter = 4;
+		boolean expectedIntersects = true;
+		IGeometricShape expectedRotated = new Polygon(new Point[] { new Point(2, 1), new Point(1, 1), new Point(1, 2), new Point(2, 2) });
+		IGeometricShape expectedTranslated = new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 3), new Point(3, 2) });
+		IGeometricShape expectedMoveCentroid = new Polygon(new Point[] { new Point(2, 1), new Point(2, 2), new Point(3, 2), new Point(3, 1) });
+
+
+		// Act
+		double perimeter = poly.perimeter();
+		boolean intersects = poly.intersects(new Circle(new Point(1, 1), 0.5));
+		IGeometricShape rotated = poly.rotate(Math.PI / 2, new Point(2, 1));
+		IGeometricShape rotatedDegrees = poly.rotateDegrees(90, new Point(2, 1));
+		IGeometricShape translated = poly.translate(new Vector(1, 1));
+		IGeometricShape moveCentroid = poly.moveCentroid(new Point(2.5, 1.5));
+
+		// Assert
+		assertEquals(expectedPerimeter, perimeter);
+		assertEquals(expectedIntersects, intersects);
+		assertEquals(expectedRotated, rotated);
+		assertEquals(expectedRotated, rotatedDegrees);
+		assertEquals(expectedTranslated, translated);
+		assertEquals(expectedMoveCentroid, moveCentroid);
+	}
+
+	@Test
+	public void ShouldIntersectCircle() throws GeometricException
+	{
+		// Arrange
+		Polygon p = new Polygon(new Point[] { new Point(7, 2), new Point(4, 7), new Point(7, 7)});
+		Circle c = new Circle(new Point(4, 4), 2);
+
+		// Act
+		boolean intercepts = p.intercepts(c);
+
+		// Assert
+		assertTrue(intercepts);
+	}
+
+	@Test
+	public void ShouldNotIntersectCircle() throws GeometricException
+	{
+		// Arrange
+		Polygon p = new Polygon(new Point[] { new Point(7, 2), new Point(6, 7), new Point(7, 7)});
+		Circle c = new Circle(new Point(4, 4), 2);
+
+		// Act
+		boolean intercepts = p.intercepts(c);
+
+		// Assert
+		assertFalse(intercepts);
+	}
+
+	@Test
+	public void ShouldNotIntersectCircleWhenEdgeOverlaps() throws GeometricException
+	{
+		// Arrange
+		Polygon p = new Polygon(new Point[] { new Point(6, 2), new Point(6, 7), new Point(7, 7)});
+		Circle c = new Circle(new Point(4, 4), 2);
+
+		// Act
+		boolean intercepts = p.intercepts(c);
+
+		// Assert
+		assertFalse(intercepts);
+	}
 }
