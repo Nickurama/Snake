@@ -7,7 +7,8 @@ import java.io.ByteArrayOutputStream;
 import org.junit.jupiter.api.Test;
 
 import GameEngine.*;
-import TestUtil.TestUtil;
+import Geometry.*;
+import TestUtil.*;
 
 public class GameEngineTests
 {
@@ -20,7 +21,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.start();
@@ -38,7 +40,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.start();
@@ -57,7 +60,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.step();
@@ -75,7 +79,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -93,7 +98,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		// Arrange
@@ -109,7 +115,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.start();
@@ -128,7 +135,8 @@ public class GameEngineTests
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.start();
@@ -147,7 +155,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		String input0 = "step\n";
 		String input1 = "stop\n";
@@ -170,7 +179,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		// Act
 		engine.start();
@@ -189,7 +199,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		String input0 = "step\n";
 		String input1 = "stop\n";
@@ -211,7 +222,8 @@ public class GameEngineTests
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
 		scene.add(obj);
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		String input0 = "test input 137\n";
 		String input1 = "stop\n";
@@ -232,7 +244,8 @@ public class GameEngineTests
 		Scene s1 = new Scene();
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		GameEngine engine = new GameEngine(flags, s0);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, s0);
 		engine.start();
 
 		// Act
@@ -253,7 +266,8 @@ public class GameEngineTests
 		Scene s1 = new Scene();
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		GameEngine engine = new GameEngine(flags, s0);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, s0);
 		engine.start();
 
 		// Act
@@ -269,7 +283,8 @@ public class GameEngineTests
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
 		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
-		GameEngine engine = new GameEngine(flags, scene);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
 
 		String input0 = "debug\n";
 		String input1 = "stop\n";
@@ -280,5 +295,170 @@ public class GameEngineTests
 
 		// Arrange
 		assertTrue(os.toString().contains("Started debugging"));
+	}
+
+	@Test
+	public void ShouldRenderGameObjects() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon poly0 = new Polygon(new Point[]
+		{
+			new Point(1, 2),
+			new Point(2, 8),
+			new Point(8, 7),
+			new Point(7, 1),
+		});
+		RenderData rData0 = new RenderData(poly0, true, 1, 'x');
+		MockRenderable mockRenderable0 = new MockRenderable(rData0);
+		Polygon poly1 = new Polygon(new Point[]
+		{
+			new Point(1, 7),
+			new Point(1, 8),
+			new Point(8, 8),
+			new Point(8, 7),
+		});
+		RenderData rData1 = new RenderData(poly1, true, 0, 'y');
+		MockRenderable mockRenderable1 = new MockRenderable(rData1);
+
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockRenderable0);
+		sc.add(mockRenderable1);
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		flags.setRasterized(true);
+		flags.setTextual(true);
+
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc, camera);
+		engine.start();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		String expected =	"----------" +
+							"-yxxxyyyy-" +
+							"-yxxxxxxx-" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"-xxxxxxxx-" +
+							"-xxxxxxx--" +
+							"-xxxxxxx--" +
+							"----xxxx--" +
+							"----------";
+
+		// Act
+		engine.step();
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldRenderOverlay()
+	{
+		// Arrange
+		Character[][] overlay = new Character[][]
+		{
+			{'d', null, null, null, null, null, null, null, null, 'c'},
+			{null, 'o', null, null, null, null, null, null, null, null},
+			{null, null, 'o', null, null, null, null, null, null, null},
+			{null, null, null, 'o', null, null, null, null, null, null},
+			{null, null, null, null, 'o', null, null, null, null, null},
+			{null, null, null, null, null, 'o', null, null, null, null},
+			{null, null, null, null, null, null, 'o', null, null, null},
+			{null, null, null, null, null, null, null, 'o', null, null},
+			{null, null, null, null, null, null, null, null, 'o', null},
+			{'a', null, null, null, null, null, null, null, null, 'b'},
+		};
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		
+		Scene sc = new Scene();
+		sc.add(mockOverlay);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		flags.setRasterized(true);
+		flags.setTextual(true);
+
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc, camera);
+		engine.start();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		String expected =	"----------" +
+							"-yxxxyyyy-" +
+							"-yxxxxxxx-" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"-xxxxxxxx-" +
+							"-xxxxxxx--" +
+							"-xxxxxxx--" +
+							"----xxxx--" +
+							"----------";
+
+		// Act
+		engine.step();
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldNotifyGameObjectsWhenCollision()
+	{
+		// Arrange
+		class MockCollider extends GameObject implements ICollider
+		{
+			Polygon collider;
+			Polygon other;
+			boolean hasCollided;
+			public MockCollider(Polygon collider)
+			{
+				this.collider = collider;
+				this.other = null;
+				this.hasCollided = false;
+			}
+			public Polygon getCollider() { return this.collider; }
+			public Polygon getOther() { return this.other; }
+			public boolean hasCollided() { return this.hasCollided; }
+			public void onCollision(GameObject other)
+			{
+				this.other = ((ICollider) other).getCollider();
+				this.hasCollided = true;
+			}
+		}
+
+		Polygon p0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		MockCollider c0 = new MockCollider(p0);
+		Polygon p1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
+		MockCollider c1 = new MockCollider(p1);
+		Polygon p2 = new Polygon(new Point[] { new Point(10, 10), new Point(10, 11), new Point(11, 11), new Point(11, 10) });
+		MockCollider c2 = new MockCollider(p2);
+		
+		Scene sc = new Scene();
+		sc.add(c0);
+		sc.add(c1);
+		sc.add(c2);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc);
+		engine.start();
+
+		// Act
+		engine.step();
+
+		// Assert
+		assertTrue(c0.hasCollided());
+		assertEquals(c0.getOther(), c1.getCollider());
+		assertTrue(c1.hasCollided());
+		assertEquals(c1.getOther(), c0.getCollider());
+		assertFalse(c2.hasCollided());
 	}
 }

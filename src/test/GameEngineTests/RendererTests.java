@@ -14,15 +14,7 @@ import org.junit.jupiter.api.Test;
 
 public class RendererTests
 {
-	class MockRenderable extends GameObject implements IRenderable
-	{
-		private RenderData rData;
-		public MockRenderable(RenderData rData) throws GeometricException
-		{
-			this.rData = rData;
-		}
-		public RenderData getRenderData() { return this.rData; }
-	}
+
 
 	@Test
 	public void ShouldRasterizeHorizontalLines() throws GeometricException
@@ -62,47 +54,49 @@ public class RendererTests
 		// Arrange
 		LineSegment s0 = new LineSegment(new Point(10, 10), new Point(10, 20));
 		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(10, 0));
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 11),
-			new Point(10, 12),
-			new Point(10, 13),
-			new Point(10, 14),
-			new Point(10, 15),
-			new Point(10, 16),
-			new Point(10, 17),
-			new Point(10, 18),
-			new Point(10, 19),
-			new Point(10, 20),
-		};
+		Rectangle camera0 = new Rectangle(new Point[] { new Point(9, 9), new Point(9, 21), new Point(11, 21), new Point(11, 9)});
+		Rectangle camera1 = new Rectangle(new Point[] { new Point(9, 0), new Point(9, 11), new Point(11, 11), new Point(11, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(10, 8),
-			new Point(10, 7),
-			new Point(10, 6),
-			new Point(10, 5),
-			new Point(10, 4),
-			new Point(10, 3),
-			new Point(10, 2),
-			new Point(10, 1),
-			new Point(10, 0),
-		};
+		String expected0 =	"---\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"---\r\n";
+
+		String expected1 =	"---\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n" +
+							"-x-\r\n";
 
 		// Act
-		Point[] points0 = Renderer.getInstance().render(s0);
-		Point[] points1 = Renderer.getInstance().render(s1);
+		Renderer.getInstance().render(s0, camera0, '-', 'x');
+		String render0 = out.toString();
+		out.reset();
+
+		Renderer.getInstance().render(s1, camera1, '-', 'x');
+		String render1 = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
+		assertEquals(expected0, render0);
+		assertEquals(expected1, render1);
 	}
 
 	@Test
@@ -113,86 +107,119 @@ public class RendererTests
 		LineSegment s1 = new LineSegment(new Point(10, 10), new Point(0, 20));
 		LineSegment s2 = new LineSegment(new Point(10, 10), new Point(0, 0));
 		LineSegment s3 = new LineSegment(new Point(10, 10), new Point(20, 0));
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
-		Point[] expected0 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 12),
-			new Point(13, 13),
-			new Point(14, 14),
-			new Point(15, 15),
-			new Point(16, 16),
-			new Point(17, 17),
-			new Point(18, 18),
-			new Point(19, 19),
-			new Point(20, 20),
-		};
+		String expected0 =	"--------------------x\r\n" +
+							"-------------------x-\r\n" +
+							"------------------x--\r\n" +
+							"-----------------x---\r\n" +
+							"----------------x----\r\n" +
+							"---------------x-----\r\n" +
+							"--------------x------\r\n" +
+							"-------------x-------\r\n" +
+							"------------x--------\r\n" +
+							"-----------x---------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
-		Point[] expected1 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 11),
-			new Point(8, 12),
-			new Point(7, 13),
-			new Point(6, 14),
-			new Point(5, 15),
-			new Point(4, 16),
-			new Point(3, 17),
-			new Point(2, 18),
-			new Point(1, 19),
-			new Point(0, 20),
-		};
+		String expected1 =	"x--------------------\r\n" +
+							"-x-------------------\r\n" +
+							"--x------------------\r\n" +
+							"---x-----------------\r\n" +
+							"----x----------------\r\n" +
+							"-----x---------------\r\n" +
+							"------x--------------\r\n" +
+							"-------x-------------\r\n" +
+							"--------x------------\r\n" +
+							"---------x-----------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
-		Point[] expected2 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 9),
-			new Point(8, 8),
-			new Point(7, 7),
-			new Point(6, 6),
-			new Point(5, 5),
-			new Point(4, 4),
-			new Point(3, 3),
-			new Point(2, 2),
-			new Point(1, 1),
-			new Point(0, 0),
-		};
+		String expected2 =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"----------x----------\r\n" +
+							"---------x-----------\r\n" +
+							"--------x------------\r\n" +
+							"-------x-------------\r\n" +
+							"------x--------------\r\n" +
+							"-----x---------------\r\n" +
+							"----x----------------\r\n" +
+							"---x-----------------\r\n" +
+							"--x------------------\r\n" +
+							"-x-------------------\r\n" +
+							"x--------------------\r\n";
 
-		Point[] expected3 = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 9),
-			new Point(12, 8),
-			new Point(13, 7),
-			new Point(14, 6),
-			new Point(15, 5),
-			new Point(16, 4),
-			new Point(17, 3),
-			new Point(18, 2),
-			new Point(19, 1),
-			new Point(20, 0),
-		};
+		String expected3 =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"----------x----------\r\n" +
+							"-----------x---------\r\n" +
+							"------------x--------\r\n" +
+							"-------------x-------\r\n" +
+							"--------------x------\r\n" +
+							"---------------x-----\r\n" +
+							"----------------x----\r\n" +
+							"-----------------x---\r\n" +
+							"------------------x--\r\n" +
+							"-------------------x-\r\n" +
+							"--------------------x\r\n";
 
 		// Act
-		Point[] points0 = Renderer.getInstance().render(s0);
-		Point[] points1 = Renderer.getInstance().render(s1);
-		Point[] points2 = Renderer.getInstance().render(s2);
-		Point[] points3 = Renderer.getInstance().render(s3);
+		Renderer.getInstance().render(s0, camera, '-', 'x');
+		String render0 = out.toString();
+		out.reset();
+
+		Renderer.getInstance().render(s1, camera, '-', 'x');
+		String render1 = out.toString();
+		out.reset();
+
+		Renderer.getInstance().render(s2, camera, '-', 'x');
+		String render2 = out.toString();
+		out.reset();
+
+		Renderer.getInstance().render(s3, camera, '-', 'x');
+		String render3 = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected0.length, points0.length);
-		for (Point p : expected0)
-			assertTrue(Arrays.asList(points0).contains(p));
-		assertEquals(expected1.length, points1.length);
-		for (Point p : expected1)
-			assertTrue(Arrays.asList(points1).contains(p));
-		assertEquals(expected2.length, points2.length);
-		for (Point p : expected2)
-			assertTrue(Arrays.asList(points2).contains(p));
-		assertEquals(expected3.length, points3.length);
-		for (Point p : expected3)
-			assertTrue(Arrays.asList(points3).contains(p));
+		assertEquals(expected0, render0);
+		assertEquals(expected1, render1);
+		assertEquals(expected2, render2);
+		assertEquals(expected3, render3);
 	}
 
 	@Test
@@ -200,28 +227,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(20, 15));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 11),
-			new Point(13, 12),
-			new Point(14, 12),
-			new Point(15, 13),
-			new Point(16, 13),
-			new Point(17, 14),
-			new Point(18, 14),
-			new Point(19, 15),
-			new Point(20, 15),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"-------------------xx\r\n" +
+							"-----------------xx--\r\n" +
+							"---------------xx----\r\n" +
+							"-------------xx------\r\n" +
+							"-----------xx--------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -229,28 +266,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(18, 20));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 11),
-			new Point(12, 12),
-			new Point(12, 13),
-			new Point(13, 14),
-			new Point(14, 15),
-			new Point(15, 16),
-			new Point(16, 17),
-			new Point(16, 18),
-			new Point(17, 19),
-			new Point(18, 20),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"------------------x--\r\n" +
+							"-----------------x---\r\n" +
+							"----------------x----\r\n" +
+							"----------------x----\r\n" +
+							"---------------x-----\r\n" +
+							"--------------x------\r\n" +
+							"-------------x-------\r\n" +
+							"------------x--------\r\n" +
+							"------------x--------\r\n" +
+							"-----------x---------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -258,28 +305,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(8, 20));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 11),
-			new Point(10, 12),
-			new Point(9, 13),
-			new Point(9, 14),
-			new Point(9, 15),
-			new Point(9, 16),
-			new Point(9, 17),
-			new Point(8, 18),
-			new Point(8, 19),
-			new Point(8, 20),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"--------x------------\r\n" +
+							"--------x------------\r\n" +
+							"--------x------------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -287,28 +344,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(0, 19));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 11),
-			new Point(8, 12),
-			new Point(7, 13),
-			new Point(6, 14),
-			new Point(5, 14),
-			new Point(4, 15),
-			new Point(3, 16),
-			new Point(2, 17),
-			new Point(1, 18),
-			new Point(0, 19),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"x--------------------\r\n" +
+							"-x-------------------\r\n" +
+							"--x------------------\r\n" +
+							"---x-----------------\r\n" +
+							"----xx---------------\r\n" +
+							"------x--------------\r\n" +
+							"-------x-------------\r\n" +
+							"--------x------------\r\n" +
+							"---------x-----------\r\n" +
+							"----------x----------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -316,28 +383,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(0, 6));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(9, 10),
-			new Point(8, 9),
-			new Point(7, 9),
-			new Point(6, 8),
-			new Point(5, 8),
-			new Point(4, 8),
-			new Point(3, 7),
-			new Point(2, 7),
-			new Point(1, 6),
-			new Point(0, 6),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------xx----------\r\n" +
+							"-------xx------------\r\n" +
+							"----xxx--------------\r\n" +
+							"--xx-----------------\r\n" +
+							"xx-------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -345,28 +422,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(9, 0));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(10, 8),
-			new Point(10, 7),
-			new Point(10, 6),
-			new Point(10, 5),
-			new Point(9, 4),
-			new Point(9, 3),
-			new Point(9, 2),
-			new Point(9, 1),
-			new Point(9, 0),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n" +
+							"---------x-----------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -374,28 +461,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(13, 0));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(10, 9),
-			new Point(11, 8),
-			new Point(11, 7),
-			new Point(11, 6),
-			new Point(11, 5),
-			new Point(12, 4),
-			new Point(12, 3),
-			new Point(12, 2),
-			new Point(13, 1),
-			new Point(13, 0),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"----------x----------\r\n" +
+							"----------x----------\r\n" +
+							"-----------x---------\r\n" +
+							"-----------x---------\r\n" +
+							"-----------x---------\r\n" +
+							"-----------x---------\r\n" +
+							"------------x--------\r\n" +
+							"------------x--------\r\n" +
+							"------------x--------\r\n" +
+							"-------------x-------\r\n" +
+							"-------------x-------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -403,28 +500,38 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10, 10), new Point(20, 7));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-			new Point(11, 10),
-			new Point(12, 9),
-			new Point(13, 9),
-			new Point(14, 9),
-			new Point(15, 8),
-			new Point(16, 8),
-			new Point(17, 8),
-			new Point(18, 8),
-			new Point(19, 7),
-			new Point(20, 7),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 20), new Point(20, 20), new Point(20, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"----------xx---------\r\n" +
+							"------------xxxx-----\r\n" +
+							"----------------xxx--\r\n" +
+							"-------------------xx\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n" +
+							"---------------------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -432,25 +539,26 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(25.2, 28.9), new Point(21.5, 23.1));
-		Point[] expected = new Point[] 
-		{
-			new Point(25, 29),
-			new Point(25, 28),
-			new Point(24, 27),
-			new Point(24, 26),
-			new Point(23, 25),
-			new Point(23, 24),
-			new Point(22, 23),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(20, 22), new Point(20, 30), new Point(26, 30), new Point(26, 22)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"-------\r\n" +
+							"-----x-\r\n" +
+							"-----x-\r\n" +
+							"----x--\r\n" +
+							"----x--\r\n" +
+							"---x---\r\n" +
+							"---x---\r\n" +
+							"--x----\r\n" +
+							"-------\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -458,18 +566,20 @@ public class RendererTests
 	{
 		// Arrange
 		LineSegment segment = new LineSegment(new Point(10.1, 10.1), new Point(9.9, 9.9));
-		Point[] expected = new Point[] 
-		{
-			new Point(10, 10),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(9, 9), new Point(9, 11), new Point(11, 11), new Point(11, 9)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---\r\n" +
+							"-x-\r\n" +
+							"---\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(segment);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertEquals(expected.length, points.length);
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -483,39 +593,26 @@ public class RendererTests
 			new Point(7, 2),
 			new Point(2, 0),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(0, 5),
-			new Point(1, 5),
-			new Point(2, 6),
-			new Point(3, 6),
-			new Point(4, 7),
-			new Point(5, 7),
-			new Point(5, 6),
-			new Point(6, 5),
-			new Point(6, 4),
-			new Point(7, 3),
-			new Point(7, 2),
-			new Point(6, 2),
-			new Point(5, 1),
-			new Point(4, 1),
-			new Point(3, 0),
-			new Point(2, 0),
-			new Point(2, 1),
-			new Point(1, 2),
-			new Point(1, 3),
-			new Point(0, 4),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 8), new Point(8, 8), new Point(8, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------\r\n" +
+							"----xx---\r\n" +
+							"--xx-x---\r\n" +
+							"xx----x--\r\n" +
+							"x-----x--\r\n" +
+							"-x-----x-\r\n" +
+							"-x----xx-\r\n" +
+							"--x-xx---\r\n" +
+							"--xx-----\r\n";
 
 		// Act
-		Point[] points = Renderer.getInstance().renderSides(poly);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -529,27 +626,27 @@ public class RendererTests
 			new Point(8, 7),
 			new Point(7, 1),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(2, 8), new Point(3, 8), new Point(4, 8), 
-			new Point(2, 7), new Point(3, 7), new Point(4, 7), new Point(5, 7), new Point(6, 7), new Point(7, 7), new Point(8, 7),
-			new Point(2, 6), new Point(3, 6), new Point(4, 6), new Point(5, 6), new Point(6, 6), new Point(7, 6), new Point(8, 6),
-			new Point(2, 5), new Point(3, 5), new Point(4, 5), new Point(5, 5), new Point(6, 5), new Point(7, 5), new Point(8, 5),
-			new Point(1, 4), new Point(2, 4), new Point(3, 4), new Point(4, 4), new Point(5, 4), new Point(6, 4), new Point(7, 4), new Point(8, 4),
-			new Point(1, 3), new Point(2, 3), new Point(3, 3), new Point(4, 3), new Point(5, 3), new Point(6, 3), new Point(7, 3),
-			new Point(1, 2), new Point(2, 2), new Point(3, 2), new Point(4, 2), new Point(5, 2), new Point(6, 2), new Point(7, 2),
-			new Point(4, 1), new Point(5, 1), new Point(6, 1), new Point(7, 1),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"----------" +
+							"--xxx-----" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"-xxxxxxxx-" +
+							"-xxxxxxx--" +
+							"-xxxxxxx--" +
+							"----xxxx--" +
+							"----------";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(poly);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -570,29 +667,29 @@ public class RendererTests
 			new Point(4, 10),
 			new Point(3, 6),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(1, 10), new Point(4, 10), new Point(6, 10),
-			new Point(1, 9), new Point(4, 9), new Point(6, 9),
-			new Point(1, 8), new Point(2, 8), new Point(4, 8), new Point(6, 8),
-			new Point(1, 7), new Point(2, 7), new Point(3, 7), new Point(4, 7), new Point(5, 7), new Point(6, 7),
-			new Point(1, 6), new Point(2, 6), new Point(3, 6), new Point(4, 6), new Point(5, 6), new Point(6, 6),
-			new Point(2, 5), new Point(3, 5), new Point(4, 5),
-			new Point(3, 4), new Point(4, 4),
-			new Point(3, 3), new Point(4, 3),
-			new Point(3, 2), new Point(4, 2),
-			new Point(3, 1), new Point(4, 1),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 11), new Point(7, 11), new Point(7, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"--------" +
+							"-x--x-x-" +
+							"-x--x-x-" +
+							"-xx-x-x-" +
+							"-xxxxxx-" +
+							"-xxxxxx-" +
+							"--xxx---" +
+							"---xx---" +
+							"---xx---" +
+							"---xx---" +
+							"---xx---" +
+							"--------";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(poly);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -606,33 +703,22 @@ public class RendererTests
 			new Point(5, 3),
 			new Point(2, 3),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(1, 1),
-			new Point(2, 1),
-			new Point(3, 1),
-			new Point(4, 1),
-			new Point(5, 1),
-			new Point(6, 1),
-			new Point(2, 2),
-			new Point(3, 2),
-			new Point(4, 2),
-			new Point(5, 2),
-			new Point(2, 3),
-			new Point(3, 3),
-			new Point(4, 3),
-			new Point(5, 3),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 4), new Point(7, 4), new Point(7, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"--------" +
+							"--xxxx--" +
+							"--xxxx--" +
+							"-xxxxxx-" +
+							"--------";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(poly);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(expected, render);
 	}
 
 	@Test
@@ -647,206 +733,307 @@ public class RendererTests
 			new Point(7, 6),
 			new Point(7, 1),
 		});
-		Point[] expected = new Point[]
-		{
-			new Point(1, 1),
-			new Point(2, 1),
-			new Point(3, 1),
-			new Point(4, 1),
-			new Point(5, 1),
-			new Point(6, 1),
-			new Point(7, 1),
-			new Point(2, 2),
-			new Point(3, 2),
-			new Point(4, 2),
-			new Point(5, 2),
-			new Point(6, 2),
-			new Point(7, 2),
-			new Point(2, 3),
-			new Point(3, 3),
-			new Point(4, 3),
-			new Point(5, 3),
-			new Point(6, 3),
-			new Point(7, 3),
-			new Point(7, 3),
-			new Point(6, 4),
-			new Point(7, 4),
-			new Point(6, 5),
-			new Point(7, 5),
-			new Point(7, 6),
-		};
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 7), new Point(8, 7), new Point(8, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------" +
+							"-------x-" +
+							"------xx-" +
+							"------xx-" +
+							"--xxxxxx-" +
+							"--xxxxxx-" +
+							"-xxxxxxx-" +
+							"---------";
 
 		// Act
-		Point[] points = Renderer.getInstance().render(poly);
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
 
-		System.out.println("Gotten:");
-		for (Point p : points)
-			System.out.println(p);
-		System.out.println("Expected:");
-		for (Point p : expected)
-			System.out.println(p);
-
-		// Arrange
-		// NOTE: the length might not be the same, as there may be repeating points
-		for (Point p : expected)
-			assertTrue(Arrays.asList(points).contains(p));
-		for (Point p : points)
-			assertTrue(Arrays.asList(expected).contains(p));
+		// Assert
+		assertEquals(expected, render);
 	}
 
 	@Test
 	public void ShouldDrawWhenOffCamera()
 	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(1, 1),
+			new Point(2, 3),
+			new Point(5, 3),
+			new Point(7, 6),
+			new Point(7, 1),
+		});
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 7), new Point(5, 7), new Point(5, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
+		String expected =	"------" +
+							"------" +
+							"------" +
+							"------" +
+							"--xxxx" +
+							"--xxxx" +
+							"-xxxxx" +
+							"------";
+
+		// Act
+		Renderer.getInstance().render(segment, camera, '-', 'x');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
 	}
 
-	// @Test
-	// public void ShouldSwitchBetweenTextualAndGraphical()
-	// {
-	// 	// Arrange
-	// 	Renderer renderer = new Renderer();
-	// 	
-	// 	// Act
-	// 	renderer.setTextual(true);
-	//
-	// 	// Assert
-	// 	assertTrue(renderer.isTextual());
-	// }
-	//
-	// @Test
-	// public void ShouldRenderDataWithoutRasterization() throws GeometricException, GameEngineException
-	// {
-	// 	// Arrange
-	// 	Renderer renderer = new Renderer();
-	// 	Scene scene = new Scene();
-	// 	class MockRenderable extends GameObject implements IRenderable
-	// 	{
-	// 		private RenderData rData;
-	// 		public MockRenderable() throws GeometricException
-	// 		{
-	// 			Polygon shape = new Polygon(new Point[]
-	// 				{
-	// 					new Point(1, 1),
-	// 					new Point(1, 2),
-	// 					new Point(2, 2),
-	// 					new Point(2, 1),
-	// 			});
-	// 			this.rData = new RenderData(shape, false, 0, 'x');
-	// 		}
-	// 		public RenderData getRenderData() { return this.rData; }
-	// 	}
-	// 	MockRenderable mockObj = new MockRenderable();
-	//
-	// 	scene.add(mockObj);
-	// 	ByteArrayOutputStream out = TestUtil.TestUtil.setIOstreams("");
-	// 	Rectangle camera = new Rectangle(new Point[]
-	// 	{
-	// 		new Point(0, 0),
-	// 		new Point(3, 3),
-	// 	}); // set a way of defining square with just two points
-	// 	Character emptyChar = '*';
-	// 	String expected = 	"****\n" +
-	// 						"*xx*\n" +
-	// 						"*xx*\n" +
-	// 						"****\n";
-	//
-	// 	// Act
-	// 	renderer.render(scene, camera, emptyChar);
-	// 	String outStr = out.toString();
-	//
-	// 	// Assert
-	// 	assertEquals(expected, outStr);
-	// }
-	//
-	// @Test
-	// public void ShouldRenderDataWithoutRasterizationMakingHoleInMiddle() throws GeometricException, GameEngineException
-	// {
-	// 	// Arrange
-	// 	Renderer renderer = new Renderer();
-	// 	Scene scene = new Scene();
-	// 	class MockRenderable extends GameObject implements IRenderable
-	// 	{
-	// 		private RenderData rData;
-	// 		public MockRenderable() throws GeometricException
-	// 		{
-	// 			Polygon shape = new Polygon(new Point[]
-	// 				{
-	// 					new Point(0, 2),
-	// 					new Point(2, 4),
-	// 					new Point(4, 2),
-	// 					new Point(2, 0),
-	// 			});
-	// 			this.rData = new RenderData(shape, false, 0, 'x');
-	// 		}
-	// 		public RenderData getRenderData() { return this.rData; }
-	// 	}
-	// 	MockRenderable mockObj = new MockRenderable();
-	//
-	// 	scene.add(mockObj);
-	// 	ByteArrayOutputStream out = TestUtil.TestUtil.setIOstreams("");
-	// 	Rectangle camera = new Rectangle(new Point[]
-	// 	{
-	// 		new Point(0, 0),
-	// 		new Point(4, 4),
-	// 	}); // set a way of defining square with just two points
-	// 	Character emptyChar = '*';
-	// 	String expected = 	"**x**\n" +
-	// 						"*x*x*\n" +
-	// 						"x***x\n" +
-	// 						"*x*x*\n" +
-	// 						"**x**\n" +
-	//
-	// 	// Act
-	// 	renderer.render(scene, camera, emptyChar);
-	// 	String outStr = out.toString();
-	//
-	// 	// Assert
-	// 	assertEquals(expected, outStr);
-	// }
-	//
-	// @Test
-	// public void ShouldRenderDataWithoutRasterizationWithDiagonalLines() throws GeometricException, GameEngineException
-	// {
-	// 	// Arrange
-	// 	Renderer renderer = new Renderer();
-	// 	Scene scene = new Scene();
-	// 	class MockRenderable extends GameObject implements IRenderable
-	// 	{
-	// 		private RenderData rData;
-	// 		public MockRenderable() throws GeometricException
-	// 		{
-	// 			Polygon shape = new Polygon(new Point[]
-	// 				{
-	// 					new Point(0, 3),
-	// 					new Point(3, 4),
-	// 					new Point(4, 1),
-	// 					new Point(1, 0),
-	// 			});
-	// 			this.rData = new RenderData(shape, false, 0, 'x');
-	// 		}
-	// 		public RenderData getRenderData() { return this.rData; }
-	// 	}
-	// 	MockRenderable mockObj = new MockRenderable();
-	//
-	// 	scene.add(mockObj);
-	// 	ByteArrayOutputStream out = TestUtil.TestUtil.setIOstreams("");
-	// 	Rectangle camera = new Rectangle(new Point[]
-	// 	{
-	// 		new Point(0, 0),
-	// 		new Point(4, 4),
-	// 	}); // set a way of defining square with just two points
-	// 	Character emptyChar = '*';
-	// 	String expected = 	"***x*\n" +
-	// 						"xxxx*\n" +
-	// 						"*x*x*\n" +
-	// 						"*xxxx\n" +
-	// 						"*x***\n" +
-	//
-	// 	// Act
-	// 	renderer.render(scene, camera, emptyChar);
-	// 	String outStr = out.toString();
-	//
-	// 	// Assert
-	// 	assertEquals(expected, outStr);
-	// }
+	@Test
+	public void ShouldRenderScene()
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(1, 2),
+			new Point(2, 8),
+			new Point(8, 7),
+			new Point(7, 1),
+		});
+		RenderData rData = new RenderData(poly, true, 0, 'x');
+		MockRenderable mockRenderable = new MockRenderable(rData);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockRenderable);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"----------" +
+							"--xxx-----" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"-xxxxxxxx-" +
+							"-xxxxxxx--" +
+							"-xxxxxxx--" +
+							"----xxxx--" +
+							"----------";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldRenderEmptyScene()
+	{
+		// Arrange
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+							"5555555555" +
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '5');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldRenderNoFill() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(0, 5),
+			new Point(5, 7),
+			new Point(7, 2),
+			new Point(2, 0),
+		});
+		RenderData rData = new RenderData(poly, false, 0, 'x');
+		MockRenderable mockRenderable = new MockRenderable(rData);
+		Scene sc = new Scene();
+		sc.add(mockRenderable);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 8), new Point(8, 8), new Point(8, 0)});
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"---------\r\n" +
+							"----xx---\r\n" +
+							"--xx-x---\r\n" +
+							"xx----x--\r\n" +
+							"x-----x--\r\n" +
+							"-x-----x-\r\n" +
+							"-x----xx-\r\n" +
+							"--x-xx---\r\n" +
+							"--xx-----\r\n";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldRenderSceneByLayer()
+	{
+		// Arrange
+		Polygon poly0 = new Polygon(new Point[]
+		{
+			new Point(1, 2),
+			new Point(2, 8),
+			new Point(8, 7),
+			new Point(7, 1),
+		});
+		RenderData rData0 = new RenderData(poly0, true, 1, 'x');
+		MockRenderable mockRenderable0 = new MockRenderable(rData0);
+		Polygon poly1 = new Polygon(new Point[]
+		{
+			new Point(1, 7),
+			new Point(1, 8),
+			new Point(8, 8),
+			new Point(8, 7),
+		});
+		RenderData rData1 = new RenderData(poly1, true, 0, 'y');
+		MockRenderable mockRenderable1 = new MockRenderable(rData1);
+
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockRenderable0);
+		sc.add(mockRenderable1);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"----------" +
+							"-yxxxyyyy-" +
+							"-yxxxxxxx-" +
+							"--xxxxxxx-" +
+							"--xxxxxxx-" +
+							"-xxxxxxxx-" +
+							"-xxxxxxx--" +
+							"-xxxxxxx--" +
+							"----xxxx--" +
+							"----------";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+
+	@Test
+	public void ShouldRenderOverlay()
+	{
+		// Arrange
+		Character[][] overlay = new Character[][]
+		{
+			{'d', null, null, null, null, null, null, null, null, 'c'},
+			{null, 'o', null, null, null, null, null, null, null, null},
+			{null, null, 'o', null, null, null, null, null, null, null},
+			{null, null, null, 'o', null, null, null, null, null, null},
+			{null, null, null, null, 'o', null, null, null, null, null},
+			{null, null, null, null, null, 'o', null, null, null, null},
+			{null, null, null, null, null, null, 'o', null, null, null},
+			{null, null, null, null, null, null, null, 'o', null, null},
+			{null, null, null, null, null, null, null, null, 'o', null},
+			{'a', null, null, null, null, null, null, null, null, 'b'},
+		};
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockOverlay);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"d--------c" +
+							"-o--------" +
+							"--o-------" +
+							"---o------" +
+							"----o-----" +
+							"-----o----" +
+							"------o---" +
+							"-------o--" +
+							"--------o-" +
+							"a--------b";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+
+	@Test
+	public void ShouldApplyOverlayToScene()
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+			{
+				new Point(1, 2),
+				new Point(2, 8),
+				new Point(8, 7),
+				new Point(7, 1),
+		});
+		RenderData rData = new RenderData(poly, true, 0, 'x');
+		MockRenderable mockRenderable = new MockRenderable(rData);
+		Character[][] overlay = new Character[][]
+		{
+			{'d', null, null, null, null, null, null, null, null, 'c'},
+			{null, 'o', null, null, null, null, null, null, null, null},
+			{null, null, 'o', null, null, null, null, null, null, null},
+			{null, null, null, 'o', null, null, null, null, null, null},
+			{null, null, null, null, 'o', null, null, null, null, null},
+			{null, null, null, null, null, 'o', null, null, null, null},
+			{null, null, null, null, null, null, 'o', null, null, null},
+			{null, null, null, null, null, null, null, 'o', null, null},
+			{null, null, null, null, null, null, null, null, 'o', null},
+			{'a', null, null, null, null, null, null, null, null, 'b'},
+		};
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockOverlay);
+		sc.add(mockRenderable);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"d--------c" +
+							"-oxxx-----" +
+							"--oxxxxxx-" +
+							"--xoxxxxx-" +
+							"--xxoxxxx-" +
+							"-xxxxoxxx-" +
+							"-xxxxxox--" +
+							"-xxxxxxo--" +
+							"----xxxxo-" +
+							"a--------b";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
 }

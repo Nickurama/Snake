@@ -1,4 +1,4 @@
-package GameEngineTests;
+package TestUtil;
 
 import GameEngine.*;
 
