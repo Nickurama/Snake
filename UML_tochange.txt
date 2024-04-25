@@ -13,6 +13,7 @@ SnakeGame.Scoreboard
 	+ purgeScores()
 	= FILE_NAME to lower
 	* set Singleton
+	+ getInstance()
 SnakeGame.GameMap
 	+ rightBound()
 	+ leftBound()

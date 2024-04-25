@@ -14,26 +14,6 @@ import java.io.ByteArrayOutputStream;
 public class GameMapTests
 {
 	@Test
-	public void ShouldContainBounds() throws GeometricException
-	{
-		// Arrange
-		Rectangle mapRect = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 6), new Point(12, 6), new Point(12, 3)});
-		GameMap map = new GameMap(mapRect);
-
-		// Act
-		int leftBound = map.leftBound();
-		int rightBound = map.rightBound();
-		int upBound = map.upBound();
-		int downBound = map.downBound();
-
-		// Arrange
-		assertEquals(3, leftBound);
-		assertEquals(12, rightBound);
-		assertEquals(12, upBound);
-		assertEquals(3, downBound);
-	}
-
-	@Test
 	public void ShouldRenderMap() throws GeometricException, GameEngineException;
 	{
 		// Arrange

@@ -1,9 +1,5 @@
 ## To Do
 
-- GameManager play
-- GameManager win
-- GameManager lose
-- Main
 
 ## Doing
 
@@ -74,3 +70,7 @@
 - GameEngine Overlay
 - SnakeSegment
 - SnakeHead
+- GameManager play
+- GameManager win
+- GameManager lose
+- Main
