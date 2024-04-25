@@ -61,7 +61,7 @@ public class SnakeUnitTests
 	}
 
 	@Test
-	public void ShouldSetPosition()
+	public void ShouldRender()
 	{
 		// Arrange
 		class MockSnake extends Snake
@@ -88,29 +88,53 @@ public class SnakeUnitTests
 		MockSnake snake = new MockSnake(map, 3);
 		SnakeUnit unit = new SnakeUnit(snake, new Point(1, 1));
 
-		Polygon obstaclePoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		Obstacle obstacle = new Obstacle(obstaclePoly);
-
 		Scene sc = new Scene();
 		sc.add(unit);
-		sc.add(obstacle);
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
-		engine.init(flags, sc);
+		engine.init(flags, sc, mapRect);
 		engine.start();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		String expected =	"-----" +
+							"-----" +
+							"xxx--" +
+							"xxx--" +
+							"xxx--";
 
 		// Act
 		engine.step();
+		String render = out.toString();
+		out.reset();
 
 		// Assert
-		assertTrue(snake.hasCollided());
+		assertEquals(expected, render);
 	}
 
 	@Test
-	public void ShouldRender()
+	public void ShouldSetPosition()
 	{
+		// Arrange
+		Rectangle mapRect = new Rectangle(new Point[]
+		{
+			new Point(0, 0),
+			new Point(0, 4),
+			new Point(4, 4),
+			new Point(4, 0)
+		});
+		GameMap map = new GameMap(mapRect);
+		MockSnake snake = new MockSnake(map, 3);
+		SnakeUnit unit = new SnakeUnit(snake, new Point(1, 1));
+		Point expected = new Point(2, 2);
 
+
+		// Act
+		unit.setPosition(expected);
+
+		// Assert
+		assertEquals(expected, unit.position());
 	}
 }

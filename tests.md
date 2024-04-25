@@ -1,11 +1,5 @@
 ## To Do
 
-- SnakeUnit
-- SnakeSegment
-- SnakeHead
-- Snake
-- SnakeAI
-- SnakeController
 - GameManager play
 - GameManager win
 - GameManager lose
@@ -69,8 +63,14 @@
 - DynamicObstacle
 - FoodCircle
 - FoodSquare
+- SnakeUnit
+- Snake
+- SnakeAI
+- SnakeController
 
 ## Scrapped
 
 - Point generic
 - GameEngine Overlay
+- SnakeSegment
+- SnakeHead
