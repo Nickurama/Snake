@@ -221,6 +221,8 @@ public class Polygon implements IGeometricShape<Polygon>
 	{
 		if (this.intersects(that))
 			return false;
+		if (that.contains(this))
+			return false;
 		if (this.contains(that.getCentroid()))
 			return true;
 		return false;

@@ -1059,6 +1059,20 @@ public class PolygonTests
 	}
 
 	@Test
+	public void ShouldNotContainCircleIfCentroidIsContainedButCircleContainsPolygon() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 3), new Point(3, 2) });
+		Circle circle = new Circle(new Point(2.5, 2.5), 2);
+
+		// Act
+		boolean contains = poly.contains(circle);
+
+		// Assert
+		assertFalse(contains);
+	}
+
+	@Test
 	public void ShouldBeGeometricShape() throws GeometricException
 	{
 		// Arrange
