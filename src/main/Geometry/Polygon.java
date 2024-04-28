@@ -17,10 +17,9 @@ import java.util.Collections;
  * @inv sides are the sides of the polygon
  * @inv vertices are the vertices of the polygon
  */
-public class Polygon
+public class Polygon implements IGeometricShape<Polygon>
 {
 	private static final String ERROR_MESSAGE = "Poligono:vi";
-	private static final String ArrayList = null;
 	protected LineSegment[] sides;
 	protected Point[] vertices;
 
@@ -140,6 +139,16 @@ public class Polygon
 		return false;
 	}
 
+	public boolean intersects(IGeometricShape<?> that)
+	{
+		if (that instanceof Circle)
+			return intersects((Circle) that);
+		else if (that instanceof Polygon)
+			return intersects((Polygon) that);
+		else
+			throw new UnsupportedOperationException(this.getClass() + " doesn't have intersect method for " + that.getClass());
+	}
+
 	/**
 	 * Checks if the polygon is intercected by a segment
 	 * 
@@ -166,6 +175,66 @@ public class Polygon
 			if (that.intersects(segment))
 				return true;
 		return false;
+	}
+
+	public boolean intersects(Circle that)
+	{
+		return that.intersects(this);
+	}
+
+	public boolean contains(IGeometricShape<?> that)
+	{
+		if (that instanceof Circle)
+			return contains((Circle) that);
+		else if (that instanceof Polygon)
+			return contains((Polygon) that);
+		else
+			throw new UnsupportedOperationException(this.getClass() + " doesn't have contain method for " + that.getClass());
+	}
+
+	public boolean contains(Point that)
+	{
+		Line scan;
+		try
+		{
+			scan = new Line(new Point(0, that.Y()), that);
+			// scan = new LineSegment(new Point(that.x, 0), that);
+		}
+		catch (GeometricException e)
+		{
+			throw new Error("Should not happen, a line between 0 and a valid point should be a valid line.\n" + e.getMessage());
+		}
+
+		int intersectNum = 0;
+		for (LineSegment side : this.sides)
+		{
+			VirtualPoint intersection = scan.intersection(side.line());
+			if (MathUtil.isLessOrEqualThan(intersection.X(), that.X()) && side.contains(intersection))
+				intersectNum++;
+		}
+
+		System.out.println(intersectNum);
+		return !(intersectNum % 2 == 0);
+	}
+
+	public boolean contains(Circle that)
+	{
+		if (this.intersects(that))
+			return false;
+		if (this.contains(that.getCentroid()))
+			return true;
+		return false;
+	}
+
+	public boolean contains(Polygon that)
+	{
+		if (this.intersects(that))
+			return false;
+
+		for (Point vertice : that.vertices())
+			if (!this.contains(vertice))
+				return false;
+		return true;
 	}
 
 	/**
@@ -308,7 +377,7 @@ public class Polygon
 	 * 
 	 * @return the centroid of the polygon
 	 */
-	private Point getCentroid()
+	public Point getCentroid()
 	{
 		double x = 0;
 		double y = 0;
@@ -366,7 +435,7 @@ public class Polygon
 		return this.translate(new Vector(this.getCentroid(), newCentroid));
 	}
 
-	public LineSegment[] getSides() { return this.sides; }
+	public LineSegment[] sides() { return this.sides; }
 
-	public Point[] getVertices() { return this.vertices; }
+	public Point[] vertices() { return this.vertices; }
 }

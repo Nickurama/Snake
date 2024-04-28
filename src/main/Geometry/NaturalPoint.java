@@ -21,7 +21,7 @@ public class NaturalPoint extends Point
 
 	private void validatePoint() throws GeometricException
 	{
-		if (!MathUtil.areEqual(this.intX, super.x) || !MathUtil.areEqual(this.intY, super.y))
+		if (!MathUtil.areEqual(this.intX, super.X()) || !MathUtil.areEqual(this.intY, super.Y()))
 			throw new GeometricException("Natural Point cannot have double values.");
 	}
 

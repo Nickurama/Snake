@@ -1,0 +1,42 @@
++ add intersects to line on polygon
++ add intersects to line on circle
++ make contains, intersects, and rotates abstract classes so that there's no repeating code
+
+
+
+
+
+
+
+
+
+
+* DELETE NaturalPoint
+* change Engine to be singleton on tests
+* change Renderer to be singleton on tests
+
+* change GameEngineFlags is/setRasterized() to is/setFill()
+* SnakeGame.Score.toString()
+* SnakeGame.Score implements comparable sort by score, then date then name
+* SnakeGame.DynamicObstacle speed
+* SnakeGame.SnakeGameException
+
+# perguntar prof: no exemplo tem uma figura em que a cobra tem de subir para apanhar a comida, mas assim a comida estaria contida nao na cabeca, mas sim no corpo tambem.
+					ou seja, aquela posicao nao seria valida... alias, todas as posicoes que a cobra contem sao as unicas posicoes validas, tirando o proposito de saber se contem.
+
+# perguntar prof: o que o prof quer dizer com poder trocar tamanhos e isso...? no codigo? em input? na function call?
+
+# perguntar prof: como o GameManager comeca tudo, e tanto a posicao e direcao da cobra sao random, e a comida tambem e random, como se faz para testar
+
+* se uma comida spawnar dentro de um obstaculo grande, nao deteta colisao... tem de se ver se esta contido
+* se uma comida spawnar num sitio de um obstaculo (especialmente se for um circulo), onde interceta exatamente todos os pontos de um obstaculo, conta como se nao houvesse
+	colisao. verificar se esta dentro (e talvez verificar se algum ponto do poligono esta dentro do circulo)
+
+* add exception to SnakeGame.FoodCircle/FoodSquare "ShouldCollideWhenInsidePolygon" (make bigger than map obstacle)
+* test ShouldCallWinWhenCantRespawn with obstacles as well
+
+*Snake ShouldDieWhenCollidingWithWall, ShouldDieWhenCollidingWithTail
+*Snake ShouldOnlyMoveWhenMoveIsCalled (despite turnleft and right)
+
+* make AI an interface and snake controller takes the interface
+

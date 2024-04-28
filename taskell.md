@@ -1,16 +1,12 @@
 ## To Do
 
-- Make Renderer
-- Make Polygon contains() function
-- Make rasterization() in polygon
-- Add Renderer to GameEngine
+- Make Renderer actually render
+- Render singleton
+- Render draw instead of make points
+- Render actually render
+- Rasterize circle edge
+- Rasterize circle
 - --- MILESTONE ---
-- Make UI class
-- Updade scene class for UI
-- Make Renderer render UI
-- Make ICollider interface
-- Update scene class for ICollider
-- Make CollisionManager
 
 ## Doing
 
@@ -45,6 +41,18 @@
 - Make RenderData class
 - Make IRenderable interface
 - Update scene class for IRenderable
+- Make Circle
+- Make Circle intersect with circle
+- Make Circle IGeometricShape
+- Make perpendicular Line generation
+- Make Circle intersect with LineSegment
+- Make Circle contains point
+- Make Circle intersect with polygon (and vice versa)
+- Make Polygon IGeometricShape
+- Make Polygon contains point
+- Make Circle contains IGeometricShape
+- Make Polygon contains IGeometricShape
+- Make contains an IGometricShape method?
 
 ## On Hold
 
@@ -81,3 +89,4 @@
 - Remove step() function from engine?
 - Equals should see if gameObjects are in the same scene
 - Write down the meaning of all of this
+- Make Circle intersect with Line

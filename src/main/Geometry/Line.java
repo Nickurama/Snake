@@ -20,6 +20,20 @@ public class Line
     private double constant;
     private Point containedPoint;
 
+	public Line(double coefficientX, double coefficientY, Point containedPoint) throws GeometricException
+	{
+		if (MathUtil.areEqual(coefficientX, 0) && MathUtil.areEqual(coefficientY, 0))
+			throw new GeometricException("Cannot create a a line with both coefficients set to 0.");
+
+		this.coefficientX = coefficientX;
+		this.coefficientY = coefficientY;
+		this.containedPoint = containedPoint;
+
+		double firstY = coefficientX + containedPoint.Y();
+		double firstX = containedPoint.X() - coefficientY;
+		this.constant = firstX * containedPoint.Y() - containedPoint.X() * firstY;
+	}
+
     /**
      * Initializes a line 
      * @param a first point contained in the line
@@ -43,7 +57,7 @@ public class Line
      * @param point the point to be checked if the line contains
      * @return if the point is contained within the line
      */
-    public boolean isCollinear(Point point)
+    public boolean isCollinear(VirtualPoint point)
     {
         return MathUtil.areEqual(calcExpr(point), 0);
     }
@@ -53,7 +67,7 @@ public class Line
      * @param point the point to plug into the line equation
      * @return the result of the equation
      */
-    private double calcExpr(Point point)
+    private double calcExpr(VirtualPoint point)
     {
         return point.X() * this.coefficientX + point.Y() * this.coefficientY + constant;
     }
@@ -94,6 +108,18 @@ public class Line
     {
         return MathUtil.areEqual(this.coefficientX * that.coefficientX + this.coefficientY * that.coefficientY, 0);
     }
+
+	public Line generatePerpendicular(Point containedPoint)
+	{
+		try
+		{
+			return new Line(-this.coefficientY, this.coefficientX, containedPoint);
+		}
+		catch (GeometricException e)
+		{
+			throw new Error("Shouldn't happen! there should always be a valid line when generating perpendicular lines.\n" + e.getMessage());
+		}
+	}
 
     /**
      * Checks if two lines are equivalent (if they describe the same line in space)

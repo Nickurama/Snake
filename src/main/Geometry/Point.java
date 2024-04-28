@@ -53,7 +53,7 @@ public class Point extends VirtualPoint
      */
     private void validatePoint() throws GeometricException
     {
-        if (x < 0 || y < 0)
+        if (this.X() < 0 || this.Y() < 0)
 			throw new GeometricException(ERROR_MESSAGE + " point coordinates should always be positive");
     }
     

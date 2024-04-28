@@ -116,7 +116,7 @@ public class LineSegmentTests
         p = new Point(1, 1);
 
         // 
-        assertFalse(p.equals(s.getFirstPoint()));
+        assertFalse(p.equals(s.firstPoint()));
     }
 
 	@Test
@@ -227,5 +227,123 @@ public class LineSegmentTests
 
 		// Assert
 		assertTrue(intercepts);
+	}
+
+	@Test
+	public void ShouldContainCollinearPointOnVerticalSegment() throws GeometricException
+	{
+		// Arrange
+		Point point0 = new Point(1, 2);
+		Point point1 = new Point(1, 3);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(1, 3));
+
+		// Act
+		boolean contains0 = segment.contains(point0);
+		boolean contains1 = segment.contains(point1);
+
+		// Arrange
+		assertTrue(contains0);
+		assertTrue(contains1);
+	}
+	@Test
+
+	public void ShouldNotContainCollinearPointOnVerticalSegment() throws GeometricException
+	{
+		// Arrange
+		Point point = new Point(1, 5);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(1, 3));
+
+		// Act
+		boolean contains = segment.contains(point);
+
+		// Arrange
+		assertFalse(contains);
+	}
+
+	@Test
+	public void ShouldContainCollinearPointOnHorizontalSegment() throws GeometricException
+	{
+		// Arrange
+		Point point0 = new Point(2, 1);
+		Point point1 = new Point(3, 1);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(3, 1));
+
+		// Act
+		boolean contains0 = segment.contains(point0);
+		boolean contains1 = segment.contains(point1);
+
+		// Arrange
+		assertTrue(contains0);
+		assertTrue(contains1);
+	}
+
+	@Test
+	public void ShouldNotContainCollinearPointOnHorizontalSegment() throws GeometricException
+	{
+		// Arrange
+		Point point = new Point(0, 1);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(3, 1));
+
+		// Act
+		boolean contains = segment.contains(point);
+
+		// Arrange
+		assertFalse(contains);
+	}
+
+	@Test
+	public void ShouldContainCollinearPointOnSegment() throws GeometricException
+	{
+		// Arrange
+		Point point0 = new Point(2, 3);
+		Point point1 = new Point(3, 5);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(3, 5));
+
+		// Act
+		boolean contains0 = segment.contains(point0);
+		boolean contains1 = segment.contains(point1);
+
+		// Arrange
+		assertTrue(contains0);
+		assertTrue(contains1);
+	}
+
+	@Test
+	public void ShouldNotContainCollinearPointOnSegment() throws GeometricException
+	{
+		// Arrange
+		Point point = new Point(2/3, 0);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(3, 5));
+
+		// Act
+		boolean contains = segment.contains(point);
+
+		// Arrange
+		assertFalse(contains);
+	}
+
+	@Test
+	public void ShouldNotContainsNonCollinearPoint() throws GeometricException
+	{
+		// Arrange
+		Point point0 = new Point(2, 2);
+		LineSegment vertical = new LineSegment(new Point(1, 1), new Point(1, 3));
+		LineSegment horizontal = new LineSegment(new Point(1, 1), new Point(3, 1));
+
+		Point point1 = new Point(3, 2);
+		Point point2 = new Point(2, 3);
+		LineSegment segment = new LineSegment(new Point(1, 1), new Point(4, 4));
+
+		// Act
+		boolean contains0 = vertical.contains(point0);
+		boolean contains1 = horizontal.contains(point0);
+		boolean contains2 = segment.contains(point1);
+		boolean contains3 = segment.contains(point2);
+
+		// Arrange
+		assertFalse(contains0);
+		assertFalse(contains1);
+		assertFalse(contains2);
+		assertFalse(contains3);
 	}
 }

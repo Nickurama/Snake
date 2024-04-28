@@ -15,7 +15,7 @@ import java.text.ParseException;
  */
 public class VirtualPoint
 {
-    protected double x, y;
+    private double x, y;
 
     /**
      * Initializes the virtual point

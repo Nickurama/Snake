@@ -1,6 +1,8 @@
 package GeometryTests;
 
 import Geometry.*;
+
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -303,5 +305,106 @@ public class LineTests
 		// Act
 		// Assert
 		assertThrows(GeometricException.class, () -> new Line(p0, p1));
+	}
+
+	@Test
+	public void ShouldGeneratePerpendicularWhenHorizontal() throws GeometricException
+	{
+		// Arrange
+		Line horizontal = new Line(new Point(1, 1), new Point(2, 1));
+		Line expected = new Line(new Point(5, 1), new Point(5, 2));
+
+		// Act
+		Line perpendicular = horizontal.generatePerpendicular(new Point(5, 3));
+
+		// Arrange
+		assertTrue(perpendicular.isPerpendicular(horizontal));
+		assertEquals(expected, perpendicular);
+	}
+
+	@Test
+	public void ShouldGeneratePerpendicularWhenVertical() throws GeometricException
+	{
+		// Arrange
+		Line vertical = new Line(new Point(1, 1), new Point(1, 2));
+		Line expected = new Line(new Point(1, 3), new Point(2, 3));
+
+		// Act
+		Line perpendicular = vertical.generatePerpendicular(new Point(5, 3));
+
+		// Arrange
+		assertTrue(perpendicular.isPerpendicular(vertical));
+		assertEquals(expected, perpendicular);
+	}
+
+	@Test
+	public void ShouldGeneratePerpendicular() throws GeometricException
+	{
+		// Arrange
+		Line line0 = new Line(new Point(1, 2), new Point(2, 1));
+		Line expected0 = new Line(new Point(2, 2), new Point(1, 1));
+		Line line1 = new Line(new Point(1, 1), new Point(3, 2));
+		Line expected1 = new Line(new Point(1, 3), new Point(2, 1));
+
+		// Act
+		Line perpendicular0 = line0.generatePerpendicular(new Point(1, 1));
+		Line perpendicular1 = line1.generatePerpendicular(new Point(2, 1));
+
+		// Arrange
+		assertTrue(perpendicular0.isPerpendicular(line0));
+		assertEquals(expected0, perpendicular0);
+		assertTrue(perpendicular1.isPerpendicular(line1));
+		assertEquals(expected1, perpendicular1);
+	}
+
+	@Test
+	public void ShouldInitializeHorizontalLineFromQuotients() throws GeometricException
+	{
+		// Arrange
+		Point p = new Point(3, 5);
+		Line expected = new Line(new Point(1, 5), new Point(2, 5));
+
+		// Act
+		Line gotten = new Line(0, 1, p);
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldInitializeVerticalLineFromQuotients() throws GeometricException
+	{
+		// Arrange
+		Point p = new Point(3, 5);
+		Line expected = new Line(new Point(3, 1), new Point(3, 2));
+
+		// Act
+		Line gotten = new Line(1, 0, p);
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldInitializeLineFromQuotients() throws GeometricException
+	{
+		// Arrange
+		Point p = new Point(3, 5);
+		Line expected = new Line(new Point(1, 6), new Point(5, 4));
+
+		// Act
+		Line gotten = new Line(1, 2, p);
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldThrowExceptionWhenBothQuotientsAreZero() throws GeometricException
+	{
+		// Arrange
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Line(0, 0, new Point(1, 1)));
 	}
 }

@@ -30,10 +30,10 @@ public class Renderer
 		ArrayList<NaturalPoint> rasterPoints = new ArrayList<NaturalPoint>();
 
 		// find minY and maxY
-		Point[] vertices = poly.getVertices();
+		Point[] vertices = poly.vertices();
 		int minY = (int) vertices[0].Y();
 		int maxY = minY;
-		for (Point vertice : poly.getVertices())
+		for (Point vertice : poly.vertices())
 		{
 			minY = Math.min((int) vertice.Y(), minY);
 			maxY = Math.max((int) Math.ceil(vertice.Y()), maxY);
@@ -48,12 +48,12 @@ public class Renderer
 
 			// calculate all intersections
 			ArrayList<RasterPoint> intersections = new ArrayList<RasterPoint>();
-			for (LineSegment segment : poly.getSides())
+			for (LineSegment segment : poly.sides())
 			{
-				if (segment.line().isParalel(scanLine) && MathUtil.areEqual(segment.getFirstPoint().Y(), currY))
+				if (segment.line().isParalel(scanLine) && MathUtil.areEqual(segment.firstPoint().Y(), currY))
 				{
-					double firstX = segment.getFirstPoint().X(); // TODO can be joined with below statements
-					double secondX = segment.getSecondPoint().X();
+					double firstX = segment.firstPoint().X(); // TODO can be joined with below statements
+					double secondX = segment.secondPoint().X();
 
 					intersections.add(new RasterPoint(firstX, segment));
 					intersections.add(new RasterPoint(secondX, segment));
@@ -86,8 +86,8 @@ public class Renderer
 				{
 
 					VirtualPoint intersection = new VirtualPoint(curr.x(), currY);
-					VirtualPoint minPointLast = last.segment().getFirstPoint().Y() < last.segment().getSecondPoint().Y() ? last.segment().getFirstPoint() : last.segment().getSecondPoint();
-					VirtualPoint minPointCurr = curr.segment().getFirstPoint().Y() < curr.segment().getSecondPoint().Y() ? curr.segment().getFirstPoint() : curr.segment().getSecondPoint();
+					VirtualPoint minPointLast = last.segment().firstPoint().Y() < last.segment().secondPoint().Y() ? last.segment().firstPoint() : last.segment().secondPoint();
+					VirtualPoint minPointCurr = curr.segment().firstPoint().Y() < curr.segment().secondPoint().Y() ? curr.segment().firstPoint() : curr.segment().secondPoint();
 
 					boolean isMinPointOfLastSegment = intersection.equals(minPointLast);
 					boolean isMinPointOfCurrSegment = intersection.equals(minPointCurr);
@@ -159,7 +159,7 @@ public class Renderer
 	{
 		ArrayList<NaturalPoint> points = new ArrayList<NaturalPoint>();
 
-		for (LineSegment side : poly.getSides())
+		for (LineSegment side : poly.sides())
 			points.addAll(Arrays.asList(rasterize(side)));
 
 		NaturalPoint[] result = new NaturalPoint[points.size()];
@@ -170,10 +170,10 @@ public class Renderer
 
 	public static NaturalPoint[] rasterize(LineSegment segment) throws GeometricException
 	{
-		int x = (int)Math.round(segment.getFirstPoint().X());
-		int y = (int)Math.round(segment.getFirstPoint().Y());
-		int x1 = (int)Math.round(segment.getSecondPoint().X());
-		int y1 = (int)Math.round(segment.getSecondPoint().Y());
+		int x = (int)Math.round(segment.firstPoint().X());
+		int y = (int)Math.round(segment.firstPoint().Y());
+		int x1 = (int)Math.round(segment.secondPoint().X());
+		int y1 = (int)Math.round(segment.secondPoint().Y());
 
 		int dx = Math.abs(x1 - x);
 		int dy = Math.abs(y1 - y);
