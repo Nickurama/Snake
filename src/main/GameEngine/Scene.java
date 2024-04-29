@@ -32,6 +32,7 @@ public class Scene implements Iterable<GameObject>
 	private HashMap<Integer, GameObject> objects;
 	private ArrayList<IInputListener> inputListeners;
 	private ArrayList<IRenderable> renderables;
+	private ArrayList<ICollider> colliders;
 	private IOverlay overlay;
 	private boolean isActive;
 	private int idCounter;
@@ -44,6 +45,7 @@ public class Scene implements Iterable<GameObject>
 		this.objects = new HashMap<Integer, GameObject>();
 		this.inputListeners = new ArrayList<IInputListener>();
 		this.renderables = new ArrayList<IRenderable>();
+		this.colliders= new ArrayList<ICollider>();
 		this.isActive = false;
 	}
 
@@ -76,6 +78,8 @@ public class Scene implements Iterable<GameObject>
 			this.renderables.add((IRenderable) object);
 		if (object instanceof IOverlay)
 			this.overlay = (IOverlay) object;
+		if (object instanceof ICollider)
+			this.colliders.add((ICollider) object);
 	}
 
 	public void remove(GameObject object)
@@ -110,6 +114,21 @@ public class Scene implements Iterable<GameObject>
 		{
 			public Iterator<IInputListener> iterator() { return inputListeners.iterator(); }
 		};
+	}
+
+	public Iterable<ICollider> colliders()
+	{
+		return new Iterable<ICollider>()
+		{
+			public Iterator<ICollider> iterator() { return colliders.iterator(); }
+		};
+	}
+
+	public ICollider[] collidersArr()
+	{
+		ICollider[] result = new ICollider[this.colliders.size()];
+		this.colliders.toArray(result);
+		return result;
 	}
 
 	public Iterable<IRenderable> renderables()

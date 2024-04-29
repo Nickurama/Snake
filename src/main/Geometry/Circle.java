@@ -92,6 +92,10 @@ public class Circle implements IGeometricShape<Circle>
 
 	public boolean intersects(LineSegment that)
 	{
+		boolean firstOnCircle = this.contains(that.firstPoint());
+		if (firstOnCircle != this.contains(that.secondPoint()))
+			return true;
+
 		Line perpendicular = that.line().generatePerpendicular(this.center);
 		VirtualPoint intersection = that.line().intersection(perpendicular);
 		if (!that.contains(intersection))

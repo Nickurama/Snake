@@ -413,6 +413,9 @@ public class SceneTests
 	// }
 	//
 	// @Test
+	// public void ShouldGetColliderArray()
+	//
+	// @Test
 	// public void ShouldGetNullOverlayIfHasntBeenSet()
 	//
 	// @Test

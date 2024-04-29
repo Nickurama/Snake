@@ -1,11 +1,8 @@
 ## To Do
 
-- Render overlay
 - --- MILESTONE ---
 - CollisionManager
 - GameEngine singleton
-- IOverlay
-- Renderer overlay
 
 ## Doing
 
@@ -59,6 +56,9 @@
 - Rasterize scene
 - Rasterize circle edge
 - Rasterize circle
+- Render overlay
+- IOverlay
+- Renderer overlay
 
 ## On Hold
 
