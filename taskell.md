@@ -7,6 +7,10 @@
 - Rasterize circle edge
 - Rasterize circle
 - --- MILESTONE ---
+- CollisionManager
+- GameEngine singleton
+- IOverlay
+- Renderer overlay
 
 ## Doing
 

@@ -6,6 +6,62 @@ import org.junit.jupiter.api.Test;
 
 public class BoundingBoxTests
 {
+	@Test
+	public void ShouldGetMinimumPoint() throws GeometricException
+	{
+        // Arrange
+        BoundingBox box = new BoundingBox(new Point[] {
+            new Point(1, 2),
+            new Point(2, 1),
+            new Point(2, 2),
+        });
+		Point expected = new Point(1, 1);
+
+		// Act
+		Point gotten = box.minPoint();
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldGetMaximumPoint() throws GeometricException
+	{
+        // Arrange
+        BoundingBox box = new BoundingBox(new Point[] {
+            new Point(1, 1),
+            new Point(1, 2),
+            new Point(2, 1),
+        });
+		Point expected = new Point(2, 2);
+
+		// Act
+		Point gotten = box.maxPoint();
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldWorkWithPolygons() throws GeometricException
+	{
+        // Arrange
+        Polygon poly = new Polygon(new Point[] {
+            new Point(1, 1),
+            new Point(1, 2),
+            new Point(2, 1),
+        });
+
+		Point expected = new Point(2, 2);
+
+		// Act
+		BoundingBox box = new BoundingBox(poly);
+		Point gotten = box.maxPoint();
+
+		// Arrange
+		assertEquals(expected, gotten);
+	}
+
     @Test
     public void ShouldNotInterceptWhenBoxesDontIntercept() throws GeometricException
     {

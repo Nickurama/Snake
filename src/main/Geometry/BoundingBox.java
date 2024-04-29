@@ -23,12 +23,22 @@ public class BoundingBox
         if (points.length == 0)
             throw new GeometricException("BoundingBox::BoundingBox error: points should be greater than 0");
         
+		initialize(points);
+    }
+
+	public BoundingBox(Polygon poly)
+	{
+		initialize(poly.vertices());
+	}
+
+	private void initialize(Point[] points)
+	{
         this.min = points[0];
         this.max = points[0];
 
         for (Point p : points)
             addPoint(p);
-    }
+	}
 
     /**
      * Adds a point to the box, ensuring that the box still bounds all points
@@ -61,4 +71,7 @@ public class BoundingBox
 
         return interceptsX && interceptsY;
     }
+
+	public Point minPoint() { return this.min; }
+	public Point maxPoint() { return this.max; }
 }

@@ -3,8 +3,6 @@ package GameEngine;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import Geometry.*;
 
@@ -23,6 +21,56 @@ public class Renderer
 
 		public double x() { return this.x; }
 		public LineSegment segment() { return this.segment; }
+	}
+
+	private static Renderer instance = null;
+	private BoundingBox camera;
+	private Character backgroundChar;
+	private Character drawChar;
+	private Character[][] raster;
+
+	private Renderer()
+	{
+		// Singleton
+	}
+
+	public static Renderer getInstance()
+	{
+		if (instance == null)
+			instance = new Renderer();
+
+		return instance;
+	}
+
+	public void init(Rectangle camera, Character backgroundChar)
+	{
+		this.camera = new BoundingBox(camera);
+		this.backgroundChar = backgroundChar;
+		generateRaster(this.camera);
+	}
+
+	private void generateRaster(BoundingBox cam)
+	{
+		int dy = (int)Math.floor(cam.maxPoint().Y()) - (int)Math.ceil(cam.minPoint().Y()) + 1;
+		int dx = (int)Math.floor(cam.maxPoint().X()) - (int)Math.ceil(cam.minPoint().X()) + 1;
+
+		raster = new Character[dy][dx];
+		for (int i = 0; i < dy; i++) // iterate over y
+		{
+			raster[i] = new Character[dx];
+			for (int j = 0; j < dx; j++) // iterate over x
+			{
+				raster[i][j] = backgroundChar;
+			}
+		}
+	}
+
+	private void draw(int x, int y)
+	{
+		if (x < camera.minPoint().X() || x > camera.maxPoint().X())
+			return;
+		if (y < camera.minPoint().Y() || y > camera.maxPoint().Y())
+			return;
 	}
 
 	public static NaturalPoint[] rasterize(Polygon poly) throws GeometricException
@@ -201,15 +249,36 @@ public class Renderer
 			return rasterizeLine(x, y, dx, dy, len, false, true);
 	}
 
-	private static NaturalPoint[] rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
-	{
-		NaturalPoint[] result = new NaturalPoint[len];
+	// private static NaturalPoint[] rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
+	// {
+	// 	NaturalPoint[] result = new NaturalPoint[len];
+	//
+	// 	int P = 2 * dy - dx;
+	//
+	// 	for (int i = 0; i < len; i++)
+	// 	{
+	// 		result[i] = swapAxis ? new NaturalPoint(y, x) : new NaturalPoint(x, y);
+	//
+	// 		x++;
+	// 		if (P < 0)
+	// 			P = P + 2 * dy;
+	// 		else
+	// 		{
+	// 			P = P + 2 * dy - 2 * dx;
+	// 			y += decrementY ? -1 : 1;
+	// 		}
+	// 	}
+	//
+	// 	return result;
+	// }
 
+	private void rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
+	{
 		int P = 2 * dy - dx;
 
 		for (int i = 0; i < len; i++)
 		{
-			result[i] = swapAxis ? new NaturalPoint(y, x) : new NaturalPoint(x, y);
+			draw(x, y);
 
 			x++;
 			if (P < 0)
@@ -220,7 +289,5 @@ public class Renderer
 				y += decrementY ? -1 : 1;
 			}
 		}
-
-		return result;
 	}
 }
