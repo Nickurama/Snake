@@ -32,6 +32,7 @@ public class Scene implements Iterable<GameObject>
 	private HashMap<Integer, GameObject> objects;
 	private ArrayList<IInputListener> inputListeners;
 	private ArrayList<IRenderable> renderables;
+	private IOverlay overlay;
 	private boolean isActive;
 	private int idCounter;
 
@@ -73,6 +74,8 @@ public class Scene implements Iterable<GameObject>
 			this.inputListeners.add((IInputListener) object);
 		if (object instanceof IRenderable)
 			this.renderables.add((IRenderable) object);
+		if (object instanceof IOverlay)
+			this.overlay = (IOverlay) object;
 	}
 
 	public void remove(GameObject object)
@@ -124,6 +127,11 @@ public class Scene implements Iterable<GameObject>
 		for (IRenderable r : renderables())
 			result[i++] = r.getRenderData();
 		return result;
+	}
+
+	public IOverlay getOverlay()
+	{
+		return this.overlay;
 	}
 
 	public boolean isActive() { return this.isActive; }

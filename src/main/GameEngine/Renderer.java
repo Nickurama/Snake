@@ -177,6 +177,8 @@ public class Renderer
 	{
 		validateRender();
 		rasterize(scene.renderablesArr());
+		if (scene.getOverlay() != null)
+			rasterize(scene.getOverlay());
 		print();
 	}
 
@@ -226,7 +228,21 @@ public class Renderer
 			throw new GameEngineException("Must initialize renderer or pass all arguments.");
 	}
 
-	public void rasterize(RenderData<?>[] renderDataArr)
+	private void rasterize(IOverlay overlay)
+	{
+		char[][] overlayRaster = overlay.getOverlay();
+		for (int i = 0; i < raster.length; i++)
+		{
+			for (int j = 0; j < raster[0].length; j++)
+			{
+				if (overlayRaster[i][j] == '\0')
+					continue;
+				raster[i][j] = overlayRaster[i][j];
+			}
+		}
+	}
+
+	private void rasterize(RenderData<?>[] renderDataArr)
 	{
 		Arrays.sort(renderDataArr);
 
@@ -257,17 +273,72 @@ public class Renderer
 		}
 	}
 
-	public void rasterize(Circle circle)
+	private void rasterize(Circle circle)
 	{
-
+		rasterize(circle, true);
 	}
 
-	public void rasterizeSides(Circle circle)
+	private void rasterizeSides(Circle circle)
 	{
-
+		rasterize(circle, false);
 	}
 
-	public void rasterize(Polygon poly)
+	private void rasterize(Circle circle, boolean fill)
+	{
+		int r = (int)Math.round(circle.radius());
+		int xCircle = (int)Math.round(circle.getCentroid().X());
+		int yCircle = (int)Math.round(circle.getCentroid().Y());
+
+		int x = 0;
+		int y = r;
+		int d = 3 - (2 * r);
+		drawCircle(xCircle, yCircle, x, y, fill);
+		while (x <= y)
+		{
+			x++;
+
+			if (d > 0)
+			{
+				y--;
+				d = d + 4 * (x - y) + 10;
+			}
+			else
+			{
+				d = d + (4 * x) + 6;
+			}
+			drawCircle(xCircle, yCircle, x, y, fill);
+		}
+	}
+
+	private void drawCircle(int xCircle, int yCircle, int x, int y, boolean fill)
+	{
+		if (fill)
+			drawCircleFill(xCircle, yCircle, x, y);
+		else
+			drawCircle(xCircle, yCircle, x, y);
+	}
+
+	private void drawCircleFill(int xCircle, int yCircle, int x, int y)
+	{
+		drawHorizontalLine(xCircle - x, xCircle + x, yCircle + y);
+		drawHorizontalLine(xCircle - x, xCircle + x, yCircle - y);
+		drawHorizontalLine(xCircle - y, xCircle + y, yCircle + x);
+		drawHorizontalLine(xCircle - y, xCircle + y, yCircle - x);
+	}
+
+	private void drawCircle(int xCircle, int yCircle, int x, int y)
+	{
+		draw(xCircle + x, yCircle + y);
+		draw(xCircle - x, yCircle + y);
+		draw(xCircle + x, yCircle - y);
+		draw(xCircle - x, yCircle - y);
+		draw(xCircle + y, yCircle + x);
+		draw(xCircle - y, yCircle + x);
+		draw(xCircle + y, yCircle - x);
+		draw(xCircle - y, yCircle - x);
+	}
+
+	private void rasterize(Polygon poly)
 	{
 		// find minY and maxY
 		Point[] vertices = poly.vertices();
@@ -382,9 +453,9 @@ public class Renderer
 				if (isPrinting)
 				{
 					// draw from last to curr
-					for (int x = (int) Math.ceil(last.x()); x <= Math.floor(curr.x()); x++)
-						draw(x, currY);
-						// rasterPoints.add(new NaturalPoint(x, currY));
+					drawHorizontalLine((int) Math.ceil(last.x()), (int)Math.floor(curr.x()), currY);
+					// for (int x = (int) Math.ceil(last.x()); x <= Math.floor(curr.x()); x++)
+					// 	draw(x, currY);
 					isPrinting = false;
 				}
 				else
@@ -399,13 +470,19 @@ public class Renderer
 		rasterizeSides(poly);
 	}
 
-	public void rasterizeSides(Polygon poly)
+	private void drawHorizontalLine(int xFrom, int xTo, int y)
+	{
+		for (int i = xFrom; i <= xTo; i++)
+			draw(i, y);
+	}
+
+	private void rasterizeSides(Polygon poly)
 	{
 		for (LineSegment side : poly.sides())
 			rasterize(side);
 	}
 
-	public void rasterize(LineSegment segment)
+	private void rasterize(LineSegment segment)
 	{
 		int x = (int)Math.round(segment.firstPoint().X());
 		int y = (int)Math.round(segment.firstPoint().Y());

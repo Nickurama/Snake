@@ -413,6 +413,9 @@ public class SceneTests
 	// }
 	//
 	// @Test
+	// public void ShouldGetNullOverlayIfHasntBeenSet()
+	//
+	// @Test
 	// public void ShouldGetOverlay()
 	// {
 	// 	// Arrange

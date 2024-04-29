@@ -1,7 +1,5 @@
 ## To Do
 
-- Rasterize circle edge
-- Rasterize circle
 - Render overlay
 - --- MILESTONE ---
 - CollisionManager
@@ -59,6 +57,8 @@
 - Render draw instead of make points
 - Render actually render
 - Rasterize scene
+- Rasterize circle edge
+- Rasterize circle
 
 ## On Hold
 

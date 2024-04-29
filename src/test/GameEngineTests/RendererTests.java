@@ -1005,21 +1005,25 @@ public class RendererTests
 	public void ShouldRenderCircleFilled() throws GeometricException
 	{
 		// Arrange
-		Circle circle = new Circle(new Point(5, 5), 4);
-		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(10, 10), new Point(10, 0)});
+		Circle circle = new Circle(new Point(7, 7), 6);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 14), new Point(14, 14), new Point(14, 0)});
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
-		String expected =	"-----------\n" +
-							"-----------\n" +
-							"----xxx----\n" +
-							"---xxxxx---\n" +
-							"--xxxxxxx--\n" +
-							"--xxxxxxx--\n" +
-							"--xxxxxxx--\n" +
-							"---xxxxx---\n" +
-							"----xxx----\n" +
-							"-----------\n" +
-							"-----------\n";
+		String expected =	"---------------\n" +
+							"------xxx------\n" +
+							"----xxxxxxx----\n" +
+							"---xxxxxxxxx---\n" +
+							"--xxxxxxxxxxx--\n" +
+							"--xxxxxxxxxxx--\n" +
+							"-xxxxxxxxxxxxx-\n" +
+							"-xxxxxxxxxxxxx-\n" +
+							"-xxxxxxxxxxxxx-\n" +
+							"--xxxxxxxxxxx--\n" +
+							"--xxxxxxxxxxx--\n" +
+							"---xxxxxxxxx---\n" +
+							"----xxxxxxx----\n" +
+							"------xxx------\n" +
+							"---------------\n";
 
 
 		// Act
@@ -1035,25 +1039,30 @@ public class RendererTests
 	public void ShouldRenderCircleInScene() throws GeometricException, GameEngineException
 	{
 		// Arrange
-		Circle circle = new Circle(new Point(5, 5), 3);
-		RenderData<Circle> rData = new RenderData<Circle>(circle, true, 1, 'x');
+		Circle circle = new Circle(new Point(7, 7), 6);
+		RenderData<Circle> rData = new RenderData<Circle>(circle, false, 1, 'x');
 		MockRenderable mockRenderable = new MockRenderable(rData);
 
-		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(10, 10), new Point(10, 0)});
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 14), new Point(14, 14), new Point(14, 0)});
 		Scene sc = new Scene();
 		sc.add(mockRenderable);
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
-		String expected =	"-----------\n" +
-							"----xxx----\n" +
-							"---x---x---\n" +
-							"--x-----x--\n" +
-							"--x-----x--\n" +
-							"--x-----x--\n" +
-							"---x---x---\n" +
-							"----xxx----\n" +
-							"-----------\n" +
-							"-----------\n";
+		String expected =	"---------------\n" +
+							"------xxx------\n" +
+							"----xx---xx----\n" +
+							"---x-------x---\n" +
+							"--x---------x--\n" +
+							"--x---------x--\n" +
+							"-x-----------x-\n" +
+							"-x-----------x-\n" +
+							"-x-----------x-\n" +
+							"--x---------x--\n" +
+							"--x---------x--\n" +
+							"---x-------x---\n" +
+							"----xx---xx----\n" +
+							"------xxx------\n" +
+							"---------------\n";
 
 		// Act
 		Renderer.getInstance().render(sc, camera, '-');
@@ -1064,100 +1073,100 @@ public class RendererTests
 		assertEquals(expected, render);
 	}
 
-	// @Test
-	// public void ShouldRenderOverlay()
-	// {
-	// 	// Arrange
-	// 	Character[][] overlay = new Character[][]
-	// 	{
-	// 		{'d', null, null, null, null, null, null, null, null, 'c'},
-	// 		{null, 'o', null, null, null, null, null, null, null, null},
-	// 		{null, null, 'o', null, null, null, null, null, null, null},
-	// 		{null, null, null, 'o', null, null, null, null, null, null},
-	// 		{null, null, null, null, 'o', null, null, null, null, null},
-	// 		{null, null, null, null, null, 'o', null, null, null, null},
-	// 		{null, null, null, null, null, null, 'o', null, null, null},
-	// 		{null, null, null, null, null, null, null, 'o', null, null},
-	// 		{null, null, null, null, null, null, null, null, 'o', null},
-	// 		{'a', null, null, null, null, null, null, null, null, 'b'},
-	// 	};
-	// 	MockOverlay mockOverlay = new MockOverlay(overlay);
-	// 	Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
-	// 	Scene sc = new Scene();
-	// 	sc.add(mockOverlay);
-	// 	ByteArrayOutputStream out = TestUtil.setIOstreams("");
-	//
-	// 	String expected =	"d--------c\n" +
-	// 						"-o--------\n" +
-	// 						"--o-------\n" +
-	// 						"---o------\n" +
-	// 						"----o-----\n" +
-	// 						"-----o----\n" +
-	// 						"------o---\n" +
-	// 						"-------o--\n" +
-	// 						"--------o-\n" +
-	// 						"a--------b\n";
-	//
-	// 	// Act
-	// 	Renderer.getInstance().render(sc, camera, '-');
-	// 	String render = out.toString();
-	// 	out.reset();
-	//
-	// 	// Assert
-	// 	assertEquals(expected, render);
-	// }
-	//
-	//
-	// @Test
-	// public void ShouldApplyOverlayToScene()
-	// {
-	// 	// Arrange
-	// 	Polygon poly = new Polygon(new Point[]
-	// 		{
-	// 			new Point(1, 2),
-	// 			new Point(2, 8),
-	// 			new Point(8, 7),
-	// 			new Point(7, 1),
-	// 	});
-	// 	RenderData rData = new RenderData(poly, true, 0, 'x');
-	// 	MockRenderable mockRenderable = new MockRenderable(rData);
-	// 	Character[][] overlay = new Character[][]
-	// 	{
-	// 		{'d', null, null, null, null, null, null, null, null, 'c'},
-	// 		{null, 'o', null, null, null, null, null, null, null, null},
-	// 		{null, null, 'o', null, null, null, null, null, null, null},
-	// 		{null, null, null, 'o', null, null, null, null, null, null},
-	// 		{null, null, null, null, 'o', null, null, null, null, null},
-	// 		{null, null, null, null, null, 'o', null, null, null, null},
-	// 		{null, null, null, null, null, null, 'o', null, null, null},
-	// 		{null, null, null, null, null, null, null, 'o', null, null},
-	// 		{null, null, null, null, null, null, null, null, 'o', null},
-	// 		{'a', null, null, null, null, null, null, null, null, 'b'},
-	// 	};
-	// 	MockOverlay mockOverlay = new MockOverlay(overlay);
-	// 	Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
-	// 	Scene sc = new Scene();
-	// 	sc.add(mockOverlay);
-	// 	sc.add(mockRenderable);
-	// 	ByteArrayOutputStream out = TestUtil.setIOstreams("");
-	//
-	// 	String expected =	"d--------c\n" +
-	// 						"-oxxx-----\n" +
-	// 						"--oxxxxxx-\n" +
-	// 						"--xoxxxxx-\n" +
-	// 						"--xxoxxxx-\n" +
-	// 						"-xxxxoxxx-\n" +
-	// 						"-xxxxxox--\n" +
-	// 						"-xxxxxxo--\n" +
-	// 						"----xxxxo-\n" +
-	// 						"a--------b\n";
-	//
-	// 	// Act
-	// 	Renderer.getInstance().render(sc, camera, '-');
-	// 	String render = out.toString();
-	// 	out.reset();
-	//
-	// 	// Assert
-	// 	assertEquals(expected, render);
-	// }
+	@Test
+	public void ShouldRenderOverlay() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		char[][] overlay = new char[][]
+		{
+			{'d', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'c'},
+			{'\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0'},
+			{'a', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'b'},
+		};
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockOverlay);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"d--------c\n" +
+							"-o--------\n" +
+							"--o-------\n" +
+							"---o------\n" +
+							"----o-----\n" +
+							"-----o----\n" +
+							"------o---\n" +
+							"-------o--\n" +
+							"--------o-\n" +
+							"a--------b\n";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+
+	@Test
+	public void ShouldApplyOverlayToScene() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+			{
+				new Point(1, 2),
+				new Point(2, 8),
+				new Point(8, 7),
+				new Point(7, 1),
+		});
+		RenderData<Polygon> rData = new RenderData<Polygon>(poly, true, 0, 'x');
+		MockRenderable mockRenderable = new MockRenderable(rData);
+		char[][] overlay = new char[][]
+		{
+			{'d', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'c'},
+			{'\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0', '\0'},
+			{'\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'o', '\0'},
+			{'a', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', 'b'},
+		};
+		MockOverlay mockOverlay = new MockOverlay(overlay);
+		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(9, 9), new Point(9, 0)});
+		Scene sc = new Scene();
+		sc.add(mockOverlay);
+		sc.add(mockRenderable);
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"d--------c\n" +
+							"-oxxx-----\n" +
+							"--oxxxxxx-\n" +
+							"--xoxxxxx-\n" +
+							"--xxoxxxx-\n" +
+							"-xxxxoxxx-\n" +
+							"-xxxxxox--\n" +
+							"-xxxxxxo--\n" +
+							"----xxxxo-\n" +
+							"a--------b\n";
+
+		// Act
+		Renderer.getInstance().render(sc, camera, '-');
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
 }
