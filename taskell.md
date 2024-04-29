@@ -1,11 +1,8 @@
 ## To Do
 
-- Make Renderer actually render
-- Render singleton
-- Render draw instead of make points
-- Render actually render
 - Rasterize circle edge
 - Rasterize circle
+- Render overlay
 - --- MILESTONE ---
 - CollisionManager
 - GameEngine singleton
@@ -57,6 +54,11 @@
 - Make Circle contains IGeometricShape
 - Make Polygon contains IGeometricShape
 - Make contains an IGometricShape method?
+- Make Renderer actually render
+- Render singleton
+- Render draw instead of make points
+- Render actually render
+- Rasterize scene
 
 ## On Hold
 

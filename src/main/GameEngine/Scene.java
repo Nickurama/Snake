@@ -117,6 +117,15 @@ public class Scene implements Iterable<GameObject>
 		};
 	}
 
+	public RenderData<?>[] renderablesArr()
+	{
+		RenderData<?>[] result = new RenderData[this.renderables.size()];
+		int i = 0;
+		for (IRenderable r : renderables())
+			result[i++] = r.getRenderData();
+		return result;
+	}
+
 	public boolean isActive() { return this.isActive; }
 	public void setActive(boolean value) { this.isActive = value; }
 }

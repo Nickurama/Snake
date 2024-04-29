@@ -25,9 +25,9 @@ public class Renderer
 
 	private static Renderer instance = null;
 	private BoundingBox camera;
-	private Character backgroundChar;
-	private Character drawChar;
-	private Character[][] raster;
+	private char backgroundChar;
+	private char drawChar;
+	private char[][] raster;
 
 	private Renderer()
 	{
@@ -42,7 +42,13 @@ public class Renderer
 		return instance;
 	}
 
-	public void init(Rectangle camera, Character backgroundChar)
+	public static void resetInstance()
+	{
+		if (instance != null)
+			instance = new Renderer();
+	}
+
+	public void init(Rectangle camera, char backgroundChar)
 	{
 		this.camera = new BoundingBox(camera);
 		this.backgroundChar = backgroundChar;
@@ -54,10 +60,10 @@ public class Renderer
 		int dy = (int)Math.floor(cam.maxPoint().Y()) - (int)Math.ceil(cam.minPoint().Y()) + 1;
 		int dx = (int)Math.floor(cam.maxPoint().X()) - (int)Math.ceil(cam.minPoint().X()) + 1;
 
-		raster = new Character[dy][dx];
+		raster = new char[dy][dx];
 		for (int i = 0; i < dy; i++) // iterate over y
 		{
-			raster[i] = new Character[dx];
+			raster[i] = new char[dx];
 			for (int j = 0; j < dx; j++) // iterate over x
 			{
 				raster[i][j] = backgroundChar;
@@ -71,12 +77,198 @@ public class Renderer
 			return;
 		if (y < camera.minPoint().Y() || y > camera.maxPoint().Y())
 			return;
+
+		x = x - (int)Math.ceil(camera.minPoint().X());
+		y = (raster.length - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
+
+		raster[y][x] = drawChar;
 	}
 
-	public static NaturalPoint[] rasterize(Polygon poly) throws GeometricException
+	private void print()
 	{
-		ArrayList<NaturalPoint> rasterPoints = new ArrayList<NaturalPoint>();
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < raster.length; i++) // iterate over y
+		{
+			builder.append(new String(raster[i]));
+			builder.append('\n');
+		}
+		System.out.print(builder.toString());
+	}
 
+	public void render(Scene scene, Rectangle camera, char backgroundChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			render(scene);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void renderSides(Circle circle, Rectangle camera, char backgroundChar, char drawChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			renderSides(circle, drawChar);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void render(Circle circle, Rectangle camera, char backgroundChar, char drawChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			render(circle, drawChar);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void render(Polygon poly, Rectangle camera, char backgroundChar, char drawChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			render(poly, drawChar);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void renderSides(Polygon poly, Rectangle camera, char backgroundChar, char drawChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			renderSides(poly, drawChar);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void render(LineSegment segment, Rectangle camera, char backgroundChar, char drawChar)
+	{
+		this.init(camera, backgroundChar);
+		try
+		{
+			render(segment, drawChar);
+		}
+		catch (GameEngineException e)
+		{
+			throw new Error("Should not have happened. Renderer should have been initialized correctly on full function call.");
+		}
+	}
+
+	public void render(Scene scene) throws GameEngineException
+	{
+		validateRender();
+		rasterize(scene.renderablesArr());
+		print();
+	}
+
+	public void render(Circle circle, char drawChar) throws GameEngineException
+	{
+		validateRender();
+		this.drawChar = drawChar;
+		rasterize(circle);
+		print();
+	}
+
+	public void renderSides(Circle circle, char drawChar) throws GameEngineException
+	{
+		validateRender();
+		this.drawChar = drawChar;
+		rasterizeSides(circle);
+		print();
+	}
+
+	public void render(Polygon poly, char drawChar) throws GameEngineException
+	{
+		validateRender();
+		this.drawChar = drawChar;
+		rasterize(poly);
+		print();
+	}
+
+	public void renderSides(Polygon poly, char drawChar) throws GameEngineException
+	{
+		validateRender();
+		this.drawChar = drawChar;
+		rasterizeSides(poly);
+		print();
+	}
+
+	public void render(LineSegment segment, char drawChar) throws GameEngineException
+	{
+		validateRender();
+		this.drawChar = drawChar;
+		rasterize(segment);
+		print();
+	}
+
+	private void validateRender() throws GameEngineException
+	{
+		if (this.camera == null)
+			throw new GameEngineException("Must initialize renderer or pass all arguments.");
+	}
+
+	public void rasterize(RenderData<?>[] renderDataArr)
+	{
+		Arrays.sort(renderDataArr);
+
+		for (RenderData<?> rData : renderDataArr)
+		{
+			IGeometricShape<?> shape = rData.getShape();
+			this.drawChar = rData.getCharacter();
+			if (shape instanceof Polygon)
+			{
+				Polygon poly = (Polygon)shape;
+				if (rData.isFilled())
+					rasterize(poly);
+				else
+					rasterizeSides(poly);
+			}
+			else if (shape instanceof Circle)
+			{
+				Circle circle = (Circle)shape;
+				if (rData.isFilled())
+					rasterize(circle);
+				else
+					rasterizeSides(circle);
+			}
+			else
+			{
+				throw new UnsupportedOperationException("Unrecognized shape to render: " + shape.getClass());
+			}
+		}
+	}
+
+	public void rasterize(Circle circle)
+	{
+
+	}
+
+	public void rasterizeSides(Circle circle)
+	{
+
+	}
+
+	public void rasterize(Polygon poly)
+	{
 		// find minY and maxY
 		Point[] vertices = poly.vertices();
 		int minY = (int) vertices[0].Y();
@@ -91,7 +283,15 @@ public class Renderer
 		for (int currY = minY; currY <= maxY; currY++)
 		{
 			// generate current scanline
-			Line scanLine = new Line(new Point(0.0, currY), new Point(1.0, currY));
+			Line scanLine;
+			try
+			{
+				scanLine = new Line(new Point(0.0, currY), new Point(1.0, currY));
+			}
+			catch (GeometricException e)
+			{
+				throw new Error("Should not happen, the scanline should always be valid.");
+			}
 
 
 			// calculate all intersections
@@ -183,7 +383,8 @@ public class Renderer
 				{
 					// draw from last to curr
 					for (int x = (int) Math.ceil(last.x()); x <= Math.floor(curr.x()); x++)
-						rasterPoints.add(new NaturalPoint(x, currY));
+						draw(x, currY);
+						// rasterPoints.add(new NaturalPoint(x, currY));
 					isPrinting = false;
 				}
 				else
@@ -195,28 +396,16 @@ public class Renderer
 		}
 
 		// Add sides
-		rasterPoints.addAll(Arrays.asList(rasterizeSides(poly)));
-		
-		// Convert arrayList to array
-		NaturalPoint[] result = new NaturalPoint[rasterPoints.size()];
-		rasterPoints.toArray(result);
-		return result;
+		rasterizeSides(poly);
 	}
 
-	public static NaturalPoint[] rasterizeSides(Polygon poly) throws GeometricException
+	public void rasterizeSides(Polygon poly)
 	{
-		ArrayList<NaturalPoint> points = new ArrayList<NaturalPoint>();
-
 		for (LineSegment side : poly.sides())
-			points.addAll(Arrays.asList(rasterize(side)));
-
-		NaturalPoint[] result = new NaturalPoint[points.size()];
-		points.toArray(result);
-
-		return result;
+			rasterize(side);
 	}
 
-	public static NaturalPoint[] rasterize(LineSegment segment) throws GeometricException
+	public void rasterize(LineSegment segment)
 	{
 		int x = (int)Math.round(segment.firstPoint().X());
 		int y = (int)Math.round(segment.firstPoint().Y());
@@ -232,53 +421,33 @@ public class Renderer
 		boolean isCloserToVerticalCenter = dy >= dx;
 
 		if (isRight && isUp && !isCloserToVerticalCenter) // first octave
-			return rasterizeLine(x, y, dx, dy, len, false, false);
+			rasterizeLine(x, y, dx, dy, len, false, false);
 		else if (isRight && isUp && isCloserToVerticalCenter) // second octave
-			return rasterizeLine(y, x, dy, dx, len, true, false);
+			rasterizeLine(y, x, dy, dx, len, true, false);
 		else if (!isRight && isUp && isCloserToVerticalCenter) // third octave
-			return rasterizeLine(y, x, dy, dx, len, true, true);
+			rasterizeLine(y, x, dy, dx, len, true, true);
 		else if (!isRight && isUp && !isCloserToVerticalCenter) // fourth octave
-			return rasterizeLine(x1, y1, dx, dy, len, false, true);
+			rasterizeLine(x1, y1, dx, dy, len, false, true);
 		else if (!isRight && !isUp && !isCloserToVerticalCenter) // fifth octave
-			return rasterizeLine(x1, y1, dx, dy, len, false, false);
+			rasterizeLine(x1, y1, dx, dy, len, false, false);
 		else if (!isRight && !isUp && isCloserToVerticalCenter) // sixth octave
-			return rasterizeLine(y1, x1, dy, dx, len, true, false);
+			rasterizeLine(y1, x1, dy, dx, len, true, false);
 		else if (isRight && !isUp && isCloserToVerticalCenter) // seventh octave
-			return rasterizeLine(y1, x1, dy, dx, len, true, true);
+			rasterizeLine(y1, x1, dy, dx, len, true, true);
 		else // eith octave
-			return rasterizeLine(x, y, dx, dy, len, false, true);
+			rasterizeLine(x, y, dx, dy, len, false, true);
 	}
 
-	// private static NaturalPoint[] rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
-	// {
-	// 	NaturalPoint[] result = new NaturalPoint[len];
-	//
-	// 	int P = 2 * dy - dx;
-	//
-	// 	for (int i = 0; i < len; i++)
-	// 	{
-	// 		result[i] = swapAxis ? new NaturalPoint(y, x) : new NaturalPoint(x, y);
-	//
-	// 		x++;
-	// 		if (P < 0)
-	// 			P = P + 2 * dy;
-	// 		else
-	// 		{
-	// 			P = P + 2 * dy - 2 * dx;
-	// 			y += decrementY ? -1 : 1;
-	// 		}
-	// 	}
-	//
-	// 	return result;
-	// }
-
-	private void rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY) throws GeometricException
+	private void rasterizeLine(int x, int y, int dx, int dy, int len, boolean swapAxis, boolean decrementY)
 	{
 		int P = 2 * dy - dx;
 
 		for (int i = 0; i < len; i++)
 		{
-			draw(x, y);
+			if (swapAxis)
+				draw(y, x);
+			else
+				draw(x, y);
 
 			x++;
 			if (P < 0)

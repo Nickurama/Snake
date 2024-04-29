@@ -281,6 +281,43 @@ public class SceneTests
 	// }
 	//
 	// @Test
+	// public void ShouldGetRenderablesArray() throws GeometricException, GameEngineException	{
+	// 	// Arrange
+	// 	class MockRenderable extends GameObject implements IRenderable
+	// 	{
+	// 		private RenderData rData;
+	// 		public MockRenderable(RenderData data)
+	// 		{
+	// 			this.rData = data;
+	// 		}
+	// 		public RenderData getRenderData() { return this.rData; }
+	// 	}
+	//
+	// 	Polygon expectedShape = new Polygon(new Point[]
+	// 	{
+	// 		new Point(0, 0),
+	// 		new Point(0, 1),
+	// 		new Point(1, 0),
+	// 	});
+	// 	boolean expectedIsRasterized = false;
+	// 	int expectedLayer = 6;
+	// 	Character expectedChar = 'f';
+	// 	RenderData expected = new RenderData(expectedShape, expectedIsRasterized, expectedLayer, expectedChar);
+	// 	MockRenderable mockRenderable = new MockRenderable(expected);
+	// 	Scene sc = new Scene();
+	// 	sc.add(mockRenderable);
+	//
+	// 	// Act
+	// 	RenderData got = sc.renderablesArr()[0];
+	//
+	// 	// Assert
+	// 	assertEquals(expectedShape, got.getShape());
+	// 	assertEquals(expectedIsRasterized, got.isFilled());
+	// 	assertEquals(expectedLayer, got.getLayer());
+	// 	assertEquals(expectedChar, got.getCharacter());
+	// }
+	//
+	// @Test
 	// public void ShouldIterateOverRenderables() throws GeometricException, GameEngineException
 	// {
 	// 	// Arrange

@@ -29,7 +29,7 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData = new RenderData(shape, isRasterized, layer, character);
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, isRasterized, layer, character);
 
 		// Assert
 		assertEquals(shape, rData.getShape());
@@ -51,7 +51,7 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData = new RenderData(shape, isRasterized, layer, character);
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, isRasterized, layer, character);
 
 		// Assert
 		assertTrue(rData.isFilled());
@@ -73,7 +73,7 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData = new RenderData(shape, isRasterized, layer, character);
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, isRasterized, layer, character);
 
 		// Assert
 		assertEquals(5, rData.getLayer());
@@ -95,7 +95,7 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData = new RenderData(shape, isRasterized, layer, character);
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, isRasterized, layer, character);
 
 		// Assert
 		assertEquals('x', rData.getCharacter());
@@ -117,7 +117,7 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData = new RenderData(shape, isRasterized, layer, character);
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, isRasterized, layer, character);
 		Polygon old = new Polygon(shape);
 		shape = new Polygon(new Point[]
 		{
@@ -146,11 +146,11 @@ public class RenderDataTests
 		Character character = 'x';
 
 		// Act
-		RenderData rData0 = new RenderData(shape, isRasterized, 4, character);
-		RenderData rData1 = new RenderData(shape, isRasterized, 9, character);
-		RenderData rData2 = new RenderData(shape, isRasterized, 3, character);
-		RenderData rData3 = new RenderData(shape, isRasterized, 1, character);
-		RenderData rData4 = new RenderData(shape, isRasterized, 3, character);
+		RenderData<Polygon> rData0 = new RenderData<Polygon>(shape, isRasterized, 4, character);
+		RenderData<Polygon> rData1 = new RenderData<Polygon>(shape, isRasterized, 9, character);
+		RenderData<Polygon> rData2 = new RenderData<Polygon>(shape, isRasterized, 3, character);
+		RenderData<Polygon> rData3 = new RenderData<Polygon>(shape, isRasterized, 1, character);
+		RenderData<Polygon> rData4 = new RenderData<Polygon>(shape, isRasterized, 3, character);
 
 		// Assert
 		assertTrue(rData0.compareTo(rData1) < 0);
@@ -171,13 +171,13 @@ public class RenderDataTests
 		});
 		boolean isRasterized = true;
 		Character character = 'x';
-		RenderData rData0 = new RenderData(shape, isRasterized, 4, character);
-		RenderData rData1 = new RenderData(shape, isRasterized, 9, character);
-		RenderData rData2 = new RenderData(shape, isRasterized, 3, character);
-		RenderData rData3 = new RenderData(shape, isRasterized, 8, character);
-		RenderData rData4 = new RenderData(shape, isRasterized, 1, character);
-		RenderData rData5 = new RenderData(shape, isRasterized, 3, character);
-		ArrayList<RenderData> list = new ArrayList<RenderData>();
+		RenderData<Polygon> rData0 = new RenderData<Polygon>(shape, isRasterized, 4, character);
+		RenderData<Polygon> rData1 = new RenderData<Polygon>(shape, isRasterized, 9, character);
+		RenderData<Polygon> rData2 = new RenderData<Polygon>(shape, isRasterized, 3, character);
+		RenderData<Polygon> rData3 = new RenderData<Polygon>(shape, isRasterized, 8, character);
+		RenderData<Polygon> rData4 = new RenderData<Polygon>(shape, isRasterized, 1, character);
+		RenderData<Polygon> rData5 = new RenderData<Polygon>(shape, isRasterized, 3, character);
+		ArrayList<RenderData<Polygon>> list = new ArrayList<RenderData<Polygon>>();
 		list.add(rData0);
 		list.add(rData1);
 		list.add(rData2);
@@ -198,5 +198,39 @@ public class RenderDataTests
 		// Assert
 		for (int i = 0; i < 6; i++)
 			assertEquals(expected.get(i), list.get(i).getLayer());
+	}
+
+	@Test
+	public void ShouldWorkWithAnyGeometricShape() throws GeometricException
+	{
+		// Arrange
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(1, 1),
+			new Point(1, 2),
+			new Point(2, 2),
+			new Point(2, 1)
+		});
+		Triangle tri = new Triangle(new Point[]
+		{
+			new Point(3, 3),
+			new Point(3, 4),
+			new Point(4, 3),
+		});
+		Circle cir = new Circle(new Point(3, 3), 2);
+
+		boolean isRasterized = true;
+		int layer = 5;
+		Character character = 'x';
+
+		// Act
+		RenderData<Polygon> polyData = new RenderData<Polygon>(poly, isRasterized, layer, character);
+		RenderData<Triangle> triData = new RenderData<Triangle>(tri, isRasterized, layer, character);
+		RenderData<Circle> cirData = new RenderData<Circle>(cir, isRasterized, layer, character);
+
+		// Assert
+		assertEquals(poly, polyData.getShape());
+		assertEquals(triData, triData.getShape());
+		assertEquals(cirData, cirData.getShape());
 	}
 }
