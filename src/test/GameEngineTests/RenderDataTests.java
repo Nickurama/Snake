@@ -230,7 +230,7 @@ public class RenderDataTests
 
 		// Assert
 		assertEquals(poly, polyData.getShape());
-		assertEquals(triData, triData.getShape());
-		assertEquals(cirData, cirData.getShape());
+		assertEquals(tri, triData.getShape());
+		assertEquals(cir, cirData.getShape());
 	}
 }

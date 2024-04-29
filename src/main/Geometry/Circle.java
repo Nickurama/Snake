@@ -92,8 +92,8 @@ public class Circle implements IGeometricShape<Circle>
 
 	public boolean intersects(LineSegment that)
 	{
-		boolean firstOnCircle = this.contains(that.firstPoint());
-		if (firstOnCircle != this.contains(that.secondPoint()))
+		boolean firstOnCircle = this.containsExclusive(that.firstPoint());
+		if (firstOnCircle != this.containsExclusive(that.secondPoint()))
 			return true;
 
 		Line perpendicular = that.line().generatePerpendicular(this.center);
@@ -131,6 +131,11 @@ public class Circle implements IGeometricShape<Circle>
 	public boolean contains(Point that)
 	{
 		return MathUtil.isLessOrEqualThan(this.center.dist(that), this.radius);
+	}
+
+	public boolean containsExclusive(Point that)
+	{
+		return this.center.dist(that) < this.radius;
 	}
 
 	public boolean contains(LineSegment that)
