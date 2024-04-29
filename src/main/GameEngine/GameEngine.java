@@ -1,24 +1,48 @@
 package GameEngine;
 
 import java.util.Scanner;
+import Geometry.Rectangle;
 
 public class GameEngine
 {
+	private static GameEngine instance = null;
 	private GameEngineFlags flags;
 	private Scene currScene;
 	private boolean isRunning;
 	private long lastFrameMillis;
 	private long currentFrameMillis;
+	private Rectangle camera;
+	private final char backgroundChar = ' ';
 
-	public GameEngine(GameEngineFlags flags, Scene scene)
+	private GameEngine()
+	{
+		// Singleton
+	}
+
+	public static GameEngine getInstance()
+	{
+		if (instance == null)
+			instance = new GameEngine();
+
+		return instance;
+	}
+
+	public void init(GameEngineFlags flags, Scene scene)
+	{
+		this.init(flags, scene, null);
+	}
+
+	public void init(GameEngineFlags flags, Scene scene, Rectangle camera)
 	{
 		this.flags = new GameEngineFlags(flags);
 		this.currScene = scene;
 		this.isRunning = false;
 		this.lastFrameMillis = System.currentTimeMillis();
 		this.currentFrameMillis = System.currentTimeMillis();
+		this.camera = camera;
 	}
 
+	// must initialize engine first before using any method
 	public void start()
 	{
 		if (this.isRunning)
@@ -118,6 +142,9 @@ public class GameEngine
 	private void update()
 	{
 		update(getDeltaT());
+		CollisionManager.detectCollisions(this.currScene);
+		if (this.camera != null)
+			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
 	}
 
 	private void update(long deltaT)
