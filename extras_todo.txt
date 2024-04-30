@@ -1,6 +1,7 @@
 !! flags.setRasterized() in engine doesn't do anything!!!!
-
 - delete NaturalPoint
+
+
 + add intersects to line on polygon
 + add intersects to line on circle
 + make contains, intersects, and rotates abstract classes so that there's no repeating code
