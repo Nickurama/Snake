@@ -1,12 +1,12 @@
 package GameEngine;
 
 /**
- * Represents an exception of the geometric type.
+ * Represents an exception of Game Engine.
  */
 public class GameEngineException extends Exception
 {
 	/**
-	* Empty geometric exception
+	* Empty GameEngine exception
 	*/
 	public GameEngineException()
 	{
@@ -14,7 +14,7 @@ public class GameEngineException extends Exception
 	}
 
 	/**
-	* Geometric exception with an error message
+	* GameEngine exception with an error message
 	*/
 	public GameEngineException(String message)
 	{

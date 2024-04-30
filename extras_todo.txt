@@ -4,6 +4,7 @@
 + make contains, intersects, and rotates abstract classes so that there's no repeating code
 + rasterizer has a lot of repeating code
 + rasterizer has very aglomerated code that should be split
++ log to file
 
 
 

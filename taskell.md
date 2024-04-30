@@ -1,8 +1,13 @@
 ## To Do
 
+- Score
+- Scoreboard
+- GameMap
+- Decide on how game coordinates work
+- Obstacle
+- DynamicObstacle
+- Overlay
 - --- MILESTONE ---
-- CollisionManager
-- GameEngine singleton
 
 ## Doing
 
@@ -59,6 +64,8 @@
 - Render overlay
 - IOverlay
 - Renderer overlay
+- CollisionManager
+- GameEngine singleton
 
 ## On Hold
 

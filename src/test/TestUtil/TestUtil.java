@@ -9,6 +9,8 @@ import java.io.*;
  */
 public class TestUtil
 {
+	public static final String TEST_FILES_PATH = "src/test/TestFiles/";
+
     /**
      * Feeds a string into stdin and gets the
      * stdout stream for getting the stdout output
