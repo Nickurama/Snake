@@ -5,9 +5,9 @@ import java.time.LocalDate;
 
 public class Score implements Comparable<Score>, Serializable
 {
-	String name;
-	LocalDate date;
-	int score;
+	private String name;
+	private LocalDate date;
+	private int score;
 
 	public Score(String name, LocalDate date, int score)
 	{

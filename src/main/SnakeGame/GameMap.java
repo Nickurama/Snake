@@ -5,14 +5,15 @@ import GameEngine.*;
 
 public class GameMap extends GameObject implements IRenderable, ICollider
 {
-	Rectangle map;
-	RenderData<Rectangle> rData;
-	IGeometricShape<Polygon> collider;
+	private final int LAYER = 0;
+	private Rectangle map;
+	private RenderData<Rectangle> rData;
+	private IGeometricShape<Polygon> collider;
 
 	public GameMap(Rectangle mapRect, char drawChar) throws SnakeGameException
 	{
 		this.map = mapRect;
-		this.rData = new RenderData<Rectangle>(map, true, 0, drawChar);
+		this.rData = new RenderData<Rectangle>(map, true, LAYER, drawChar);
 		try
 		{
 			this.collider = buildCollider();
@@ -37,23 +38,11 @@ public class GameMap extends GameObject implements IRenderable, ICollider
 		return outer;
 	}
 
-	public RenderData<Rectangle> getRenderData()
-	{
-		return this.rData;
-	}
+	public RenderData<Rectangle> getRenderData() { return this.rData; }
 
-	public GameObject getGameObject()
-	{
-		return this;
-	}
+	public GameObject getGameObject() { return this; }
 
-	public void onCollision(GameObject other)
-	{
-		// do nothing
-	}
+	public void onCollision(GameObject other) { } // do nothing
 
-	public IGeometricShape<Polygon> getCollider()
-	{
-		return this.collider;
-	}
+	public IGeometricShape<Polygon> getCollider() { return this.collider; }
 }
