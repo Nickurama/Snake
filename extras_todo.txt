@@ -9,6 +9,7 @@
 + log to file
 + construct rectangle from two points
 + can't initialize IGeometricShape<Rectangle> or anything that isn't polygon or circle
+- ICollider getGameObject() shouldn't be needed, Renderer should figure out what the GameObject is
 
 
 

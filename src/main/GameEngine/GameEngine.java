@@ -116,12 +116,17 @@ public class GameEngine
 
 	public void step() throws GameEngineException
 	{
+		step(getDeltaT());
+	}
+
+	public void step(long deltaT) throws GameEngineException
+	{
 		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
 			throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
 		if (!isRunning)
 			return;
 
-		update();
+		update(deltaT);
 	}
 
 	public void setScene(Scene newScene) throws GameEngineException
@@ -142,14 +147,16 @@ public class GameEngine
 	private void update()
 	{
 		update(getDeltaT());
-		CollisionManager.detectCollisions(this.currScene);
-		if (this.camera != null)
-			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
 	}
 
 	private void update(long deltaT)
 	{
 		for (GameObject obj : currScene)
 			obj.update((int)deltaT);
+
+		CollisionManager.detectCollisions(this.currScene);
+
+		if (this.camera != null)
+			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
 	}
 }

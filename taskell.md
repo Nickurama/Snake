@@ -1,9 +1,5 @@
 ## To Do
 
-- Score
-- Scoreboard
-- GameMap
-- Decide on how game coordinates work
 - Obstacle
 - DynamicObstacle
 - Overlay
@@ -66,6 +62,10 @@
 - Renderer overlay
 - CollisionManager
 - GameEngine singleton
+- Score
+- Scoreboard
+- GameMap
+- Decide on how game coordinates work
 
 ## On Hold
 

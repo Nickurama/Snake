@@ -462,4 +462,28 @@ public class GameEngineTests
 
 		assertFalse(c2.hasCollided());
 	}
+
+	@Test
+	public void Should() throws GameEngineException
+	{
+		// Arrange
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+
+		MockGameObject obj = new MockGameObject();
+		Scene scene = new Scene();
+		scene.add(obj);
+
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
+		engine.start();
+
+		long expected = 137;
+
+		// Act
+		engine.step(expected);
+
+		// Arrange
+		assertEquals(expected, obj.getLastDelta());
+	}
 }

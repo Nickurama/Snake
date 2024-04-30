@@ -5,7 +5,7 @@ import GameEngine.*;
 
 public class GameMap extends GameObject implements IRenderable, ICollider
 {
-	private final int LAYER = 0;
+	private static final int LAYER = 0;
 	private Rectangle map;
 	private RenderData<Rectangle> rData;
 	private IGeometricShape<Polygon> collider;

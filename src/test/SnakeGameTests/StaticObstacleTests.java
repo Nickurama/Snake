@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
 
-public class ObstacleTests
+public class StaticObstacleTests
 {
 	@Test
 	public void ShouldBeRendered() throws GameEngineException, GeometricException
@@ -18,7 +18,7 @@ public class ObstacleTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 4), new Point(4, 4), new Point(4, 0)});
 		Polygon p = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		Obstacle obstacle = new Obstacle(p, true, 'x');
+		StaticObstacle obstacle = new StaticObstacle(p, true, 'x');
 
 		Scene sc = new Scene();
 		sc.add(obstacle);
@@ -52,7 +52,7 @@ public class ObstacleTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 4), new Point(4, 4), new Point(4, 0)});
 		Polygon p = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		Obstacle obstacle = new Obstacle(p, false, 'x');
+		StaticObstacle obstacle = new StaticObstacle(p, false, 'x');
 
 		Scene sc = new Scene();
 		sc.add(obstacle);
@@ -86,7 +86,7 @@ public class ObstacleTests
 		// Arrange
 		Polygon p0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
 		Polygon p1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
-		Obstacle obstacle = new Obstacle(p0, true, 'x');
+		StaticObstacle obstacle = new StaticObstacle(p0, true, 'x');
 		MockCollider collider = new MockCollider(p1);
 
 		Scene sc = new Scene();
