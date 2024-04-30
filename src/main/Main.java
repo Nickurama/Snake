@@ -42,6 +42,27 @@ public class Main
 		// 	new Point(29, 21),
 		// 	new Point(29, 1),
 		// });
+
+		Polygon poly = new Polygon(new Point[]
+		{
+			new Point(0.6, 0.6),
+			new Point(0.6, 1.4),
+			new Point(1.4, 1.4),
+			new Point(1.4, 0.6),
+		});
+
+		poly = poly.moveCentroid(new Point(150, 120));
+
+		Rectangle camera = new Rectangle(new Point[]
+		{
+			new Point(100, 100),
+			new Point(100, 140),
+			new Point(250, 140),
+			new Point(250, 100),
+		});
+
+		Renderer.getInstance().render(poly, camera, '-', 'x');
+
 		// Polygon poly = new Polygon(new Point[]
 		// {
 		// 	new Point(1, 1),
@@ -63,7 +84,6 @@ public class Main
 	// 		new Point(1, 21),
 	// 	});
 	//
-	// 	poly = poly.moveCentroid(new Point(150, 120));
 	//
 	// 	int startX = 100;
 	// 	int startY = 100;

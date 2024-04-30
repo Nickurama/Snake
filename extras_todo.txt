@@ -1,3 +1,5 @@
+!! flags.setRasterized() in engine doesn't do anything!!!!
+
 - delete NaturalPoint
 + add intersects to line on polygon
 + add intersects to line on circle
@@ -5,6 +7,8 @@
 + rasterizer has a lot of repeating code
 + rasterizer has very aglomerated code that should be split
 + log to file
++ construct rectangle from two points
++ can't initialize IGeometricShape<Rectangle> or anything that isn't polygon or circle
 
 
 
@@ -31,6 +35,8 @@
 # perguntar prof: o que o prof quer dizer com poder trocar tamanhos e isso...? no codigo? em input? na function call?
 
 # perguntar prof: como o GameManager comeca tudo, e tanto a posicao e direcao da cobra sao random, e a comida tambem e random, como se faz para testar
+
+# perguntar prof: can't initialize IGeometricShape<Rectangle> or anything that isn't polygon or circle
 
 * se uma comida spawnar dentro de um obstaculo grande, nao deteta colisao... tem de se ver se esta contido
 * se uma comida spawnar num sitio de um obstaculo (especialmente se for um circulo), onde interceta exatamente todos os pontos de um obstaculo, conta como se nao houvesse
