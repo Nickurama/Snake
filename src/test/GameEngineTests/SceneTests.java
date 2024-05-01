@@ -203,7 +203,7 @@ public class SceneTests
 		s0.add(obj);
 
 		// Assert
-		assertThrows(GameEngineException.class, () -> s1.add(obj));
+		assertThrows(RuntimeException.class, () -> s1.add(obj));
 	}
 
 	@Test
@@ -219,7 +219,7 @@ public class SceneTests
 		s0.remove(obj);
 
 		// Assert
-		assertThrows(GameEngineException.class, () -> s1.add(obj));
+		assertThrows(RuntimeException.class, () -> s1.add(obj));
 	}
 
 	@Test

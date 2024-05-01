@@ -56,9 +56,17 @@ public class Scene implements Iterable<GameObject>
 	 * and calls start() if the scene is already active
 	 * @param object the object to add to the scene
 	 */
-	public void add(GameObject object) throws GameEngineException
+	public void add(GameObject object)
 	{
-		object.setScene(this, nextId());
+		try
+		{
+			object.setScene(this, nextId());
+		}
+		catch (GameEngineException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Could not add GameObject to scene.\n" + e);
+			throw new RuntimeException("Could not add GameObject to scene: " + e.getMessage());
+		}
 		this.objects.put(object.id(), object);
 
 		categorize(object);

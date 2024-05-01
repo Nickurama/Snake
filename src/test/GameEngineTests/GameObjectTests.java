@@ -18,11 +18,7 @@ public class GameObjectTests
 			@Override
 			public void start()
 			{
-				try
-				{
-					this.sceneHandle.add(new GameObject());
-				}
-				catch (GameEngineException e) {}
+				this.sceneHandle.add(new GameObject());
 			}
 		};
 

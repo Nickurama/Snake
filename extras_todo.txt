@@ -1,5 +1,6 @@
 !! flags.setRasterized() in engine doesn't do anything!!!!
 - delete NaturalPoint
++ SnakeOverlay should be 3 different overlays
 
 
 + make textOverlay with utilities in engine
@@ -12,6 +13,7 @@
 + construct rectangle from two points
 + can't initialize IGeometricShape<Rectangle> or anything that isn't polygon or circle
 - ICollider getGameObject() shouldn't be needed, Renderer should figure out what the GameObject is
++ return IGeometricShape<T> instead of T in IGeometricShape
 
 
 
