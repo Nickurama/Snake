@@ -442,4 +442,35 @@ public class SceneTests
 		// Assert
 		assertTrue(Arrays.equals(sc.getOverlay().getOverlay(), overlay1));
 	}
+
+	@Test
+	public void ShouldRemoveFromCategorization() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon shape = new Polygon(new Point[]
+		{
+			new Point(0, 0),
+			new Point(0, 1),
+			new Point(1, 0),
+		});
+		RenderData<Polygon> rData = new RenderData<Polygon>(shape, false, 2, 'f');
+		MockRenderable mockRenderable = new MockRenderable(rData);
+		Scene sc = new Scene();
+		sc.add(mockRenderable);
+
+		int initialSize = 0;
+		for (IRenderable renderable : sc.renderables())
+			initialSize++;
+
+		// Act
+		sc.remove(mockRenderable);
+
+		int finalSize = 0;
+		for (IRenderable renderable : sc.renderables())
+			finalSize++;
+
+		// Assert
+		assertEquals(1, initialSize);
+		assertEquals(0, finalSize);
+	}
 }

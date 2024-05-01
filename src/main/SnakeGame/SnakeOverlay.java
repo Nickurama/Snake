@@ -124,15 +124,6 @@ public class SnakeOverlay extends GameObject implements IOverlay
 
 		for (int i = 0; i < numScoresDisplayed; i++)
 			writeLeft(formatScore(scores[i], i + 1, maxNameLen, maxScoreLen), writeIndex + i);
-		// int n = 1;
-		// for (Score s : scores)
-		// {
-		// 	if (writeIndex + n > overlay.length - 2 || (this.maxHighscoreEntries > 0 && n > this.maxHighscoreEntries))
-		// 		break;
-		//
-		// 	writeLeft(formatScore(s, n, maxNameLen, maxScoreLen), writeIndex + n - 1);
-		// 	n++;
-		// }
 	}
 
 	private String formatScore(Score s, int place, int maxNameLen, int maxScoreLen)

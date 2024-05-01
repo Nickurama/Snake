@@ -9,11 +9,13 @@ public class Scene implements Iterable<GameObject>
 {
 	public class SceneIterator implements Iterator<GameObject>
 	{
+		private HashMap<Integer, GameObject> objectsMap;
 		private Iterator<Map.Entry<Integer, GameObject>> entryIterator;
 
 		public SceneIterator()
 		{
-			entryIterator = Scene.this.objects.entrySet().iterator();
+			objectsMap = new HashMap<Integer, GameObject>(Scene.this.objects);
+			entryIterator = objectsMap.entrySet().iterator();
 		}
 
 		@Override
@@ -30,9 +32,9 @@ public class Scene implements Iterable<GameObject>
 	}
 
 	private HashMap<Integer, GameObject> objects;
-	private ArrayList<IInputListener> inputListeners;
-	private ArrayList<IRenderable> renderables;
-	private ArrayList<ICollider> colliders;
+	private HashMap<Integer, IInputListener> inputListeners;
+	private HashMap<Integer, IRenderable> renderables;
+	private HashMap<Integer, ICollider> colliders;
 	private IOverlay overlay;
 	private boolean isActive;
 	private int idCounter;
@@ -43,9 +45,9 @@ public class Scene implements Iterable<GameObject>
 	public Scene()
 	{
 		this.objects = new HashMap<Integer, GameObject>();
-		this.inputListeners = new ArrayList<IInputListener>();
-		this.renderables = new ArrayList<IRenderable>();
-		this.colliders= new ArrayList<ICollider>();
+		this.inputListeners = new HashMap<Integer, IInputListener>();
+		this.renderables = new HashMap<Integer, IRenderable>();
+		this.colliders= new HashMap<Integer, ICollider>();
 		this.isActive = false;
 	}
 
@@ -73,18 +75,28 @@ public class Scene implements Iterable<GameObject>
 	private void categorize(GameObject object)
 	{
 		if (object instanceof IInputListener)
-			this.inputListeners.add((IInputListener) object);
+			this.inputListeners.put(object.id(), (IInputListener) object);
 		if (object instanceof IRenderable)
-			this.renderables.add((IRenderable) object);
+			this.renderables.put(object.id(), (IRenderable) object);
 		if (object instanceof IOverlay)
 			this.overlay = (IOverlay) object;
 		if (object instanceof ICollider)
-			this.colliders.add((ICollider) object);
+			this.colliders.put(object.id(), (ICollider) object);
 	}
 
 	public void remove(GameObject object)
 	{
 		this.objects.remove(object.id());
+
+		if (object instanceof IInputListener)
+			this.inputListeners.remove(object.id());
+		if (object instanceof IRenderable)
+			this.renderables.remove(object.id());
+		if (object instanceof IOverlay)
+			this.overlay = null;
+		if (object instanceof ICollider)
+			this.colliders.remove(object.id());
+
 		if (this.isActive)
 			object.stop();
 	}
@@ -112,7 +124,14 @@ public class Scene implements Iterable<GameObject>
 	{
 		return new Iterable<IInputListener>()
 		{
-			public Iterator<IInputListener> iterator() { return inputListeners.iterator(); }
+			class IInputListenerIterator implements Iterator<IInputListener>
+			{
+				private HashMap<Integer, IInputListener> map = new HashMap<Integer, IInputListener>(Scene.this.inputListeners);
+				private Iterator<Map.Entry<Integer, IInputListener>> entryIterator = map.entrySet().iterator();
+				public boolean hasNext() { return entryIterator.hasNext(); }
+				public IInputListener next() { return entryIterator.next().getValue(); }
+			}
+			public Iterator<IInputListener> iterator() { return new IInputListenerIterator(); }
 		};
 	}
 
@@ -120,22 +139,34 @@ public class Scene implements Iterable<GameObject>
 	{
 		return new Iterable<ICollider>()
 		{
-			public Iterator<ICollider> iterator() { return colliders.iterator(); }
+			class IColliderIterator implements Iterator<ICollider>
+			{
+				private HashMap<Integer, ICollider> map = new HashMap<Integer, ICollider>(Scene.this.colliders);
+				private Iterator<Map.Entry<Integer, ICollider>> entryIterator = map.entrySet().iterator();
+				public boolean hasNext() { return entryIterator.hasNext(); }
+				public ICollider next() { return entryIterator.next().getValue(); }
+			}
+			public Iterator<ICollider> iterator() { return new IColliderIterator(); }
 		};
 	}
 
 	public ICollider[] collidersArr()
 	{
-		ICollider[] result = new ICollider[this.colliders.size()];
-		this.colliders.toArray(result);
-		return result;
+		return this.colliders.values().toArray(new ICollider[0]);
 	}
 
 	public Iterable<IRenderable> renderables()
 	{
 		return new Iterable<IRenderable>()
 		{
-			public Iterator<IRenderable> iterator() { return renderables.iterator(); }
+			class IRenderableIterator implements Iterator<IRenderable>
+			{
+				private HashMap<Integer, IRenderable> map = new HashMap<Integer, IRenderable>(Scene.this.renderables);
+				private Iterator<Map.Entry<Integer, IRenderable>> entryIterator = map.entrySet().iterator();
+				public boolean hasNext() { return entryIterator.hasNext(); }
+				public IRenderable next() { return entryIterator.next().getValue(); }
+			}
+			public Iterator<IRenderable> iterator() { return new IRenderableIterator(); }
 		};
 	}
 

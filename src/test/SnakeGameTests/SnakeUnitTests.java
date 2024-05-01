@@ -1,140 +1,114 @@
-// package SnakeGameTests;
-//
-// import SnakeGame.*;
-// import GameEngine.*;
-// import Geometry.*;
-// import TestUtil.*;
-//
-// import org.junit.jupiter.api.Test;
-// import static org.junit.Assert.assertThrows;
-// import static org.junit.jupiter.api.Assertions.*;
-// import java.io.ByteArrayOutputStream;
-//
-// public class SnakeUnitTests
-// {
-// 	@Test
-// 	public void ShouldNotifySnakeOfCollisions()
-// 	{
-// 		// Arrange
-// 		class MockSnake extends Snake
-// 		{
-// 			boolean hasCollided;
-// 			public MockSnake(GameMap map, int size)
-// 			{
-// 				super(map, size);
-// 				this.hasCollided = false;
-// 			}
-// 			@Override
-// 			public void onCollision(GameObject other) { hasCollided = true; }
-// 			public boolean hasCollided() { return this.hasCollided; }
-// 		}
-//
-// 		Rectangle mapRect = new Rectangle(new Point[]
-// 		{
-// 			new Point(0, 0),
-// 			new Point(0, 4),
-// 			new Point(4, 4),
-// 			new Point(4, 0)
-// 		});
-// 		GameMap map = new GameMap(mapRect);
-// 		MockSnake snake = new MockSnake(map, 3);
-// 		SnakeUnit unit = new SnakeUnit(snake, new Point(1, 1));
-//
-// 		Polygon obstaclePoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-// 		Obstacle obstacle = new Obstacle(obstaclePoly);
-//
-// 		Scene sc = new Scene();
-// 		sc.add(unit);
-// 		sc.add(obstacle);
-//
-// 		GameEngineFlags flags = new GameEngineFlags();
-// 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-// 		GameEngine engine = GameEngine.getInstance();
-// 		engine.init(flags, sc);
-// 		engine.start();
-//
-// 		// Act
-// 		engine.step();
-//
-// 		// Assert
-// 		assertTrue(snake.hasCollided());
-// 	}
-//
-// 	@Test
-// 	public void ShouldRender()
-// 	{
-// 		// Arrange
-// 		class MockSnake extends Snake
-// 		{
-// 			boolean hasCollided;
-// 			public MockSnake(GameMap map, int size)
-// 			{
-// 				super(map, size);
-// 				this.hasCollided = false;
-// 			}
-// 			@Override
-// 			public void onCollision(GameObject other) { hasCollided = true; }
-// 			public boolean hasCollided() { return this.hasCollided; }
-// 		}
-//
-// 		Rectangle mapRect = new Rectangle(new Point[]
-// 		{
-// 			new Point(0, 0),
-// 			new Point(0, 4),
-// 			new Point(4, 4),
-// 			new Point(4, 0)
-// 		});
-// 		GameMap map = new GameMap(mapRect);
-// 		MockSnake snake = new MockSnake(map, 3);
-// 		SnakeUnit unit = new SnakeUnit(snake, new Point(1, 1));
-//
-// 		Scene sc = new Scene();
-// 		sc.add(unit);
-//
-// 		GameEngineFlags flags = new GameEngineFlags();
-// 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-// 		flags.setRasterized(true);
-// 		GameEngine engine = GameEngine.getInstance();
-// 		engine.init(flags, sc, mapRect);
-// 		engine.start();
-//
-// 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
-// 		String expected =	"-----" +
-// 							"-----" +
-// 							"xxx--" +
-// 							"xxx--" +
-// 							"xxx--";
-//
-// 		// Act
-// 		engine.step();
-// 		String render = out.toString();
-// 		out.reset();
-//
-// 		// Assert
-// 		assertEquals(expected, render);
-// 	}
-//
-// 	@Test
-// 	public void ShouldSetPosition()
-// 	{
-// 		// Arrange
-// 		Rectangle mapRect = new Rectangle(new Point[]
-// 		{
-// 			new Point(0, 0),
-// 			new Point(0, 4),
-// 			new Point(4, 4),
-// 			new Point(4, 0)
-// 		});
-// 		GameMap map = new GameMap(mapRect);
-// 		MockSnake snake = new MockSnake(map, 3);
-// 		SnakeUnit unit = new SnakeUnit(snake, new Point(1, 1));
-// 		Point expected = new Point(2, 2);
-//
-//
-// 		// Act
-// 		unit.setPosition(expected);
-//
-// 		// Assert
-// 		assertEquals(expected, unit.position());
-// 	}
-// }
+package SnakeGameTests;
+
+import SnakeGame.*;
+import GameEngine.*;
+import Geometry.*;
+import TestUtil.*;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.ByteArrayOutputStream;
+
+public class SnakeUnitTests
+{
+	@Test
+	public void ShouldThrowWhenZeroOrLessUnitSize()
+	{
+		// Arrange
+		// Act
+		// Assert
+		assertThrows(SnakeGameException.class, () -> new Snake(new Point(2.5, 2.5), 0, true, 't', 'h'));
+	}
+
+	@Test
+	public void ShouldThrowWhenPlacedInInvalidPosition()
+	{
+		// Arrange
+		// Act
+		// Assert
+		assertThrows(SnakeGameException.class, () -> new Snake(new Point(1, 1), 5, true, 't', 'h'));
+	}
+
+	@Test
+	public void ShouldNotifySnakeOfCollisions() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Snake snake = new Snake(new Point(2.5, 2.5), 2, true, 't', 'h');
+
+		Polygon obstaclePoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'x');
+
+		Scene sc = new Scene();
+		sc.add(snake);
+		sc.add(obstacle);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc);
+		engine.start();
+
+		// Act
+		engine.step();
+
+		// Assert
+		assertTrue(snake.isDead());
+	}
+
+	@Test
+	public void ShouldRender() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Snake snake = new Snake(new Point(2.5, 2.5), 2, true, 't', 'h');
+
+		Scene sc = new Scene();
+		sc.add(snake);
+
+		Rectangle camera = new Rectangle(new Point[]
+		{
+			new Point(0, 0),
+			new Point(0, 5),
+			new Point(5, 5),
+			new Point(5, 0)
+		});
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		flags.setRasterized(true);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc, camera);
+		engine.start();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		String expected =	"      \n" +
+							"      \n" +
+							"  hh  \n" +
+							"  hh  \n" +
+							"      \n" +
+							"      \n";
+
+		// Act
+		engine.step();
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldBeMoved() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Snake snake = new Snake(new Point(2.5, 2.5), 2, true, 't', 'h');
+		SnakeUnit unit = new SnakeUnit(snake, new Point(3.5, 3.5), 'x');
+		Point expected = new Point(6.5, 10.5);
+
+		// Act
+		unit.move(expected);
+
+		// Assert
+		assertEquals(expected, unit.position());
+	}
+}
