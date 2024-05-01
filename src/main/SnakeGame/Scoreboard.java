@@ -89,6 +89,9 @@ public class Scoreboard
 	public Score[] getScores() throws SnakeGameException
 	{
 		ArrayList<Score> scores = readScores();
+		if (scores == null)
+			return null;
+		Collections.sort(scores, Collections.reverseOrder());
 		Score[] result = new Score[scores.size()];
 		scores.toArray(result);
 		return result;

@@ -2,6 +2,7 @@
 - delete NaturalPoint
 
 
++ make textOverlay with utilities in engine
 + add intersects to line on polygon
 + add intersects to line on circle
 + make contains, intersects, and rotates abstract classes so that there's no repeating code

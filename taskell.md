@@ -1,9 +1,18 @@
 ## To Do
 
-- Obstacle
-- DynamicObstacle
-- Overlay
+- SnakeUnit
+- Snake
+- SnakeController
+- Overlay update gameplay values
 - --- MILESTONE ---
+- Food
+- SnakeAI
+- --- MILESTONE ---
+- GameManager
+- --- MILESTONE ---
+- Documentation
+- UML
+- Report
 
 ## Doing
 
@@ -66,6 +75,9 @@
 - Scoreboard
 - GameMap
 - Decide on how game coordinates work
+- Obstacle
+- DynamicObstacle
+- Overlay
 
 ## On Hold
 
