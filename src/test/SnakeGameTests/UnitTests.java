@@ -53,9 +53,10 @@ public class UnitTests
 		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
-		engine.start();
-
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		engine.start();
+		out.reset();
+
 		String expected =	"     \n" +
 							" xxx \n" +
 							" xxx \n" +
@@ -107,9 +108,10 @@ public class UnitTests
 		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
-		engine.start();
-
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		engine.start();
+		out.reset();
+
 		String expected =	"     \n" +
 							" ooo \n" +
 							" ooo \n" +

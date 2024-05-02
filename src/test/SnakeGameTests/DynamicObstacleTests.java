@@ -87,7 +87,7 @@ public class DynamicObstacleTests
 		Polygon p0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
 		Polygon p1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
 		DynamicObstacle obstacle = new DynamicObstacle(p0, true, 'x', 0);
-		MockCollider collider = new MockCollider(p1);
+		MockCollider collider = new MockCollider(p1, false);
 
 		Scene sc = new Scene();
 		sc.add(obstacle);

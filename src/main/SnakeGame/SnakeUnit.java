@@ -6,11 +6,13 @@ import GameEngine.*;
 public class SnakeUnit extends Unit implements ICollider
 {
 	private Snake snakeHandle;
+	private boolean isDeepCollision;
 
 	public SnakeUnit(Snake snake, Point position, char drawChar) throws SnakeGameException
 	{
 		super(position, snake.unitSize(), snake.isFilled(), drawChar, Snake.LAYER);
 		this.snakeHandle = snake;
+		this.isDeepCollision = true;
 	}
 
 	public GameObject getGameObject() { return this; }
@@ -21,5 +23,9 @@ public class SnakeUnit extends Unit implements ICollider
 	{
 		if (other instanceof SnakeUnit || other instanceof IObstacle)
 			snakeHandle.die();
+		else if (other instanceof IFood && (this.getCollider().contains(((IFood)other).getCollider())))
+			snakeHandle.eat((IFood)other);
 	}
+
+	public boolean isDeepCollision() { return this.isDeepCollision; }
 }

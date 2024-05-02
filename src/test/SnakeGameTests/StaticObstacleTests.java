@@ -28,9 +28,10 @@ public class StaticObstacleTests
 		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
-		engine.start();
-
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		engine.start();
+		out.reset();
+
 		String expected =	"     \n" +
 							" xxx \n" +
 							" xxx \n" +
@@ -62,9 +63,10 @@ public class StaticObstacleTests
 		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
-		engine.start();
-
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		engine.start();
+		out.reset();
+
 		String expected =	"     \n" +
 							" xxx \n" +
 							" x x \n" +
@@ -87,7 +89,7 @@ public class StaticObstacleTests
 		Polygon p0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
 		Polygon p1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
 		StaticObstacle obstacle = new StaticObstacle(p0, true, 'x');
-		MockCollider collider = new MockCollider(p1);
+		MockCollider collider = new MockCollider(p1, false);
 
 		Scene sc = new Scene();
 		sc.add(obstacle);

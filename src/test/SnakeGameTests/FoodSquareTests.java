@@ -50,7 +50,7 @@ public class FoodSquareTests
 		// Arrange
 		Polygon colliderPoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
 		FoodSquare food = new FoodSquare(new Point(2.5, 2.5), 2, true, 'x', 1);
-		MockCollider collider = new MockCollider(colliderPoly);
+		MockCollider collider = new MockCollider(colliderPoly, false);
 
 		Scene sc = new Scene();
 		sc.add(food);

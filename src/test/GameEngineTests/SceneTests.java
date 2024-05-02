@@ -346,9 +346,9 @@ public class SceneTests
 			new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 1), }),
 			new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 2), })
 		};
-		MockCollider mockCollider0 = new MockCollider(colliders[0]);
-		MockCollider mockCollider1 = new MockCollider(colliders[1]);
-		MockCollider mockCollider2 = new MockCollider(colliders[2]);
+		MockCollider mockCollider0 = new MockCollider(colliders[0], false);
+		MockCollider mockCollider1 = new MockCollider(colliders[1], false);
+		MockCollider mockCollider2 = new MockCollider(colliders[2], false);
 		Scene sc = new Scene();
 
 		// Act
@@ -371,9 +371,9 @@ public class SceneTests
 			new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 1), }),
 			new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 2), })
 		};
-		MockCollider mockCollider0 = new MockCollider(colliders[0]);
-		MockCollider mockCollider1 = new MockCollider(colliders[1]);
-		MockCollider mockCollider2 = new MockCollider(colliders[2]);
+		MockCollider mockCollider0 = new MockCollider(colliders[0], false);
+		MockCollider mockCollider1 = new MockCollider(colliders[1], false);
+		MockCollider mockCollider2 = new MockCollider(colliders[2], false);
 		Scene sc = new Scene();
 
 		// Act

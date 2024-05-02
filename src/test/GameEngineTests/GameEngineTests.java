@@ -432,11 +432,11 @@ public class GameEngineTests
 	public void ShouldNotifyGameObjectsWhenCollision() throws GeometricException, GameEngineException
 	{
 		Polygon p0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		MockCollider c0 = new MockCollider(p0);
+		MockCollider c0 = new MockCollider(p0, false);
 		Polygon p1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
-		MockCollider c1 = new MockCollider(p1);
+		MockCollider c1 = new MockCollider(p1, false);
 		Polygon p2 = new Polygon(new Point[] { new Point(10, 10), new Point(10, 11), new Point(11, 11), new Point(11, 10) });
-		MockCollider c2 = new MockCollider(p2);
+		MockCollider c2 = new MockCollider(p2, false);
 		
 		Scene sc = new Scene();
 		sc.add(c0);

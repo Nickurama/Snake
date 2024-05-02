@@ -2,10 +2,8 @@ package SnakeGame;
 
 import Geometry.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 import GameEngine.*;
 
@@ -30,8 +28,8 @@ public class Snake extends GameObject
 	private int length;
 	private int toGrow;
 	private boolean isAwake;
-	private ArrayList<IFood> foodFound;
-	private ArrayList<IFood> reachableFood;
+	// private ArrayList<IFood> foodFound;
+	// private ArrayList<IFood> reachableFood;
 	private Queue<SnakeUnit> units;
 
 	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
@@ -46,8 +44,8 @@ public class Snake extends GameObject
 		this.length = 1;
 		this.toGrow = 0;
 		this.isAwake = false;
-		this.foodFound = new ArrayList<IFood>();
-		this.reachableFood = new ArrayList<IFood>();
+		// this.foodFound = new ArrayList<IFood>();
+		// this.reachableFood = new ArrayList<IFood>();
 		this.units = new LinkedList<SnakeUnit>();
 		this.units.add(this.head);
 	}
@@ -222,8 +220,8 @@ public class Snake extends GameObject
 	{
 		super.sceneHandle.add(this.head);
 
-		if (hasFood())
-			eat();
+		// if (hasFood())
+		// 	eat();
 	}
 
 	@Override
@@ -232,50 +230,53 @@ public class Snake extends GameObject
 		if (!isDead && isAwake)
 			move();
 
-		if (hasFood())
-			eat();
+		// if (hasFood())
+		// 	eat();
 	}
 
-	private boolean hasFood()
-	{
-		this.foodFound.clear();
-		this.reachableFood.clear();
+	// private boolean hasFood()
+	// {
+	// 	this.foodFound.clear();
+	// 	this.reachableFood.clear();
+	//
+	// 	findFood();
+	//
+	// 	for (IFood food : foodFound)
+	// 	{
+	// 		for (SnakeUnit unit : units)
+	// 		{
+	// 			if (unit.getCollider().contains(food.getCollider()))
+	// 			{
+	// 				reachableFood.add(food);
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	//
+	// 	return reachableFood.size() > 0;
+	// }
+	//
+	// public void findFood()
+	// {
+	// 	for (GameObject obj : super.sceneHandle)
+	// 		if (obj instanceof IFood)
+	// 			this.foodFound.add((IFood)obj);
+	// }
+	//
+	// private void eat()
+	// {
+	// 	if (isDead)
+	// 		return;
+	//
+	// 	for (IFood food : reachableFood)
+	// 		eat(food);
+	// }
 
-		findFood();
-
-		for (IFood food : foodFound)
-		{
-			for (SnakeUnit unit : units)
-			{
-				if (unit.getCollider().contains(food.getCollider()))
-				{
-					reachableFood.add(food);
-					break;
-				}
-			}
-		}
-
-		return reachableFood.size() > 0;
-	}
-
-	public void findFood()
-	{
-		for (GameObject obj : super.sceneHandle)
-			if (obj instanceof IFood)
-				this.foodFound.add((IFood)obj);
-	}
-
-	private void eat()
+	public void eat(IFood food)
 	{
 		if (isDead)
 			return;
 
-		for (IFood food : reachableFood)
-			eat(food);
-	}
-
-	private void eat(IFood food)
-	{
 		food.consume();
 		grow();
 	}

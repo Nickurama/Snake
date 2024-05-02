@@ -10,6 +10,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	private float speed;
 	private RenderData<Polygon> rData;
 	private IGeometricShape<Polygon> collider;
+	private boolean isDeepCollision;
 	
 	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed)
 	{
@@ -17,6 +18,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 		this.collider = obstacle;
 		this.rotationPoint = rotationPoint;
 		this.speed = speed;
+		this.isDeepCollision = false;
 	}
 
 	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, float speed)
@@ -54,4 +56,6 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	public void onCollision(GameObject other) { } // do nothing
 	
 	public IGeometricShape<Polygon> getCollider() { return this.collider; }
+
+	public boolean isDeepCollision() { return this.isDeepCollision; }
 }

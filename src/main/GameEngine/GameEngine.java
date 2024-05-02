@@ -60,6 +60,10 @@ public class GameEngine
 		for (GameObject obj : currScene)
 			obj.start();
 
+		CollisionManager.detectCollisions(this.currScene);
+		if (this.camera != null)
+			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
+
 		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
 			updateStepped();
 		else if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.AUTO)

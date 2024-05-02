@@ -9,14 +9,17 @@ public class MockCollider extends GameObject implements ICollider
 	IGeometricShape<?> otherShape;
 	GameObject other;
 	boolean hasCollided;
-	public MockCollider(IGeometricShape<?> collider)
+	boolean isDeepCollision;
+	public MockCollider(IGeometricShape<?> collider, boolean isDeepCollision)
 	{
 		this.collider = collider;
+		this.isDeepCollision = isDeepCollision;
 		this.otherShape = null;
 		this.other = null;
 		this.hasCollided = false;
 	}
 	public IGeometricShape<?> getCollider() { return this.collider; }
+	public boolean isDeepCollision() { return this.isDeepCollision; }
 	public GameObject getGameObject() { return this; }
 	public IGeometricShape<?> getOtherShape() { return this.otherShape; }
 	public GameObject getOther() { return this.other; }

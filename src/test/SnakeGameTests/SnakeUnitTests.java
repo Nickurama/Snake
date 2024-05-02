@@ -78,9 +78,11 @@ public class SnakeUnitTests
 		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
-		engine.start();
 
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+		engine.start();
+		out.reset();
+
 		String expected =	"      \n" +
 							"      \n" +
 							"  hh  \n" +

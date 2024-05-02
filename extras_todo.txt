@@ -6,6 +6,7 @@
 + GameManager should manage certain exceptions instead of throwing RuntimeException
 
 
++ make different types of collision (inclusive, exclusive, deep (contains)...)
 + make textOverlay with utilities in engine
 + add intersects to line on polygon
 + add intersects to line on circle

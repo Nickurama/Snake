@@ -19,6 +19,9 @@ public class CollisionManager
 
 			if (collider.getCollider().intersectsInclusive(other.getCollider()))
 				invokeCollision(collider, other);
+			else if ((collider.isDeepCollision() || other.isDeepCollision()))
+				if (collider.getCollider().contains(other.getCollider()) || other.getCollider().contains(collider.getCollider()))
+					invokeCollision(collider, other);
 		}
 	}
 

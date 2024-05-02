@@ -1,12 +1,14 @@
 ## To Do
 
 - Overlay split
+- Overlay gameplay
 - Overlay update gameplay values
-- --- MILESTONE ---
+- Overlay gameover
+- Overlay highscores
 - SnakeController
-- Food respawn
 - GameManager
 - --- MILESTONE ---
+- Food respawn
 - SnakeAI
 - Code cleanup
 - --- MILESTONE ---
@@ -86,33 +88,13 @@
 - Snake body
 - Snake turn body
 - Snake die when colliding with itself
-
-## On Hold
-
 - Do GameEngine
     * [ ] Do GameEngine class
     * [ ] Do GameEngine tests
     * [ ] Do GameEngine documentation
 
-## Major Tasks
+## On Hold
 
-- Scene
-- Engine
-- Logger
-- Renderer
-- UI
-- Collisions
-- Game Manager
-- Game Map
-- Game UI
-- Snake
-- Food
-- Score
-
-## Major Done
-
-- Input
-- Game Object
 
 ## Scrapped
 

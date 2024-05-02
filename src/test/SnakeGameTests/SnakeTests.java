@@ -763,6 +763,38 @@ public class SnakeTests
 	}
 
 	@Test
+	public void ShouldDieWhenMovingIntoObstacle() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Snake snake = new Snake(new Point(21.5, 7.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Polygon obstaclePoly = new Polygon(new Point[] { new Point(21, 1), new Point(21, 2), new Point(22, 2), new Point(22, 1)});
+		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'r');
+
+		Scene sc = new Scene();
+		sc.add(snake);
+		sc.add(obstacle);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc);
+		engine.start();
+
+		snake.awake();
+		engine.step();
+		engine.step();
+		boolean isDead0 = snake.isDead();
+
+		// Act
+		engine.step();
+		boolean isDead1 = snake.isDead();
+
+		// Assert
+		assertFalse(isDead0);
+		assertTrue(isDead1);
+	}
+
+	@Test
 	public void ShouldNotMoveWhenNotAwake() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange

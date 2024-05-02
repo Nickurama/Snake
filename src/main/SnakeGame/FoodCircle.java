@@ -7,6 +7,7 @@ public class FoodCircle extends GameObject implements IFood
 {
 	private RenderData<Circle> rData;
 	private IGeometricShape<Circle> collider;
+	private boolean isDeepCollision;
 
 	public FoodCircle(Point position, int radius, boolean isFilled, char drawChar, int layer) throws SnakeGameException
 	{
@@ -24,6 +25,7 @@ public class FoodCircle extends GameObject implements IFood
 
 		this.rData = new RenderData<Circle>(circle, isFilled, layer, drawChar);
 		this.collider = circle;
+		this.isDeepCollision = false;
 	}
 
 	public void consume()
@@ -38,4 +40,6 @@ public class FoodCircle extends GameObject implements IFood
 	public IGeometricShape<Circle> getCollider() { return this.collider; }
 	
 	public void onCollision(GameObject other) { }
+
+	public boolean isDeepCollision() { return this.isDeepCollision; }
 }

@@ -95,10 +95,10 @@ public class GameMapTests
 			new Point(1, 1),
 			new Point(1, 0),
 		});
-		MockCollider collider0 = new MockCollider(colliderSq.moveCentroid(new Point(2, 2)));
-		MockCollider collider1 = new MockCollider(colliderSq.moveCentroid(new Point(2, 7)));
-		MockCollider collider2 = new MockCollider(colliderSq.moveCentroid(new Point(13, 7)));
-		MockCollider collider3 = new MockCollider(colliderSq.moveCentroid(new Point(13, 2)));
+		MockCollider collider0 = new MockCollider(colliderSq.moveCentroid(new Point(2, 2)), false);
+		MockCollider collider1 = new MockCollider(colliderSq.moveCentroid(new Point(2, 7)), false);
+		MockCollider collider2 = new MockCollider(colliderSq.moveCentroid(new Point(13, 7)), false);
+		MockCollider collider3 = new MockCollider(colliderSq.moveCentroid(new Point(13, 2)), false);
 
 		Scene sc = new Scene();
 		sc.add(map);
