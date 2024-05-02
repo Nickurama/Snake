@@ -882,14 +882,17 @@ public class PolygonTests
 	public void ShouldContainPoint() throws GeometricException
 	{
 		// Arrange
-		Polygon poly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Polygon poly0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Polygon poly1 = new Polygon(new Point[] { new Point(1, 2), new Point(2, 3), new Point(3, 2), new Point(2, 1) });
 		Point p = new Point(2, 2);
 
 		// Act
-		boolean contains = poly.contains(p);
+		boolean contains0 = poly0.contains(p);
+		boolean contains1 = poly1.contains(p);
 
 		// Assert
-		assertTrue(contains);
+		assertTrue(contains0);
+		assertTrue(contains1);
 	}
 
 	@Test
@@ -1005,6 +1008,32 @@ public class PolygonTests
 	}
 
 	@Test
+	public void ShouldContainItself() throws GeometricException
+	{
+		// Arrange
+		Polygon outer = new Polygon(new Point[] {
+			new Point(1, 1),
+			new Point(2, 6),
+			new Point(8, 6),
+			new Point(7, 1),
+			new Point(6, 3),
+		});
+		Polygon inner = new Polygon(new Point[] {
+			new Point(1, 1),
+			new Point(2, 6),
+			new Point(8, 6),
+			new Point(7, 1),
+			new Point(6, 3),
+		});
+
+		// Act
+		boolean contains = outer.contains(inner);
+
+		// Assert
+		assertTrue(contains);
+	}
+
+	@Test
 	public void ShouldContainCircle() throws GeometricException
 	{
 		// Arrange
@@ -1073,6 +1102,20 @@ public class PolygonTests
 	}
 
 	@Test
+	public void ShouldIntersectInclusive() throws GeometricException
+	{
+		// Arrange
+		Polygon poly0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 2), new Point(2, 1)});
+		Polygon poly1 = new Polygon(new Point[] { new Point(2, 1), new Point(2, 2), new Point(3, 2), new Point(3, 1)});
+
+		// Act
+		boolean intersects = poly0.intersectsInclusive(poly1);
+
+		// Assert
+		assertTrue(intersects);
+	}
+
+	@Test
 	public void ShouldBeGeometricShape() throws GeometricException
 	{
 		// Arrange
@@ -1083,6 +1126,7 @@ public class PolygonTests
 		IGeometricShape<Polygon> expectedRotated = new Polygon(new Point[] { new Point(2, 0), new Point(1, 0), new Point(1, 1), new Point(2, 1) });
 		IGeometricShape<Polygon> expectedTranslated = new Polygon(new Point[] { new Point(2, 2), new Point(2, 3), new Point(3, 3), new Point(3, 2) });
 		IGeometricShape<Polygon> expectedMoveCentroid = new Polygon(new Point[] { new Point(2, 1), new Point(2, 2), new Point(3, 2), new Point(3, 1) });
+		boolean expectedIntersectsInclusive = true;
 
 		// Act
 		double perimeter = poly.perimeter();
@@ -1093,6 +1137,7 @@ public class PolygonTests
 		IGeometricShape<?> translated = poly.translate(new Vector(1, 1));
 		IGeometricShape<?> moveCentroid = poly.moveCentroid(new Point(2.5, 1.5));
 		boolean equals = poly.equals(new Circle(new Point(1, 1), 1));
+		boolean intersectsInclusive = poly.intersectsInclusive(new Circle(new Point(3, 1.5), 1));
 
 		// Assert
 		assertEquals(expectedPerimeter, perimeter);
@@ -1102,6 +1147,7 @@ public class PolygonTests
 		assertEquals(expectedRotated, rotatedDegrees);
 		assertEquals(expectedTranslated, translated);
 		assertEquals(expectedMoveCentroid, moveCentroid);
+		assertEquals(expectedIntersectsInclusive, intersectsInclusive);
 		assertFalse(equals);
 	}
 

@@ -1,11 +1,6 @@
 ## To Do
 
-- FoodCircle without respawn
-- FoodSquare without respawn
-- Snake eat
-- Snake grow
-- Snake body
-- Snake turn body
+- Overlay split
 - Overlay update gameplay values
 - --- MILESTONE ---
 - SnakeController
@@ -13,6 +8,7 @@
 - GameManager
 - --- MILESTONE ---
 - SnakeAI
+- Code cleanup
 - --- MILESTONE ---
 - Documentation
 - UML
@@ -83,6 +79,13 @@
 - DynamicObstacle
 - Overlay
 - SnakeUnit
+- FoodSquare without respawn
+- FoodCircle without respawn
+- Snake eat
+- Snake grow
+- Snake body
+- Snake turn body
+- Snake die when colliding with itself
 
 ## On Hold
 

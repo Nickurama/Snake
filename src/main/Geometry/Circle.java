@@ -111,6 +111,45 @@ public class Circle implements IGeometricShape<Circle>
 		return false;
 	}
 
+	public boolean intersectsInclusive(IGeometricShape<?> that)
+	{
+		if (that instanceof Circle)
+			return intersectsInclusive((Circle) that);
+		else if (that instanceof Polygon)
+			return intersectsInclusive((Polygon) that);
+		else
+			throw new UnsupportedOperationException(this.getClass() + " doesn't have intersect method for " + that.getClass());
+	}
+
+	public boolean intersectsInclusive(Circle that)
+	{
+		double distance = this.center.dist(that.center);
+		if (this.contains(that))
+			return false;
+		return MathUtil.isLessOrEqualThan(distance, this.radius + that.radius);
+	}
+
+	public boolean intersectsInclusive(LineSegment that)
+	{
+		boolean firstOnCircle = this.containsExclusive(that.firstPoint());
+		if (firstOnCircle != this.containsExclusive(that.secondPoint()))
+			return true;
+
+		Line perpendicular = that.line().generatePerpendicular(this.center);
+		VirtualPoint intersection = that.line().intersection(perpendicular);
+		if (!that.contains(intersection))
+			return false;
+		return MathUtil.isLessOrEqualThan(this.center.dist(intersection), this.radius);
+	}
+
+	public boolean intersectsInclusive(Polygon that)
+	{
+		for (LineSegment side : that.sides())
+			if (this.intersectsInclusive(side))
+				return true;
+		return false;
+	}
+
 	public boolean contains(IGeometricShape<?> that)
 	{
 		if (that instanceof Circle)

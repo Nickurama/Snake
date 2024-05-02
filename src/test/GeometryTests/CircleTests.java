@@ -387,7 +387,7 @@ public class CircleTests
 		IGeometricShape<Circle> expectedRotated = new Circle(new Point(6, 4), 2);
 		IGeometricShape<Circle> expectedTranslated = new Circle(new Point(5, 5), 2);
 		IGeometricShape<Circle> expectedMoveCentroid = new Circle(new Point(6, 4), 2);
-
+		boolean expectedIntersectsInclusive = true;
 
 		// Act
 		double perimeter = circle.perimeter();
@@ -398,6 +398,7 @@ public class CircleTests
 		IGeometricShape<?> translated = circle.translate(new Vector(1, 1));
 		IGeometricShape<?> moveCentroid = circle.moveCentroid(new Point(6, 4));
 		boolean equals = circle.equals(new Polygon(new Point[] { new Point(1, 1), new Point(1, 2), new Point(2, 1) }));
+		boolean intersectsInclusive = circle.intersectsInclusive(new Polygon(new Point[] { new Point(6, 3), new Point(6, 5), new Point(8, 5), new Point(8, 3)}));
 
 		// Assert
 		assertTrue(MathUtil.areEqual(expectedPerimeter, perimeter));
@@ -407,6 +408,7 @@ public class CircleTests
 		assertEquals(expectedRotated, rotatedDegrees);
 		assertEquals(expectedTranslated, translated);
 		assertEquals(expectedMoveCentroid, moveCentroid);
+		assertEquals(expectedIntersectsInclusive, intersectsInclusive);
 		assertFalse(equals);
 	}
 
@@ -620,5 +622,19 @@ public class CircleTests
 
 		// Assert
 		assertTrue(contains);
+	}
+
+	@Test
+	public void ShouldIntersectInclusive() throws GeometricException
+	{
+		// Arrange
+		Circle circle0 = new Circle(new Point(1, 1), 1);
+		Circle circle1 = new Circle(new Point(3, 1), 1);
+
+		// Act
+		boolean intersects = circle0.intersectsInclusive(circle1);
+
+		// Assert
+		assertTrue(intersects);
 	}
 }

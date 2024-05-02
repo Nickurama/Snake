@@ -61,7 +61,6 @@ public class SnakeUnitTests
 	{
 		// Arrange
 		Snake snake = new Snake(new Point(2.5, 2.5), Snake.Direction.UP, 2, true, 't', 'h');
-		System.out.println(snake.unitSize());
 
 		Scene sc = new Scene();
 		sc.add(snake);

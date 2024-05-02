@@ -55,12 +55,11 @@ public class LineSegment
     public boolean intersectsInclusive(LineSegment that)
     {
         if (this.line.isParalel(that.line))
-            return false;
-            // return doParalelSegmentsCollide(that);
+            return doParalelSegmentsOverlap(that);
         VirtualPoint intersection = this.line.intersection(that.line);
 
         // checks if a point is exactly on one of the bounds of the segment
-        if (isPointOnBounds(intersection) || that.isPointOnBounds(intersection))
+        if (isPointOnBounds(intersection) && that.isPointOnBounds(intersection))
             return true;
 
         return this.contains(intersection) && that.contains(intersection);
@@ -97,7 +96,6 @@ public class LineSegment
      * @param that the other paralel segment
      * @return if the two paralel segments overlap
      */
-    @SuppressWarnings("unused")
     private boolean doParalelSegmentsOverlap(LineSegment that)
     {
         if (this.line.equals(that.line))
@@ -138,6 +136,27 @@ public class LineSegment
                             MathUtil.areEqual(pointOnSegment.Y(), maxY));
         return containsX && containsY;
     }
+
+	public boolean containsExclusive(VirtualPoint pointOnSegment)
+	{
+		if (!this.line().isCollinear(pointOnSegment))
+			return false;
+
+		if (pointOnSegment.equals(this.firstPoint()) || pointOnSegment.equals(this.secondPoint()))
+			return false;
+
+        double minX = Math.min(this.point1.X(), this.point2.X());
+        double maxX = Math.max(this.point1.X(), this.point2.X());
+        double minY = Math.min(this.point1.Y(), this.point2.Y());
+        double maxY = Math.max(this.point1.Y(), this.point2.Y());
+        boolean containsX = (pointOnSegment.X() > minX && pointOnSegment.X() < maxX) ||
+                            (MathUtil.areEqual(pointOnSegment.X(), minX) ||
+                            MathUtil.areEqual(pointOnSegment.X(), maxX));
+        boolean containsY = (pointOnSegment.Y() > minY && pointOnSegment.Y() < maxY) ||
+                            (MathUtil.areEqual(pointOnSegment.Y(), minY) ||
+                            MathUtil.areEqual(pointOnSegment.Y(), maxY));
+        return containsX && containsY;
+	}
 
     /**
      * Calculates the length of the segment

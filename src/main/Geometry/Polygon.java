@@ -176,6 +176,37 @@ public class Polygon implements IGeometricShape<Polygon>
 		return that.intersects(this);
 	}
 
+	public boolean intersectsInclusive(IGeometricShape<?> that)
+	{
+		if (that instanceof Circle)
+			return intersectsInclusive((Circle) that);
+		else if (that instanceof Polygon)
+			return intersectsInclusive((Polygon) that);
+		else
+			throw new UnsupportedOperationException(this.getClass() + " doesn't have intersect method for " + that.getClass());
+	}
+
+	public boolean intersectsInclusive(Circle that)
+	{
+		return that.intersectsInclusive(this);
+	}
+
+	public boolean intersectsInclusive(LineSegment that)
+	{
+		for (LineSegment side : sides)
+			if (side.intersectsInclusive(that))
+				return true;
+		return false;
+	}
+
+	public boolean intersectsInclusive(Polygon that)
+	{
+		for (LineSegment segment : this.sides)
+			if (that.intersectsInclusive(segment))
+				return true;
+		return false;
+	}
+
 	public boolean contains(IGeometricShape<?> that)
 	{
 		if (that instanceof Circle)
@@ -192,22 +223,29 @@ public class Polygon implements IGeometricShape<Polygon>
 		try
 		{
 			scan = new Line(new Point(0, that.Y()), that);
-			// scan = new LineSegment(new Point(that.x, 0), that);
 		}
 		catch (GeometricException e)
 		{
-			throw new Error("Should not happen, a line between 0 and a valid point should be a valid line.\n" + e.getMessage());
+			throw new RuntimeException("Should not happen, a line between 0 and a valid point should be a valid line.\n" + e.getMessage());
 		}
 
 		int intersectNum = 0;
-		for (LineSegment side : this.sides)
+
+		for (Point vertice : this.vertices)
 		{
-			VirtualPoint intersection = scan.intersection(side.line());
-			if (MathUtil.isLessOrEqualThan(intersection.X(), that.X()) && side.contains(intersection))
+			if (vertice.equals(that))
+				return true;
+			if (MathUtil.isLessOrEqualThan(vertice.X(), that.X()) && scan.isCollinear(vertice))
 				intersectNum++;
 		}
 
-		System.out.println(intersectNum);
+		for (LineSegment side : this.sides)
+		{
+			VirtualPoint intersection = scan.intersection(side.line());
+			if (MathUtil.isLessOrEqualThan(intersection.X(), that.X()) && side.containsExclusive(intersection))
+				intersectNum++;
+		}
+
 		return !(intersectNum % 2 == 0);
 	}
 

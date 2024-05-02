@@ -1,6 +1,9 @@
 !! flags.setRasterized() in engine doesn't do anything!!!!
+= refine rasterizer code
+- getGameObject in collider should not exist
 - delete NaturalPoint
 + SnakeOverlay should be 3 different overlays
++ GameManager should manage certain exceptions instead of throwing RuntimeException
 
 
 + make textOverlay with utilities in engine

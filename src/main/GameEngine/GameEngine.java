@@ -48,6 +48,12 @@ public class GameEngine
 		if (this.isRunning)
 			return;
 
+		if (this.currScene == null)
+		{
+			Logger.log(Logger.Level.FATAL, "Engine was started with null scene. (not initialized)");
+			throw new RuntimeException("Engine must be initialized before starting.");
+		}
+
 		this.isRunning = true;
 		currScene.setActive(true);
 

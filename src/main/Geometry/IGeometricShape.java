@@ -4,6 +4,7 @@ public interface IGeometricShape<T>
 {
 	public double perimeter();
 	public boolean intersects(IGeometricShape<?> that);
+	public boolean intersectsInclusive(IGeometricShape<?> that);
 	public boolean contains(IGeometricShape<?> that);
 	public T rotate(double angle, VirtualPoint anchor) throws GeometricException;
 	public T rotate(double angle) throws GeometricException;

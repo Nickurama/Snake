@@ -17,7 +17,7 @@ public class CollisionManager
 			if (other == collider)
 				continue;
 
-			if (collider.getCollider().intersects(other.getCollider()))
+			if (collider.getCollider().intersectsInclusive(other.getCollider()))
 				invokeCollision(collider, other);
 		}
 	}
@@ -25,7 +25,8 @@ public class CollisionManager
 	public static void detectCollisions(Scene scene)
 	{
 		int offset = 1;
-		for (ICollider collider : scene.colliders())
-			detectCollision(scene.collidersArr(), collider, offset++);
+		ICollider[] colliders = scene.collidersArr();
+		for (int i = 0; i < colliders.length; i++)
+			detectCollision(colliders, colliders[i], offset++);
 	}
 }
