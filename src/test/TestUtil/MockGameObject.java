@@ -13,10 +13,11 @@ public class MockGameObject extends GameObject implements IInputListener
 	private int number;
 	private Operation lastOperation;
 	private int lastDelta;
+	protected int lateUpdateCount;
 
 	private boolean hasStarted;
 	private boolean hasStopped;
-	private int updateCount;
+	protected int updateCount;
 
 	private String inputReceived;
 
@@ -28,6 +29,7 @@ public class MockGameObject extends GameObject implements IInputListener
 		this.updateCount = 0;
 		this.lastOperation = Operation.NONE;
 		this.inputReceived = null;
+		this.lateUpdateCount = 0;
 	}
 
 	public MockGameObject()
@@ -35,6 +37,7 @@ public class MockGameObject extends GameObject implements IInputListener
 		this(0);
 	}
 
+	@Override
 	public void update(int deltaT)
 	{
 		lastDelta = deltaT;
@@ -42,12 +45,14 @@ public class MockGameObject extends GameObject implements IInputListener
 		lastOperation = Operation.UPDATED;
 	}
 
+	@Override
 	public void start()
 	{
 		hasStarted = true;
 		lastOperation = Operation.STARTED;
 	}
 
+	@Override
 	public void stop()
 	{
 		hasStopped = true;
@@ -57,6 +62,12 @@ public class MockGameObject extends GameObject implements IInputListener
 	public void onInputReceived(String input)
 	{
 		this.inputReceived = input;
+	}
+
+	@Override
+	public void lateUpdate()
+	{
+		this.lateUpdateCount++;
 	}
 
 	public int getNumber() { return number; }
@@ -72,4 +83,6 @@ public class MockGameObject extends GameObject implements IInputListener
 	public int updateCount() { return updateCount; }
 
 	public String inputReceived() { return inputReceived; }
+
+	public int lateUpdateCount() { return lateUpdateCount; }
 }

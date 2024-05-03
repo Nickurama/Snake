@@ -1,12 +1,8 @@
 ## To Do
 
-- Overlay split
-- Overlay gameplay
-- Overlay update gameplay values
-- Overlay gameover
-- Overlay highscores
 - SnakeController
 - GameManager
+- Overlay GameManager.score instead of passing snake
 - --- MILESTONE ---
 - Food respawn
 - SnakeAI
@@ -92,6 +88,11 @@
     * [ ] Do GameEngine class
     * [ ] Do GameEngine tests
     * [ ] Do GameEngine documentation
+- Overlay split
+- Overlay gameplay
+- Overlay update gameplay values
+- Overlay gameover
+- Overlay highscores
 
 ## On Hold
 

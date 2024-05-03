@@ -166,6 +166,9 @@ public class GameEngine
 
 		CollisionManager.detectCollisions(this.currScene);
 
+		for (GameObject obj : currScene)
+			obj.lateUpdate();
+
 		if (this.camera != null)
 			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
 	}

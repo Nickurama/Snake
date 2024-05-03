@@ -32,7 +32,6 @@ public class GameObject
 		return this.id;
 	}
 
-
 	/**
 	 * Is called every frame
 	 * @param deltaTms the time since the last update
@@ -50,4 +49,6 @@ public class GameObject
 	 * and whenever the object is uninstantiated
 	 */
 	public void stop() {};
+
+	public void lateUpdate() {};
 }

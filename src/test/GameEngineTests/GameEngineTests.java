@@ -464,7 +464,7 @@ public class GameEngineTests
 	}
 
 	@Test
-	public void Should() throws GameEngineException
+	public void ShouldStepWithDeltaT() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
@@ -485,5 +485,37 @@ public class GameEngineTests
 
 		// Arrange
 		assertEquals(expected, obj.getLastDelta());
+	}
+
+	@Test
+	public void ShouldCallLateUpdateAfterUpdate() throws GameEngineException
+	{
+		// Arrange
+		class MockGameObjectLate extends MockGameObject
+		{
+			@Override
+			public void lateUpdate()
+			{
+				super.updateCount = 0;
+				super.lateUpdateCount++;
+			}
+		}
+		MockGameObjectLate obj = new MockGameObjectLate();
+
+		Scene scene = new Scene();
+		scene.add(obj);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
+		engine.start();
+
+		// Act
+		engine.step();
+
+		// Arrange
+		assertEquals(1, obj.lateUpdateCount());
+		assertEquals(0, obj.updateCount());
 	}
 }
