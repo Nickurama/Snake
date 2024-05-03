@@ -162,12 +162,16 @@ public class GameEngine
 	private void update(long deltaT)
 	{
 		for (GameObject obj : currScene)
+			obj.earlyUpdate();
+
+		for (GameObject obj : currScene)
 			obj.update((int)deltaT);
 
 		CollisionManager.detectCollisions(this.currScene);
 
 		for (GameObject obj : currScene)
 			obj.lateUpdate();
+
 
 		if (this.camera != null)
 			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);

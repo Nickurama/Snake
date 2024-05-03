@@ -51,4 +51,6 @@ public class GameObject
 	public void stop() {};
 
 	public void lateUpdate() {};
+
+	public void earlyUpdate() {};
 }

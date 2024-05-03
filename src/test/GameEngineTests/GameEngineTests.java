@@ -518,4 +518,36 @@ public class GameEngineTests
 		assertEquals(1, obj.lateUpdateCount());
 		assertEquals(0, obj.updateCount());
 	}
+
+	@Test
+	public void ShouldCallEarlyUpdateBeforeUpdate() throws GameEngineException
+	{
+		// Arrange
+		class MockGameObjectEarly extends MockGameObject
+		{
+			@Override
+			public void earlyUpdate()
+			{
+				super.updateCount = -1;
+				super.earlyUpdateCount++;
+			}
+		}
+		MockGameObjectEarly obj = new MockGameObjectEarly();
+
+		Scene scene = new Scene();
+		scene.add(obj);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
+		engine.start();
+
+		// Act
+		engine.step();
+
+		// Arrange
+		assertEquals(1, obj.earlyUpdateCount());
+		assertEquals(0, obj.updateCount());
+	}
 }

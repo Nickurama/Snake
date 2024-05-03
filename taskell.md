@@ -1,6 +1,5 @@
 ## To Do
 
-- SnakeController
 - GameManager
 - Overlay GameManager.score instead of passing snake
 - --- MILESTONE ---
@@ -93,6 +92,7 @@
 - Overlay update gameplay values
 - Overlay gameover
 - Overlay highscores
+- SnakeController
 
 ## On Hold
 
