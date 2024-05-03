@@ -63,9 +63,9 @@ public class Square extends Rectangle
      */
     private boolean areAllSidesSameLength()
     {
-        double len = this.sides[0].length();
-        for (int i = 1; i < sides.length; i++)
-            if (!MathUtil.areEqual(this.sides[i].length(), len))
+        double len = this.sides()[0].length();
+        for (int i = 1; i < sides().length; i++)
+            if (!MathUtil.areEqual(this.sides()[i].length(), len))
                 return false;
         return true;
     }
@@ -73,7 +73,7 @@ public class Square extends Rectangle
     @Override
     public String toString()
     {
-        return "Quadrado: " + VirtualPoint.arrayToString(this.vertices);
+        return "Quadrado: " + VirtualPoint.arrayToString(this.vertices());
     }
 
     @Override

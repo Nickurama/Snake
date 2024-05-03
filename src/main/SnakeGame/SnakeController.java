@@ -14,7 +14,7 @@ public class SnakeController extends GameObject
 	}
 
 	@Override
-	public void update(int deltaT)
+	public void earlyUpdate()
 	{
 		switch(controller.nextTurn())
 		{

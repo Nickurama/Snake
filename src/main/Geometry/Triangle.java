@@ -23,7 +23,7 @@ public class Triangle extends Polygon
     public Triangle(Point[] points) throws GeometricException
     {
         super(points);
-        validateTriangle(this.sides.length);
+        validateTriangle(this.sides().length);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Triangle extends Polygon
      */
     private void validateTriangle(int numSides) throws GeometricException
     {
-        if (this.sides.length != NUM_SIDES)
+        if (this.sides().length != NUM_SIDES)
 			throw new GeometricException(ERROR_MESSAGE + " A triangle should have exactly 3 vertices.");
     }
 
@@ -62,7 +62,7 @@ public class Triangle extends Polygon
     @Override
     public String toString()
     {
-        return "Triangulo: " + VirtualPoint.arrayToString(this.vertices);
+        return "Triangulo: " + VirtualPoint.arrayToString(this.vertices());
     }
 
     @Override

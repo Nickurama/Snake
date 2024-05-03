@@ -106,25 +106,41 @@ public class GameEngineTests
 		assertThrows(GameEngineException.class, () -> engine.step());
 	}
 
+	// @Test
+	// public void ShouldNotStartWhenAlreadyRunning() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	GameEngineFlags flags = new GameEngineFlags();
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+	// 	MockGameObject obj = new MockGameObject();
+	// 	Scene scene = new Scene();
+	// 	scene.add(obj);
+	// 	GameEngine engine = GameEngine.getInstance();
+	// 	engine.init(flags, scene);
+	//
+	// 	// Act
+	// 	engine.start();
+	// 	engine.step();
+	// 	engine.start();
+	//
+	// 	// Arrange
+	// 	assertEquals(MockGameObject.Operation.UPDATED, obj.lastOperation());
+	// }
+
 	@Test
-	public void ShouldNotStartWhenAlreadyRunning() throws GameEngineException
+	public void ShouldThrowIfStartingWhenAlreadyRunning() throws GameEngineException
 	{
 		// Arrange
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		MockGameObject obj = new MockGameObject();
 		Scene scene = new Scene();
-		scene.add(obj);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, scene);
+		engine.start();
 
 		// Act
-		engine.start();
-		engine.step();
-		engine.start();
-
 		// Arrange
-		assertEquals(MockGameObject.Operation.UPDATED, obj.lastOperation());
+		assertThrows(RuntimeException.class, () -> engine.start());
 	}
 
 	@Test
@@ -326,7 +342,6 @@ public class GameEngineTests
 		sc.add(mockRenderable1);
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		flags.setTextual(true);
 
 		GameEngine engine = GameEngine.getInstance();
@@ -400,7 +415,6 @@ public class GameEngineTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		flags.setTextual(true);
 
 		GameEngine engine = GameEngine.getInstance();

@@ -23,7 +23,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -64,7 +63,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -107,7 +105,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -151,7 +148,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -194,7 +190,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -237,7 +232,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -280,7 +274,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -323,7 +316,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -368,7 +360,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -411,7 +402,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -456,7 +446,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -499,7 +488,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
@@ -542,7 +530,6 @@ public class TextOverlayTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);

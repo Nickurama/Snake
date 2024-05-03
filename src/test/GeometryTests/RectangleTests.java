@@ -139,4 +139,34 @@ public class RectangleTests
 		assertThrows(GeometricException.class, () -> new Rectangle(points0));
 		assertThrows(GeometricException.class, () -> new Rectangle(points1));
 	}
+
+	@Test
+	public void ShouldDefineRectangleWithTwoPoints() throws GeometricException
+	{
+		// Arrange
+		Rectangle expected = new Rectangle(new Point[] {
+			new Point(1, 2),
+			new Point(1, 7),
+			new Point(5, 7),
+			new Point(5, 2),
+		});
+
+		// Act
+		Rectangle rect0 = new Rectangle(new Point(1, 2), new Point(5, 7));
+		Rectangle rect1 = new Rectangle(new Point(5, 7), new Point(1, 2));
+
+		// Assert
+		assertEquals(expected, rect0);
+		assertEquals(expected, rect1);
+	}
+
+	@Test
+	public void ShouldThrowWhenTwoPointsDontDefineRectangle() throws GeometricException
+	{
+		// Arrange
+		// Act
+		// Assert
+		assertThrows(GeometricException.class, () -> new Rectangle(new Point(1, 1), new Point(1, 5)));
+		assertThrows(GeometricException.class, () -> new Rectangle(new Point(1, 1), new Point(5, 1)));
+	}
 }

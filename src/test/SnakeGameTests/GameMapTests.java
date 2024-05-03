@@ -32,7 +32,6 @@ public class GameMapTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		flags.setTextual(true);
 
 		GameEngine engine = GameEngine.getInstance();
@@ -109,7 +108,6 @@ public class GameMapTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		flags.setTextual(true);
 
 		GameEngine engine = GameEngine.getInstance();

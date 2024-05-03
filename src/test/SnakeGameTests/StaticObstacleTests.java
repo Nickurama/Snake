@@ -25,7 +25,6 @@ public class StaticObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
@@ -60,7 +59,6 @@ public class StaticObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");

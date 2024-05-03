@@ -14,8 +14,8 @@ import java.text.ParseException;
 public class Polygon implements IGeometricShape<Polygon>
 {
 	private static final String ERROR_MESSAGE = "Poligono:vi";
-	protected LineSegment[] sides;
-	protected Point[] vertices;
+	private LineSegment[] sides;
+	private Point[] vertices;
 
 	/**
 	 * Initializes a polygon

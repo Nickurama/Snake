@@ -1,6 +1,7 @@
 ## To Do
 
 - GameManager
+- GameManager builder
 - Overlay GameManager.score instead of passing snake
 - --- MILESTONE ---
 - Food respawn

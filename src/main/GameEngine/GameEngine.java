@@ -46,7 +46,10 @@ public class GameEngine
 	public void start()
 	{
 		if (this.isRunning)
-			return;
+		{
+			Logger.log(Logger.Level.FATAL, "Engine attempted to start while running.");
+			throw new RuntimeException("Engine attempted to start while running.");
+		}
 
 		if (this.currScene == null)
 		{
@@ -176,4 +179,6 @@ public class GameEngine
 		if (this.camera != null)
 			Renderer.getInstance().render(this.currScene, this.camera, this.backgroundChar);
 	}
+
+	public boolean isRunning() { return this.isRunning; }
 }

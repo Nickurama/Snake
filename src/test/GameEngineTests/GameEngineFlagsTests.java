@@ -16,12 +16,10 @@ public class GameEngineFlagsTests
 
 		// Act
 		opts.setTextual(true);
-		opts.setRasterized(true);
 		opts.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
 
 		// Assert
 		assertTrue(opts.isTextual());
-		assertTrue(opts.isRasterized());
 		assertEquals(opts.updateMethod(), GameEngineFlags.UpdateMethod.CODE);
 	}
 

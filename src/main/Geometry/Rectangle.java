@@ -38,6 +38,22 @@ public class Rectangle extends Polygon
         validateRectangle(poly.getNumSides());
     }
 
+	public Rectangle(Point firstPoint, Point secondPoint) throws GeometricException
+	{
+		super(makeRectangleFromTwoPoints(firstPoint, secondPoint));
+		validateRectangle(4);
+	}
+
+	private static Point[] makeRectangleFromTwoPoints(Point firstPoint, Point secondPoint) throws GeometricException
+	{
+		return new Point[] {
+			firstPoint,
+			new Point(firstPoint.X(), secondPoint.Y()),
+			secondPoint,
+			new Point(secondPoint.X(), firstPoint.Y()),
+		};
+	}
+
     /**
      * Validates the preconditions for the
      * class to work. terminates the program if
@@ -71,15 +87,15 @@ public class Rectangle extends Polygon
      */
     private boolean allAnglesAreRightAngles()
     {
-        return (this.sides[0].line().isPerpendicular(this.sides[1].line()) &&
-            this.sides[0].line().isPerpendicular(this.sides[3].line()) &&
-            this.sides[1].line().isPerpendicular(this.sides[2].line()));
+        return (this.sides()[0].line().isPerpendicular(this.sides()[1].line()) &&
+            this.sides()[0].line().isPerpendicular(this.sides()[3].line()) &&
+            this.sides()[1].line().isPerpendicular(this.sides()[2].line()));
     }
 
     @Override
     public String toString()
     {
-        return "Retangulo: " + VirtualPoint.arrayToString(this.vertices);
+        return "Retangulo: " + VirtualPoint.arrayToString(this.vertices());
     }
 
     @Override

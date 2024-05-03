@@ -13,7 +13,7 @@ public class GameEngineFlags
 	}
 	private UpdateMethod updateMethod;
 	private boolean isTextual;
-	private boolean isRasterized;
+	// private boolean isRasterized;
 
 	/**
 	 * Initalizes GameEngineFlags
@@ -21,7 +21,7 @@ public class GameEngineFlags
 	public GameEngineFlags()
 	{
 		this.isTextual = true;
-		this.isRasterized = true;
+		// this.isRasterized = true;
 		updateMethod = UpdateMethod.STEP;
 	}
 
@@ -29,7 +29,7 @@ public class GameEngineFlags
 	{
 		this.updateMethod = that.updateMethod();
 		this.isTextual = that.isTextual();
-		this.isRasterized = that.isRasterized();
+		// this.isRasterized = that.isRasterized();
 	}
 
 	/**
@@ -44,17 +44,17 @@ public class GameEngineFlags
 	 */
 	public void setTextual(boolean arg) { this.isTextual = arg; }
 
-	/**
-	 * If the objects's should be filled when drawn
-	 * @return If the objects's should be filled when drawn
-	 */
-	public boolean isRasterized() { return this.isRasterized; }
-
-	/**
-	 * Sets if the objects's should be filled when drawn
-	 * @param arg If the objects's should be filled when drawn
-	 */
-	public void setRasterized(boolean arg) { this.isRasterized = arg; }
+	// /**
+	//  * If the objects's should be filled when drawn
+	//  * @return If the objects's should be filled when drawn
+	//  */
+	// public boolean isRasterized() { return this.isRasterized; }
+	//
+	// /**
+	//  * Sets if the objects's should be filled when drawn
+	//  * @param arg If the objects's should be filled when drawn
+	//  */
+	// public void setRasterized(boolean arg) { this.isRasterized = arg; }
 
 	/**
 	 * Returns the method in which the engine should be updated

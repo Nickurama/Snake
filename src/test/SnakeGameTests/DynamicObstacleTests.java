@@ -25,7 +25,6 @@ public class DynamicObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		engine.start();
@@ -59,7 +58,6 @@ public class DynamicObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		engine.start();
@@ -120,7 +118,6 @@ public class DynamicObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		engine.start();
@@ -192,7 +189,6 @@ public class DynamicObstacleTests
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		flags.setRasterized(true);
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc, camera);
 		engine.start();
