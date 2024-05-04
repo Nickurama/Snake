@@ -11,7 +11,7 @@ public class GameObject
 	// private static int counter = 0;
 	// private final int id = counter++;
 	private int id = -1; // set to -1 here since constructor wouldn't be inherited
-	protected Scene sceneHandle;
+	private Scene sceneHandle = null;
 
 	public final void setScene(Scene scene, int id) throws GameEngineException
 	{
@@ -25,6 +25,17 @@ public class GameObject
 	private final boolean hasSceneBeenSet()
 	{
 		return id != -1;
+	}
+
+	public final void detachScene()
+	{
+		id = -1;
+		this.sceneHandle = null;
+	}
+
+	public final Scene sceneHandle()
+	{
+		return this.sceneHandle;
 	}
 
 	public final Integer id()

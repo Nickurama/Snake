@@ -30,7 +30,7 @@ public class FoodCircle extends GameObject implements IFood
 
 	public void consume()
 	{
-		super.sceneHandle.remove(this);
+		super.sceneHandle().remove(this);
 	}
 
 	public RenderData<Circle> getRenderData() { return this.rData; }

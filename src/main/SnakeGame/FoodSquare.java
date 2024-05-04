@@ -15,7 +15,7 @@ public class FoodSquare extends Unit implements IFood
 
 	public void consume()
 	{
-		super.sceneHandle.remove(this);
+		super.sceneHandle().remove(this);
 	}
 
 	public GameObject getGameObject() { return this; }

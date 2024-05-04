@@ -98,7 +98,7 @@ public class Snake extends GameObject
 
 		head = newUnit;
 		units.add(newUnit);
-		super.sceneHandle.add(newUnit);
+		super.sceneHandle().add(newUnit);
 		toGrow--;
 	}
 
@@ -218,7 +218,7 @@ public class Snake extends GameObject
 	@Override
 	public void start()
 	{
-		super.sceneHandle.add(this.head);
+		super.sceneHandle().add(this.head);
 
 		// if (hasFood())
 		// 	eat();

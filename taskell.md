@@ -1,9 +1,12 @@
 ## To Do
 
-- GameManager
+- change overlay when lose/win
+- make player be able to submit highscore
+- make replayable
+- only snake head should check for containing food
+- GameManager tests
 - GameManager builder
 - Overlay GameManager.score instead of passing snake
-- --- MILESTONE ---
 - Food respawn
 - SnakeAI
 - Code cleanup
@@ -94,6 +97,8 @@
 - Overlay gameover
 - Overlay highscores
 - SnakeController
+- GameManager
+- Removing from scene should free the game object
 
 ## On Hold
 
@@ -107,3 +112,4 @@
 - Equals should see if gameObjects are in the same scene
 - Write down the meaning of all of this
 - Make Circle intersect with Line
+- Stopping game engine should free the game object, and the scene shouldn't be active anymore

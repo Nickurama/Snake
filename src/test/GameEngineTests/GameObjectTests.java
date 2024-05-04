@@ -18,7 +18,7 @@ public class GameObjectTests
 			@Override
 			public void start()
 			{
-				this.sceneHandle.add(new GameObject());
+				this.sceneHandle().add(new GameObject());
 			}
 		};
 

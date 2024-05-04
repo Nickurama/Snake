@@ -71,10 +71,10 @@ public class GameMap extends GameObject implements IRenderable
 	@Override
 	public void start()
 	{
-		super.sceneHandle.add(topBound);
-		super.sceneHandle.add(bottomBound);
-		super.sceneHandle.add(leftBound);
-		super.sceneHandle.add(rightBound);
+		super.sceneHandle().add(topBound);
+		super.sceneHandle().add(bottomBound);
+		super.sceneHandle().add(leftBound);
+		super.sceneHandle().add(rightBound);
 	}
 
 	public RenderData<Rectangle> getRenderData() { return this.rData; }

@@ -206,21 +206,21 @@ public class SceneTests
 		assertThrows(RuntimeException.class, () -> s1.add(obj));
 	}
 
-	@Test
-	public void ShouldNotBeAbleToAddGameObjectEvenIfRemovedFromOtherScene() throws GameEngineException
-	{
-		// Arrange
-		Scene s0 = new Scene();
-		Scene s1 = new Scene();
-		GameObject obj = new GameObject();
-
-		// Act
-		s0.add(obj);
-		s0.remove(obj);
-
-		// Assert
-		assertThrows(RuntimeException.class, () -> s1.add(obj));
-	}
+	// @Test
+	// public void ShouldNotBeAbleToAddGameObjectEvenIfRemovedFromOtherScene() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	Scene s0 = new Scene();
+	// 	Scene s1 = new Scene();
+	// 	GameObject obj = new GameObject();
+	//
+	// 	// Act
+	// 	s0.add(obj);
+	// 	s0.remove(obj);
+	//
+	// 	// Assert
+	// 	assertThrows(RuntimeException.class, () -> s1.add(obj));
+	// }
 
 	@Test
 	public void ShouldGenerateObjectIdsPerOrder() throws GameEngineException
@@ -472,5 +472,22 @@ public class SceneTests
 		// Assert
 		assertEquals(1, initialSize);
 		assertEquals(0, finalSize);
+	}
+
+	@Test
+	public void ShouldAllowAddingToSceneAfterRemoval()
+	{
+		// Arrange
+		GameObject obj = new GameObject();
+		Scene sc0 = new Scene();
+		sc0.add(obj);
+		Scene sc1 = new Scene();
+
+		// Act
+		sc0.remove(obj);
+		sc1.add(obj);
+
+		// Assert
+		assertEquals(sc1.iterator().next().id(), obj.id());
 	}
 }

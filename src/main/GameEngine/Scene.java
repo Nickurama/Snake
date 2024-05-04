@@ -107,6 +107,8 @@ public class Scene implements Iterable<GameObject>
 
 		if (this.isActive)
 			object.stop();
+
+		object.detachScene(); // has to  be last operation
 	}
 
 	public boolean contains(GameObject obj)
