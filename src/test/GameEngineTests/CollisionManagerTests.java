@@ -185,4 +185,31 @@ public class CollisionManagerTests
 
 		assertFalse(mockCollider2.hasCollided());
 	}
+
+	@Test
+	public void ShouldReturnTrueOnAnyCollision() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon collider0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Polygon collider1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
+		Polygon collider2 = new Polygon(new Point[] { new Point(10, 10), new Point(10, 11), new Point(11, 11), new Point(11, 10) });
+		MockCollider mockCollider0 = new MockCollider(collider0, false);
+		MockCollider mockCollider1 = new MockCollider(collider1, false);
+		MockCollider mockCollider2 = new MockCollider(collider2, false);
+
+		Scene sc = new Scene();
+		sc.add(mockCollider0);
+		sc.add(mockCollider1);
+		sc.add(mockCollider2);
+
+		// Act
+		boolean collidesAny0 = CollisionManager.collidesAny(mockCollider0, sc);
+		boolean collidesAny1 = CollisionManager.collidesAny(mockCollider1, sc);
+		boolean collidesAny2 = CollisionManager.collidesAny(mockCollider2, sc);
+
+		// Assert
+		assertTrue(collidesAny0);
+		assertTrue(collidesAny1);
+		assertFalse(collidesAny2);
+	}
 }

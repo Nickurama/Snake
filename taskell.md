@@ -1,5 +1,7 @@
 ## To Do
 
+- GameManager builder
+- Random snake position
 - change overlay when lose/win
 - make player be able to submit highscore
 - make replayable

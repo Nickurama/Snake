@@ -1,7 +1,9 @@
 import Geometry.*;
+
+import java.util.Random;
+
 import GameEngine.*;
-import java.lang.reflect.Constructor;
-import java.util.Scanner;
+import SnakeGame.*;
 
 /**
  * The class to manage the input and output
@@ -13,12 +15,9 @@ public class Main
 {
     public static void main(String[] args) throws Exception
     {	
-		Polygon poly = new Polygon(new Point[] {
-			new Point(1, 1),
-			new Point(1, 2),
-			new Point(2, 2),
-			new Point(2, 1),
-		});
-		System.out.println(poly.intersectsInclusive(poly));
+		long seed = new Random().nextLong();
+		System.out.println("Seed: " + seed);
+		GameManager.getInstance().init(40, 10, 2, true, true, GameEngineFlags.UpdateMethod.STEP, GameManager.ControlMethod.MANUAL, new Random().nextLong());
+		GameManager.getInstance().play();
     }
 }
