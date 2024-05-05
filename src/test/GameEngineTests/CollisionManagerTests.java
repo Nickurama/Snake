@@ -6,6 +6,9 @@ import TestUtil.*;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 public class CollisionManagerTests
@@ -211,5 +214,34 @@ public class CollisionManagerTests
 		assertTrue(collidesAny0);
 		assertTrue(collidesAny1);
 		assertFalse(collidesAny2);
+	}
+
+	@Test
+	public void ShouldGetCollisions() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon collider0 = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
+		Polygon collider1 = new Polygon(new Point[] { new Point(2, 2), new Point(2, 4), new Point(4, 4), new Point(4, 2) });
+		Polygon collider2 = new Polygon(new Point[] { new Point(0.5, 2.5), new Point(0.5, 4.5), new Point(2.5, 4.5), new Point(2.5, 2.5) });
+		Polygon collider3 = new Polygon(new Point[] { new Point(10, 10), new Point(10, 11), new Point(11, 11), new Point(11, 10) });
+		MockCollider mockCollider0 = new MockCollider(collider0, false);
+		MockCollider mockCollider1 = new MockCollider(collider1, false);
+		MockCollider mockCollider2 = new MockCollider(collider2, false);
+		MockCollider mockCollider3 = new MockCollider(collider3, false);
+
+		Scene sc = new Scene();
+		sc.add(mockCollider0);
+		sc.add(mockCollider1);
+		sc.add(mockCollider2);
+		sc.add(mockCollider3);
+
+		// Act
+		GameObject[] colliders = CollisionManager.getCollisions(mockCollider1, sc);
+
+		// Assert
+		assertTrue(Arrays.stream(colliders).anyMatch(mockCollider0::equals));
+		assertFalse(Arrays.stream(colliders).anyMatch(mockCollider1::equals));
+		assertTrue(Arrays.stream(colliders).anyMatch(mockCollider2::equals));
+		assertFalse(Arrays.stream(colliders).anyMatch(mockCollider3::equals));
 	}
 }

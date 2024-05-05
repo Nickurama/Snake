@@ -334,9 +334,9 @@ public class SnakeTests
 	{
 		// Arrange
 		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
-		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f', 0);
-		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f', 0);
-		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f', 0);
+		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f');
+		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f');
+		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -362,7 +362,7 @@ public class SnakeTests
 	{
 		// Arrange
 		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
-		FoodSquare food = new FoodSquare(new Point(3, 3), 3, true, 'f', 0);
+		FoodSquare food = new FoodSquare(new Point(3, 3), 3, true, 'f');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -390,7 +390,7 @@ public class SnakeTests
 		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
 		snake.awake();
 
-		FoodSquare food = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f', 0);
+		FoodSquare food = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -434,8 +434,8 @@ public class SnakeTests
 
 		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
 
-		FoodSquare food0 = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f', 0);
-		FoodSquare food1 = new FoodSquare(new Point(24.5, 4.5), 2, true, 'f', 0);
+		FoodSquare food0 = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f');
+		FoodSquare food1 = new FoodSquare(new Point(24.5, 4.5), 2, true, 'f');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -541,9 +541,9 @@ public class SnakeTests
 
 		Scene sc = new Scene();
 		sc.add(snake);
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -589,9 +589,9 @@ public class SnakeTests
 
 		Scene sc = new Scene();
 		sc.add(snake);
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f', 0));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(20.5, 4.5), 2, true, 'f'));
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -637,9 +637,9 @@ public class SnakeTests
 
 		Scene sc = new Scene();
 		sc.add(snake);
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -685,9 +685,9 @@ public class SnakeTests
 
 		Scene sc = new Scene();
 		sc.add(snake);
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -731,10 +731,10 @@ public class SnakeTests
 
 		Scene sc = new Scene();
 		sc.add(snake);
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
-		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f', 0));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
+		sc.add(new FoodSquare(new Point(21.5, 7.5), 2, true, 'f'));
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
@@ -837,9 +837,9 @@ public class SnakeTests
 	{
 		// Arrange
 		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
-		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f', 0);
-		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f', 0);
-		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f', 0);
+		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f');
+		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f');
+		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -899,5 +899,42 @@ public class SnakeTests
 
 		// Assert
 		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldNotEatIfNotHead() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Snake snake = new Snake(new Point(3, 3), Snake.Direction.UP, 3, true, 'x', 'x');
+		snake.awake();
+		FoodSquare food0 = new FoodSquare(new Point(3, 3), 3, true, 'f');
+		FoodSquare food1 = new FoodSquare(new Point(3, 3), 2, true, 'f');
+		FoodSquare food2 = new FoodSquare(new Point(3, 6), 2, true, 'f');
+
+		Scene sc = new Scene();
+		sc.add(snake);
+		sc.add(food0);
+		sc.add(food1);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc);
+		engine.start();
+
+		engine.step();
+		engine.step();
+		int startLen = snake.length();
+
+		int expectedLen = 3;
+
+		// Act
+		sc.add(food2);
+		engine.step();
+		int endLen = snake.length();
+
+		// Arrange
+		assertEquals(expectedLen, startLen);
+		assertEquals(expectedLen, endLen);
 	}
 }

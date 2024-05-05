@@ -1,5 +1,7 @@
 package GameEngine;
 
+import java.util.ArrayList;
+
 public class CollisionManager
 {
 	public static void detectCollisions(Scene scene)
@@ -29,7 +31,7 @@ public class CollisionManager
 		}
 	}
 
-	private static boolean collides(ICollider collider, ICollider other)
+	public static boolean collides(ICollider collider, ICollider other)
 	{
 		if (other == collider)
 			return false;
@@ -55,5 +57,15 @@ public class CollisionManager
 			if (collides(collider, other))
 				return true;
 		return false;
+	}
+
+	public static GameObject[] getCollisions(ICollider collider, Scene scene)
+	{
+		ArrayList<GameObject> collisions = new ArrayList<GameObject>();
+		for (ICollider other : scene.colliders())
+			if (collides(collider, other))
+				collisions.add(other.getGameObject());
+
+		return collisions.toArray(new GameObject[0]);
 	}
 }

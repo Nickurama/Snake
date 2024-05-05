@@ -5,14 +5,14 @@ import GameEngine.*;
 
 public class Unit extends GameObject implements IRenderable
 {
-	private static final double UNIT_OFFSET = 0.001;
+	public static final double UNIT_OFFSET = 0.001;
 	private Square unit;
-	private int size;
+	private double size;
 	private RenderData<Square> rData;
 	private Point position;
 
 	// cannot use zero based coordinates
-	public Unit(Point position, int size, boolean isFilled, char drawChar, int layer) throws SnakeGameException
+	public Unit(Point position, double size, boolean isFilled, char drawChar, int layer) throws SnakeGameException
 	{
 		this.position = position;
 		this.size = size;

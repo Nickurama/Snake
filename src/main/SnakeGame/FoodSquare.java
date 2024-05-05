@@ -5,12 +5,14 @@ import Geometry.*;
 
 public class FoodSquare extends Unit implements IFood
 {
+	private static final int LAYER = 1;
+
 	private boolean isDeepCollision;
 
-	public FoodSquare(Point position, int size, boolean isFilled, char drawChar, int layer) throws SnakeGameException
+	public FoodSquare(Point position, double size, boolean isFilled, char drawChar) throws SnakeGameException
 	{
-		super(position, size, isFilled, drawChar, layer);
-		this.isDeepCollision = false;
+		super(position, size, isFilled, drawChar, LAYER);
+		this.isDeepCollision = true;
 	}
 
 	public void consume()

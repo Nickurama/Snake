@@ -13,6 +13,8 @@ public class GameMap extends GameObject implements IRenderable
 	private StaticObstacle bottomBound;
 	private StaticObstacle leftBound;
 	private StaticObstacle rightBound;
+	private int width;
+	private int height;
 
 	public GameMap(Rectangle mapRect, char drawChar) throws SnakeGameException
 	{
@@ -27,6 +29,10 @@ public class GameMap extends GameObject implements IRenderable
 			Logger.log(Logger.Level.ERROR, "Could not build map colliders, map is too close to origin.\n" + e);
 			throw new SnakeGameException("Could not build map colliders, map is too close to origin.");
 		}
+
+		BoundingBox box = new BoundingBox(mapRect);
+		this.width = (int)Math.round(box.maxPoint().X() - box.minPoint().X()) + 1;
+		this.height = (int)Math.round(box.maxPoint().Y() - box.minPoint().Y()) + 1;
 	}
 
 	private void buildBounds() throws GeometricException
@@ -67,6 +73,9 @@ public class GameMap extends GameObject implements IRenderable
 		});
 		this.rightBound = new StaticObstacle(rightPoly, false, ' ');
 	}
+
+	public int width() { return this.width; }
+	public int height() { return this.height; }
 
 	@Override
 	public void start()

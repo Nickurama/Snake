@@ -1,15 +1,12 @@
 ## To Do
 
-- GameManager builder
-- Random snake position
+- Food respawn
 - change overlay when lose/win
 - make player be able to submit highscore
 - make replayable
-- only snake head should check for containing food
-- GameManager tests
-- GameManager builder
 - Overlay GameManager.score instead of passing snake
-- Food respawn
+- Render food AND snake with #
+- Render obstacle with O
 - SnakeAI
 - Code cleanup
 - --- MILESTONE ---
@@ -101,6 +98,10 @@
 - SnakeController
 - GameManager
 - Removing from scene should free the game object
+- Random snake position
+- GameManager tests
+- GameManager builder
+- only snake head should check for containing food
 
 ## On Hold
 
@@ -115,3 +116,4 @@
 - Write down the meaning of all of this
 - Make Circle intersect with Line
 - Stopping game engine should free the game object, and the scene shouldn't be active anymore
+- GameManager builder

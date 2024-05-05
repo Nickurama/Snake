@@ -7,6 +7,7 @@ public class SnakeUnit extends Unit implements ICollider
 {
 	private Snake snakeHandle;
 	private boolean isDeepCollision;
+	private boolean isHead;
 
 	public SnakeUnit(Snake snake, Point position, char drawChar) throws SnakeGameException
 	{
@@ -23,8 +24,13 @@ public class SnakeUnit extends Unit implements ICollider
 	{
 		if (other instanceof SnakeUnit || other instanceof IObstacle)
 			snakeHandle.die();
-		else if (other instanceof IFood && (this.getCollider().contains(((IFood)other).getCollider())))
+		else if (this.isHead && other instanceof IFood && (this.getCollider().contains(((IFood)other).getCollider())))
 			snakeHandle.eat((IFood)other);
+	}
+
+	public void setHead(boolean isHead)
+	{
+		this.isHead = isHead;
 	}
 
 	public boolean isDeepCollision() { return this.isDeepCollision; }

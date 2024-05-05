@@ -26,6 +26,11 @@ public class DynamicObstacle extends GameObject implements IObstacle
 		this(obstacle, isFilled, drawChar, obstacle.getCentroid(), speed);
 	}
 
+	public DynamicObstacle(DynamicObstacle obstacle)
+	{
+		this((Polygon)obstacle.collider, obstacle.rData.isFilled(), obstacle.rData.getCharacter(), obstacle.rotationPoint, obstacle.speed);
+	}
+
 	@Override
 	public void update(int deltaT)
 	{

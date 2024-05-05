@@ -5,17 +5,19 @@ import Geometry.*;
 
 public class FoodCircle extends GameObject implements IFood
 {
+	private static final int LAYER = 1;
+
 	private RenderData<Circle> rData;
 	private IGeometricShape<Circle> collider;
 	private boolean isDeepCollision;
 
-	public FoodCircle(Point position, int radius, boolean isFilled, char drawChar, int layer) throws SnakeGameException
+	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar) throws SnakeGameException
 	{
 		Circle circle = null;
 
 		try
 		{
-			circle = new Circle(position, radius);
+			circle = new Circle(position, radius - Unit.UNIT_OFFSET);
 		}
 		catch (GeometricException e)
 		{
@@ -23,9 +25,9 @@ public class FoodCircle extends GameObject implements IFood
 			throw new RuntimeException("Error creating the food circle: " + e.getMessage());
 		}
 
-		this.rData = new RenderData<Circle>(circle, isFilled, layer, drawChar);
+		this.rData = new RenderData<Circle>(circle, isFilled, LAYER, drawChar);
 		this.collider = circle;
-		this.isDeepCollision = false;
+		this.isDeepCollision = true;
 	}
 
 	public void consume()

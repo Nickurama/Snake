@@ -40,6 +40,7 @@ public class Snake extends GameObject
 		this.tailChar = tailChar;
 		this.headChar = headChar;
 		this.head = new SnakeUnit(this, initialPos, headChar);
+		head.setHead(true);
 		this.isDead = false;
 		this.length = 1;
 		this.toGrow = 0;
@@ -61,6 +62,7 @@ public class Snake extends GameObject
 	private void move()
 	{
 		head.setDrawChar(tailChar);
+		head.setHead(false);
 		if (toGrow > 0)
 			growUnit();
 		else
@@ -98,6 +100,7 @@ public class Snake extends GameObject
 
 		head = newUnit;
 		units.add(newUnit);
+		head.setHead(true);
 		super.sceneHandle().add(newUnit);
 		toGrow--;
 	}
@@ -115,9 +118,11 @@ public class Snake extends GameObject
 			Logger.log(Logger.Level.ERROR, "Snake encountered an error while trying to move.\n" + e);
 			throw new RuntimeException("Snake encountered an error while trying to move: " + e.getMessage());
 		}
+		head.setHead(false);
 		head = newHead;
 		units.add(head);
 		head.setDrawChar(headChar);
+		head.setHead(true);
 	}
 
 	private void moveUp()
@@ -233,44 +238,6 @@ public class Snake extends GameObject
 		// if (hasFood())
 		// 	eat();
 	}
-
-	// private boolean hasFood()
-	// {
-	// 	this.foodFound.clear();
-	// 	this.reachableFood.clear();
-	//
-	// 	findFood();
-	//
-	// 	for (IFood food : foodFound)
-	// 	{
-	// 		for (SnakeUnit unit : units)
-	// 		{
-	// 			if (unit.getCollider().contains(food.getCollider()))
-	// 			{
-	// 				reachableFood.add(food);
-	// 				break;
-	// 			}
-	// 		}
-	// 	}
-	//
-	// 	return reachableFood.size() > 0;
-	// }
-	//
-	// public void findFood()
-	// {
-	// 	for (GameObject obj : super.sceneHandle)
-	// 		if (obj instanceof IFood)
-	// 			this.foodFound.add((IFood)obj);
-	// }
-	//
-	// private void eat()
-	// {
-	// 	if (isDead)
-	// 		return;
-	//
-	// 	for (IFood food : reachableFood)
-	// 		eat(food);
-	// }
 
 	public void eat(IFood food)
 	{

@@ -20,18 +20,18 @@ public class GameoverOverlayTests
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
 		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 3, true, 'o', 'x');
 		snake.awake();
-		GameoverOverlay overlay = new GameoverOverlay(snake, camera, '╔', '╗', '╚', '╝', '║', '═');
+		GameoverOverlay overlay = new GameoverOverlay(camera, '╔', '╗', '╚', '╝', '║', '═');
 
 		Scene sc = new Scene();
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
-		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F', 0));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
+		sc.add(new FoodSquare(new Point(5, 5), 1, true, 'F'));
 		sc.add(snake);
 
 		GameEngineFlags flags = new GameEngineFlags();
@@ -72,7 +72,7 @@ public class GameoverOverlayTests
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
 		StaticObstacle obstacle = new StaticObstacle(camera, true, 'x');
 		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 3, true, 'o', 'x');
-		GameoverOverlay overlay = new GameoverOverlay(snake, camera, '╔', '╗', '╚', '╝', '║', '═');
+		GameoverOverlay overlay = new GameoverOverlay(camera, '╔', '╗', '╚', '╝', '║', '═');
 		Scene sc = new Scene();
 		sc.add(snake);
 		sc.add(overlay);

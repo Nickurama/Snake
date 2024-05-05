@@ -214,4 +214,30 @@ public class DynamicObstacleTests
 		// Assert
 		assertEquals(expected, render);
 	}
+
+	@Test
+	public void ShouldMakeDeepCopy() throws GeometricException, GameEngineException
+	{
+		// Arrange
+		Polygon p = new Polygon(new Point[] { new Point(4, 4), new Point(4, 6), new Point(6, 6), new Point(6, 4) });
+		DynamicObstacle obstacle = new DynamicObstacle(p, true, 'x', (float)Math.PI / 4);
+		DynamicObstacle copy = new DynamicObstacle(obstacle);
+
+		Scene sc = new Scene();
+		sc.add(obstacle);
+
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, sc);
+		engine.start();
+
+
+		// Act
+		engine.step(1);
+
+		// Assert
+		assertEquals(p, copy.getCollider());
+		assertNotEquals(p, obstacle.getCollider());
+	}
 }

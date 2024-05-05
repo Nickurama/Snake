@@ -2,7 +2,10 @@ package Geometry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * Represents an immutable point in two dimensional space
@@ -94,6 +97,13 @@ public class VirtualPoint
     @Override
     public String toString()
     {
+		// DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+		// symbols.setDecimalSeparator('.');
+		// symbols.setGroupingSeparator(',');
+		// DecimalFormat format = new DecimalFormat("#.0", symbols);
+		// String printableX = format.format(this.x);
+		// String printableY = format.format(this.y);
+
         // this is done because the expected behaviour is to
         // truncate the number, but sometimes the number will be
         // a small infitesimal below the actual number which

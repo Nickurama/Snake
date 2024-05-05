@@ -17,7 +17,7 @@ public class FoodCircleTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 7), new Point(7, 7), new Point(7, 3)});
-		FoodCircle food = new FoodCircle(new Point(5, 5), 2, false, 'x', 1);
+		FoodCircle food = new FoodCircle(new Point(5, 5), 2, false, 'x');
 
 		Scene sc = new Scene();
 		sc.add(food);
@@ -49,7 +49,7 @@ public class FoodCircleTests
 	{
 		// Arrange
 		Polygon colliderPoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		FoodCircle food = new FoodCircle(new Point(2.5, 2.5), 2, true, 'x', 1);
+		FoodCircle food = new FoodCircle(new Point(2.5, 2.5), 2, true, 'x');
 		MockCollider collider = new MockCollider(colliderPoly, false);
 
 		Scene sc = new Scene();
@@ -74,7 +74,7 @@ public class FoodCircleTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 7), new Point(7, 7), new Point(7, 3)});
-		FoodCircle food = new FoodCircle(new Point(5, 5), 2, true, 'x', 1);
+		FoodCircle food = new FoodCircle(new Point(5, 5), 2, true, 'x');
 
 		Scene sc = new Scene();
 		sc.add(food);

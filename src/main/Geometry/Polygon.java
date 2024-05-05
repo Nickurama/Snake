@@ -241,6 +241,8 @@ public class Polygon implements IGeometricShape<Polygon>
 
 		for (LineSegment side : this.sides)
 		{
+			if (side.contains(that))
+				return true;
 			VirtualPoint intersection = scan.intersection(side.line());
 			if (MathUtil.isLessOrEqualThan(intersection.X(), that.X()) && side.containsExclusive(intersection))
 				intersectNum++;

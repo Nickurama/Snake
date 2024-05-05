@@ -17,7 +17,7 @@ public class FoodSquareTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 7), new Point(7, 7), new Point(7, 3)});
-		FoodSquare food = new FoodSquare(new Point(5, 5), 5, false, 'x', 1);
+		FoodSquare food = new FoodSquare(new Point(5, 5), 5, false, 'x');
 
 		Scene sc = new Scene();
 		sc.add(food);
@@ -49,7 +49,7 @@ public class FoodSquareTests
 	{
 		// Arrange
 		Polygon colliderPoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
-		FoodSquare food = new FoodSquare(new Point(2.5, 2.5), 2, true, 'x', 1);
+		FoodSquare food = new FoodSquare(new Point(2.5, 2.5), 2, true, 'x');
 		MockCollider collider = new MockCollider(colliderPoly, false);
 
 		Scene sc = new Scene();
@@ -74,7 +74,7 @@ public class FoodSquareTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 7), new Point(7, 7), new Point(7, 3)});
-		FoodSquare food = new FoodSquare(new Point(5, 5), 5, false, 'x', 1);
+		FoodSquare food = new FoodSquare(new Point(5, 5), 5, false, 'x');
 
 		Scene sc = new Scene();
 		sc.add(food);
@@ -116,6 +116,15 @@ public class FoodSquareTests
 
 	@Test
 	public void ShouldRespawnInReachableArea() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// GameManager.getInstance().init(10, 10, '.', new Point(13, 4), Snake.Direction.RIGHT, 2, true, 'T', 'H'
+		// 	, true, GameEngineFlags.UpdateMethod.STEP, GameManager.ControlMethod.MANUAL);
+		//
+		throw new Error();
+	}
+
+	@Test
+	public void ShouldRespawnInReachableAreaWhenSmallerThanSnake() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		throw new Error();
 	}

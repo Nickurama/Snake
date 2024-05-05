@@ -3,7 +3,10 @@ import Geometry.*;
 import java.util.Random;
 
 import GameEngine.*;
+import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
+import SnakeGame.Snake.*;
+import SnakeGame.GameManager.*;
 
 /**
  * The class to manage the input and output
@@ -15,9 +18,10 @@ public class Main
 {
     public static void main(String[] args) throws Exception
     {	
-		long seed = new Random().nextLong();
+		long seed = 7208301651677690248L;
+		// long seed = new Random().nextLong();
 		System.out.println("Seed: " + seed);
-		GameManager.getInstance().init(40, 10, 2, true, true, GameEngineFlags.UpdateMethod.STEP, GameManager.ControlMethod.MANUAL, new Random().nextLong());
+		GameManager.getInstance().init(39, 9, 3, false, 2, FoodType.SQUARE, 1, true, UpdateMethod.STEP, ControlMethod.MANUAL, seed);
 		GameManager.getInstance().play();
     }
 }
