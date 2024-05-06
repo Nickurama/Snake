@@ -918,9 +918,9 @@ public class GameManagerTests
 
 		Polygon obstacle = new Rectangle(new Point(0, 0), new Point(5, 3));
 
-		Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(31, 5));
+		Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(33, 7));
 		Point anchor = new Point(31, 4.5);
-		float speed = (float)Math.PI / 2;
+		float speed = (float)Math.PI / 4;
 
 		new GameManagerBuilder()
 			.addObstacle(obstacle)
@@ -952,10 +952,10 @@ public class GameManagerTests
 		String expected =	"╔════════════════════════════════════════╗\n" +
 							"║ f                                      ║\n" +
 							"║ h                                      ║\n" +
-							"║                                        ║\n" +
-							"║                                        ║\n" +
-							"║                              OO        ║\n" +
-							"║                              OO        ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
@@ -965,12 +965,12 @@ public class GameManagerTests
 							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║ h                                      ║\n" +
-							"║                                        ║\n" +
-							"║                                        ║\n" +
-							"║                                        ║\n" +
-							"║                                O       ║\n" +
-							"║                               OO     f ║\n" +
-							"║------                         O        ║\n" +
+							"║                               -        ║\n" +
+							"║                              ----      ║\n" +
+							"║                              -----     ║\n" +
+							"║                             -----   f  ║\n" +
+							"║                              ----      ║\n" +
+							"║------                          -       ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
@@ -1009,10 +1009,10 @@ public class GameManagerTests
 							"╔════════════════════════════════════════╗\n" +
 							"║ f                                      ║\n" +
 							"║ h                                      ║\n" +
-							"║                                        ║\n" +
-							"║                                        ║\n" +
-							"║                              OO        ║\n" +
-							"║                              OO        ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
+							"║                              ----      ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
 							"║------                                  ║\n" +
