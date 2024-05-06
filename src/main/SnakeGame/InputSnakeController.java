@@ -6,7 +6,7 @@ public class InputSnakeController extends GameObject implements ISnakeController
 {
 	private static final String LEFT_INPUT_STR = "left";
 	private static final String RIGHT_INPUT_STR = "right";
-	private static final String FRONT_INPUT_STR = "foward";
+	private static final String FRONT_INPUT_STR = "front";
 
 	private TurnDirection nextDir;
 
