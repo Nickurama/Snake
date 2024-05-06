@@ -58,6 +58,12 @@ public class Scene implements Iterable<GameObject>
 	 */
 	public void add(GameObject object)
 	{
+		if (object == null)
+		{
+			Logger.log(Logger.Level.FATAL, "Attempted to add a null object to the scene.");
+			throw new RuntimeException("Attempted to add a null object to the scene.");
+		}
+
 		try
 		{
 			object.setScene(this, nextId());

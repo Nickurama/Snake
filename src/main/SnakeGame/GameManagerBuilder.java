@@ -166,6 +166,12 @@ public class GameManagerBuilder
 		return this;
 	}
 
+	public GameManagerBuilder setMaxScoresDisplay(int maxScoresDisplay)
+	{
+		this.gmInstance.setMaxScoresDisplay(maxScoresDisplay);
+		return this;
+	}
+
 	private void validate() throws SnakeGameException
 	{
 		if (this.foodType == null)

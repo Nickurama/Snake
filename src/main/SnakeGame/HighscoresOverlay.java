@@ -9,29 +9,31 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	public static final String ERR_NO_SCORES_STR = " No scores found...";
 	public static final String ERR_READING_STR = " An error ocurred while reading scores...";
 
+	private IHighscoresReader highscoresReader;
 	private TextOverlay overlay;
 	private int maxHighscoreEntries;
 
-	public HighscoresOverlay(Rectangle camera, int maxHighscoreEntries, TextOverlayOutline outline)
+	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, int maxHighscoreEntries, TextOverlayOutline outline)
 	{
+		this.highscoresReader = highscoresReader;
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
 		this.maxHighscoreEntries = maxHighscoreEntries;
 	}
 
-	public HighscoresOverlay(Rectangle camera, TextOverlayOutline overlay)
+	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, TextOverlayOutline overlay)
 	{
-		this(camera, -1, overlay);
+		this(highscoresReader, camera, -1, overlay);
 	}
 
-	public HighscoresOverlay(Rectangle camera, int maxHighscoreEntries, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
+	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, int maxHighscoreEntries, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
-		this(camera, maxHighscoreEntries, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
+		this(highscoresReader, camera, maxHighscoreEntries, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
-	public HighscoresOverlay(Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
+	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
-		this(camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
+		this(highscoresReader, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
 	private void drawOverlay(int maxScores)
@@ -51,7 +53,7 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		int writeIndex = 4;
 		try
 		{
-			scores = Scoreboard.getInstance().getScores();
+			scores = highscoresReader.getScores();
 		}
 		catch (SnakeGameException e)
 		{
@@ -80,6 +82,7 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 
 		int maxScoresCanBeDisplayed = overlay.innerHeight() - writeIndex;
 		int numScoresDisplayed = this.maxHighscoreEntries < 0 ? maxScoresCanBeDisplayed : Math.min(maxScoresCanBeDisplayed, this.maxHighscoreEntries);
+		numScoresDisplayed = Math.min(numScoresDisplayed, scores.length);
 
 		for (int i = 0; i < numScoresDisplayed; i++)
 			maxNameLen = Math.max(maxNameLen, scores[i].name().length());

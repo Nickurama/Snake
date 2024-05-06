@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
 import SnakeGame.Snake.*;
 
-public class GameManager extends GameObject
+public class GameManager extends GameObject implements IInputListener, ISnakeStats
 {
 	public static enum ControlMethod
 	{
@@ -24,6 +25,14 @@ public class GameManager extends GameObject
 	{
 		SQUARE,
 		CIRCLE,
+	}
+
+	private static enum GameState
+	{
+		INITIALIZATION,
+		GAMEPLAY,
+		GAMEOVER,
+		HIGHSCORES,
 	}
 
 	private static GameManager instance = null;
@@ -52,7 +61,9 @@ public class GameManager extends GameObject
 	private boolean isTextual;
 	private UpdateMethod updateMethod;
 	private ControlMethod controlMethod;
+	private Integer maxScoresDisplay;
 	private long seed;
+
 	private Scene scene;
 	private Snake snake;
 	private IFood food;
@@ -60,6 +71,8 @@ public class GameManager extends GameObject
 	private Rectangle camera;
 	ArrayList<Polygon> staticObstacles;
 	ArrayList<DynamicObstacle> dynamicObstacles;
+	private GameState gameState;
+	private boolean hasWon;
 
 	private GameManager() // Singleton
 	{
@@ -77,12 +90,14 @@ public class GameManager extends GameObject
 			Logger.log(Logger.Level.FATAL, "Should never happen. initial position should always be valid.\n" + e);
 			throw new RuntimeException("Should never happen. initial position should always be valid.\n" + e.getMessage());
 		}
+		this.maxScoresDisplay = null;
 
 		this.scene = null;
 		this.snake = null;
 		this.food = null;
 		this.staticObstacles = new ArrayList<Polygon>();
 		this.dynamicObstacles = new ArrayList<DynamicObstacle>();
+		this.hasWon = false;
 	}
 
 	public static GameManager getInstance()
@@ -135,6 +150,7 @@ public class GameManager extends GameObject
 	{
 		try
 		{
+			this.gameState = GameState.INITIALIZATION;
 			this.mapWidth = mapWidth;
 			this.mapHeight = mapHeight;
 			this.startingSnakePos = getAbsolute(relativeSnakePos);
@@ -366,6 +382,12 @@ public class GameManager extends GameObject
 			scene.add(snake);
 		}
 
+		if (this.food == null)
+		{
+			Logger.log(Logger.Level.ERROR, "Could not spawn in fruit! The whole map is occupied.");
+			throw new SnakeGameException("Could not spawn in fruit! The whole map is occupied.");
+		}
+
 		ISnakeController controller = generateController();
 		scene.add((GameObject)controller);
 		scene.add(new SnakeController(snake, controller));
@@ -414,6 +436,11 @@ public class GameManager extends GameObject
 		this.dynamicObstacles.add(new DynamicObstacle(getAbsolute(obstacle), this.isFilled, this.obstacleChar, anchor, speed));
 	}
 
+	public void setMaxScoresDisplay(int maxScoresDisplay)
+	{
+		this.maxScoresDisplay = maxScoresDisplay;
+	}
+
 	private IObstacle[] generateObstacles()
 	{
 		IObstacle[] obstacles = new IObstacle[this.staticObstacles.size() + this.dynamicObstacles.size()];
@@ -457,6 +484,8 @@ public class GameManager extends GameObject
 	private IFood generateRandomFruit(GameMap map) throws SnakeGameException
 	{
 		Point pos = map.getRandomInnerUnitSpawnPosition((int)Math.round(this.foodSize), this.snakeSize);
+		if (pos == null)
+			return null;
 		IFood foodGenerated = generateFood(pos);
 		return foodGenerated;
 	}
@@ -490,7 +519,7 @@ public class GameManager extends GameObject
 	private IOverlay generateOverlay()
 	{
 		TextOverlayOutline outline = new TextOverlayOutline();
-		GameplayOverlay overlay = new GameplayOverlay(this.camera, outline);
+		GameplayOverlay overlay = new GameplayOverlay(this, this.camera, outline);
 		return overlay;
 	}
 
@@ -518,13 +547,20 @@ public class GameManager extends GameObject
 
 	public void play()
 	{
+		this.gameState = GameState.GAMEPLAY;
 		this.snake.awake();
 		GameEngine.getInstance().start();
 	}
 
 	public int score()
 	{
-		return (this.snake.length() - 1) * this.foodScore;
+		if (this.snake == null)
+			return 0;
+			
+		int score = (this.snake.length() - 1) * this.foodScore;
+		if (hasWon)
+			score = Integer.MAX_VALUE;
+		return score;
 	}
 
 	public Snake.Direction snakeDir() { return this.snake.direction(); }
@@ -532,8 +568,14 @@ public class GameManager extends GameObject
 	@Override
 	public void lateUpdate()
 	{
-		if (this.food.wasConsumed())
-			respawnFood();
+		if (this.gameState.equals(GameState.GAMEPLAY))
+		{
+			if (this.food.wasConsumed())
+				respawnFood();
+
+			if (this.snake.isDead())
+				gameover();
+		}
 	}
 
 	private void respawnFood()
@@ -548,6 +590,53 @@ public class GameManager extends GameObject
 			throw new RuntimeException("Error while respawning fruit: " + e.getMessage());
 		}
 
-		this.scene.add((GameObject)this.food);
+		if (this.food == null)
+		{
+			this.hasWon = true;
+			gameover();
+		}
+		else
+			this.scene.add((GameObject)this.food);
+	}
+
+	private void gameover()
+	{
+		this.gameState = GameState.GAMEOVER;
+		GameObject overlay = new GameoverOverlay(this, this.camera, new TextOverlayOutline());
+		this.scene.add(overlay);
+	}
+
+	public void onInputReceived(String input)
+	{
+		if (this.gameState.equals(GameState.GAMEOVER))
+		{
+			registerScore(input);
+			highscores();
+		}
+	}
+
+	private void registerScore(String name)
+	{
+		Score newScore = new Score(name, LocalDate.now(), this.score());
+		try
+		{
+			Scoreboard.getInstance().addEntry(newScore);
+			System.out.println("Score saved! :3");
+		}
+		catch (SnakeGameException e)
+		{
+			System.out.println("Could not save score! :(\n" + e.getMessage());
+		}
+	}
+
+	private void highscores()
+	{
+		this.gameState = GameState.HIGHSCORES;
+		GameObject overlay;
+		if (maxScoresDisplay == null)
+			overlay = new HighscoresOverlay(Scoreboard.getInstance(), this.camera, new TextOverlayOutline());
+		else
+			overlay = new HighscoresOverlay(Scoreboard.getInstance(), this.camera, this.maxScoresDisplay, new TextOverlayOutline());
+		this.scene.add(overlay);
 	}
 }

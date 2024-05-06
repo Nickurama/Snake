@@ -2,6 +2,12 @@ package GameEngine;
 
 public class TextOverlayOutline
 {
+	private static final char DEFAULT_TOP_LEFT = '╔';
+	private static final char DEFAULT_TOP_RIGHT = '╗';
+	private static final char DEFAULT_BOTTOM_LEFT = '╚';
+	private static final char DEFAULT_BOTTOM_RIGHT = '╝';
+	private static final char DEFAULT_LEFT_RIGHT = '║';
+	private static final char DEFAULT_TOP_BOTTOM = '═';
 	private char topLeft;
 	private char topRight;
 	private char bottomLeft;
@@ -21,7 +27,7 @@ public class TextOverlayOutline
 
 	public TextOverlayOutline()
 	{
-		this('╔', '╗', '╚', '╝', '║', '═');
+		this(DEFAULT_TOP_LEFT, DEFAULT_TOP_RIGHT, DEFAULT_BOTTOM_LEFT, DEFAULT_BOTTOM_RIGHT, DEFAULT_LEFT_RIGHT, DEFAULT_TOP_BOTTOM);
 	}
 
 	public void setTopLeft(char c) { this.topLeft = c; }

@@ -1,9 +1,6 @@
 ## To Do
 
-- change overlay when lose/win
-- make player be able to submit highscore
 - make replayable
-- Render food AND snake with #
 - SnakeAI
 - Code cleanup
 - --- MILESTONE ---
@@ -102,6 +99,8 @@
 - Overlay GameManager.score instead of passing snake
 - Render obstacle with O
 - Food respawn
+- change overlay when lose/win
+- make player be able to submit highscore
 
 ## On Hold
 
@@ -117,3 +116,4 @@
 - Make Circle intersect with Line
 - Stopping game engine should free the game object, and the scene shouldn't be active anymore
 - GameManager builder
+- Render food AND snake with #

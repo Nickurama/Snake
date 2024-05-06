@@ -10,24 +10,26 @@ public class GameplayOverlay extends GameObject implements IOverlay
 
 	private TextOverlay overlay;
 	private TextOverlayOutline outline;
+	private ISnakeStats snakeStats;
 
-	public GameplayOverlay(Rectangle camera, TextOverlayOutline outline)
+	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, TextOverlayOutline outline)
 	{
+		this.snakeStats = snakeStats;
 		this.outline = outline;
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
 	}
 
-	public GameplayOverlay(Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
+	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
-		this(camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
+		this(snakeStats, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
 
 	private void updateOverlay()
 	{
 		int direction = 0;
-		switch (GameManager.getInstance().snakeDir())
+		switch (snakeStats.snakeDir())
 		{
 			case Snake.Direction.UP:
 				direction = 90;
@@ -42,7 +44,7 @@ public class GameplayOverlay extends GameObject implements IOverlay
 				direction = 0;
 				break;
 		}
-		updateOverlay(direction, GameManager.getInstance().score());
+		updateOverlay(direction, snakeStats.score());
 	}
 
 	private void updateOverlay(int dir, int score)

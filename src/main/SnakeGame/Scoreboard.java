@@ -2,18 +2,23 @@ package SnakeGame;
 
 import GameEngine.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
-public class Scoreboard
+public class Scoreboard implements IHighscoresReader
 {
+	private static final String DEFAULT_FILENAME = "scores.ser";
 	private static Scoreboard instance = null;
 	private String filename;
 
 	private Scoreboard()
 	{
 		// Singleton
-		this.filename = "scores.csv";
+		this.filename = DEFAULT_FILENAME;
 	}
 
 	public static Scoreboard getInstance()
@@ -58,8 +63,10 @@ public class Scoreboard
 	@SuppressWarnings("unchecked")
 	private ArrayList<Score> readScores() throws SnakeGameException
 	{
+		File file = new File(filename);
 		ArrayList<Score> scores = null;
-		try (FileInputStream fileIn = new FileInputStream(filename);
+
+		try (FileInputStream fileIn = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(fileIn);)
 		{
 			scores = (ArrayList<Score>) in.readObject();
@@ -74,7 +81,9 @@ public class Scoreboard
 
 	private void writeScores(ArrayList<Score> scores) throws SnakeGameException
 	{
-		try (FileOutputStream fileOut = new FileOutputStream(filename);
+		File file = new File(filename);
+
+		try (FileOutputStream fileOut = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);)
 		{
 			out.writeObject(scores);

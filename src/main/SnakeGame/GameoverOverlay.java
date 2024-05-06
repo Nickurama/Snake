@@ -10,16 +10,18 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	private static final String NAME_STR = "What is your name?";
 
 	private TextOverlay overlay;
+	private ISnakeStats snakeStats;
 
-	public GameoverOverlay(Rectangle camera, TextOverlayOutline outline)
+	public GameoverOverlay(ISnakeStats snakeStats, Rectangle camera, TextOverlayOutline outline)
 	{
+		this.snakeStats = snakeStats;
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
 	}
 
-	public GameoverOverlay(Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
+	public GameoverOverlay(ISnakeStats snakeStats, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
-		this(camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
+		this(snakeStats, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
 	private void drawOverlay(int score)
@@ -33,7 +35,7 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	@Override
 	public void start()
 	{
-		drawOverlay(GameManager.getInstance().score());
+		drawOverlay(snakeStats.score());
 	}
 
 	public char[][] getOverlay()

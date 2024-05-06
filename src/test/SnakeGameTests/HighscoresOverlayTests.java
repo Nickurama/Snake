@@ -21,7 +21,7 @@ public class HighscoresOverlayTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
-		HighscoresOverlay overlay = new HighscoresOverlay(camera, '╔', '╗', '╚', '╝', '║', '═');
+		HighscoresOverlay overlay = new HighscoresOverlay(Scoreboard.getInstance(), camera, '╔', '╗', '╚', '╝', '║', '═');
 
 		Scoreboard.getInstance().setFile(TEST_FILE);
 		Scoreboard.getInstance().purgeScores();
@@ -67,7 +67,7 @@ public class HighscoresOverlayTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
-		HighscoresOverlay overlay = new HighscoresOverlay(camera, '╔', '╗', '╚', '╝', '║', '═');
+		HighscoresOverlay overlay = new HighscoresOverlay(Scoreboard.getInstance(), camera, '╔', '╗', '╚', '╝', '║', '═');
 
 		Scoreboard.getInstance().setFile(TEST_FILE);
 		Scoreboard.getInstance().purgeScores();
@@ -115,7 +115,7 @@ public class HighscoresOverlayTests
 	{
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
-		HighscoresOverlay overlay = new HighscoresOverlay(camera, 2, '╔', '╗', '╚', '╝', '║', '═');
+		HighscoresOverlay overlay = new HighscoresOverlay(Scoreboard.getInstance(), camera, 2, '╔', '╗', '╚', '╝', '║', '═');
 
 		Scoreboard.getInstance().setFile(TEST_FILE);
 		Scoreboard.getInstance().purgeScores();

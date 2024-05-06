@@ -222,7 +222,10 @@ public class Polygon implements IGeometricShape<Polygon>
 		Line scan;
 		try
 		{
-			scan = new Line(new Point(0, that.Y()), that);
+			int x = 0;
+			if (that.X() == 0)
+				x = 10;
+			scan = new Line(new Point(x, that.Y()), that);
 		}
 		catch (GeometricException e)
 		{
