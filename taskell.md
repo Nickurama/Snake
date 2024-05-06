@@ -1,12 +1,9 @@
 ## To Do
 
-- Food respawn
 - change overlay when lose/win
 - make player be able to submit highscore
 - make replayable
-- Overlay GameManager.score instead of passing snake
 - Render food AND snake with #
-- Render obstacle with O
 - SnakeAI
 - Code cleanup
 - --- MILESTONE ---
@@ -102,6 +99,9 @@
 - GameManager tests
 - GameManager builder
 - only snake head should check for containing food
+- Overlay GameManager.score instead of passing snake
+- Render obstacle with O
+- Food respawn
 
 ## On Hold
 

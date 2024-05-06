@@ -1,3 +1,5 @@
++ SnakeBuilder tests
++ GameManagerBuilder tests
 = refine rasterizer code
 - getGameObject in collider should not exist
 - delete NaturalPoint

@@ -490,4 +490,21 @@ public class SceneTests
 		// Assert
 		assertEquals(sc1.iterator().next().id(), obj.id());
 	}
+
+	@Test
+	public void ShouldCallInitializeWhenAddingToScene()
+	{
+		// Arrange
+		MockGameObject obj = new MockGameObject();
+		Scene sc = new Scene();
+
+		// Act
+		boolean hasInitializedBefore = obj.hasInitialized();
+		sc.add(obj);
+		boolean hasInitializedAfter = obj.hasInitialized();
+
+		// Assert
+		assertFalse(hasInitializedBefore);
+		assertTrue(hasInitializedAfter);
+	}
 }

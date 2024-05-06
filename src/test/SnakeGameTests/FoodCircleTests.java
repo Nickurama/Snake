@@ -113,28 +113,4 @@ public class FoodCircleTests
 		assertEquals(expected0, render0);
 		assertEquals(expected1, render1);
 	}
-
-	@Test
-	public void ShouldRespawnInReachableArea() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldRespawnOutsideOfObstacles() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldRespawnOutsideOfSnake() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldCallWinWhenCantRespawn() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
 }

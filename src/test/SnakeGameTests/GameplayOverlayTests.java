@@ -122,7 +122,7 @@ public class GameplayOverlayTests
 							"║Dir: 90   Score: 0║\n" +
 							"╚══════════════════╝\n";
 		String expected1 =	"╔══════════════════╗\n" +
-							"║                  ║\n" +
+							"║      f           ║\n" +
 							"║                  ║\n" +
 							"║                  ║\n" +
 							"║         xxx      ║\n" +
@@ -143,7 +143,7 @@ public class GameplayOverlayTests
 							"║Dir: 90   Score: 2║\n" +
 							"╚══════════════════╝\n";
 		String expected2 =	"╔══════════════════╗\n" +
-							"║         xxx      ║\n" +
+							"║      f  xxx      ║\n" +
 							"║         xxx      ║\n" +
 							"║         xxx      ║\n" +
 							"║         ooo      ║\n" +

@@ -113,37 +113,4 @@ public class FoodSquareTests
 		assertEquals(expected0, render0);
 		assertEquals(expected1, render1);
 	}
-
-	@Test
-	public void ShouldRespawnInReachableArea() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		// GameManager.getInstance().init(10, 10, '.', new Point(13, 4), Snake.Direction.RIGHT, 2, true, 'T', 'H'
-		// 	, true, GameEngineFlags.UpdateMethod.STEP, GameManager.ControlMethod.MANUAL);
-		//
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldRespawnInReachableAreaWhenSmallerThanSnake() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldRespawnOutsideOfObstacles() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldRespawnOutsideOfSnake() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
-
-	@Test
-	public void ShouldCallWinWhenCantRespawn() throws GeometricException, GameEngineException, SnakeGameException
-	{
-		throw new Error();
-	}
 }

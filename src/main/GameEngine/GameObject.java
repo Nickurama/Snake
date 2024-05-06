@@ -47,21 +47,23 @@ public class GameObject
 	 * Is called every frame
 	 * @param deltaTms the time since the last update
 	 */
-	public void update(int deltaTms) {};
+	public void update(int deltaTms) {}
 
 	/**
 	 * Is called when the game engine starts
 	 * and whenever the object is instantiated
 	 */
-	public void start() {};
+	public void start() {}
 
 	/**
 	 * Is called when the game engine stops
 	 * and whenever the object is uninstantiated
 	 */
-	public void stop() {};
+	public void stop() {}
 
-	public void lateUpdate() {};
+	public void initialize() {}
 
-	public void earlyUpdate() {};
+	public void lateUpdate() {}
+
+	public void earlyUpdate() {}
 }

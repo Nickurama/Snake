@@ -12,7 +12,7 @@ import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
 import SnakeGame.Snake.*;
 
-public class GameManager
+public class GameManager extends GameObject
 {
 	public static enum ControlMethod
 	{
@@ -24,21 +24,6 @@ public class GameManager
 	{
 		SQUARE,
 		CIRCLE,
-	}
-
-	private class FillerUnit extends Unit implements ICollider
-	{
-		private boolean isDeepCollision;
-		public FillerUnit(Point position, int size, boolean isDeepCollision) throws SnakeGameException
-		{
-			super(position, size, true, ' ', 0);
-			this.isDeepCollision = isDeepCollision;
-		}
-
-		public IGeometricShape<Polygon> getCollider() { return super.getRenderData().getShape(); }
-		public GameObject getGameObject() { return this; }
-		public void onCollision(GameObject other) { }
-		public boolean isDeepCollision() { return this.isDeepCollision; }
 	}
 
 	private static GameManager instance = null;
@@ -71,12 +56,10 @@ public class GameManager
 	private Scene scene;
 	private Snake snake;
 	private IFood food;
+	private GameMap map;
 	private Rectangle camera;
 	ArrayList<Polygon> staticObstacles;
 	ArrayList<DynamicObstacle> dynamicObstacles;
-
-	private Point[] allPossibleSnakePositions;
-	private Point[] allPossibleFoodPositions;
 
 	private GameManager() // Singleton
 	{
@@ -98,7 +81,6 @@ public class GameManager
 		this.scene = null;
 		this.snake = null;
 		this.food = null;
-		this.allPossibleSnakePositions = null;
 		this.staticObstacles = new ArrayList<Polygon>();
 		this.dynamicObstacles = new ArrayList<DynamicObstacle>();
 	}
@@ -221,7 +203,7 @@ public class GameManager
 	{
 		if (this.startingSnakePos == null)
 			return;
-		this.allPossibleSnakePositions = generateAllPossiblePositions(this.snakeSize);
+		Point[] allPossibleSnakePositions = this.map.getAllPossibleUnitSpawnPositions(this.snakeSize);
 		if (!Arrays.stream(allPossibleSnakePositions).anyMatch(this.startingSnakePos::equals))
 		{
 			Logger.log(Logger.Level.FATAL, "Snake was placed in an invalid position: " + getRelative(this.startingSnakePos));
@@ -233,10 +215,15 @@ public class GameManager
 	{
 		if (this.startingSnakePos == null)
 			return;
-		if (isSnakeColliding())
+		
+		GameObject[] objectsOccupying = this.map.getObjectsOccupyingUnit(this.startingSnakePos, this.snakeSize);
+		for (GameObject obj : objectsOccupying)
 		{
-			Logger.log(Logger.Level.FATAL, "Snake was placed in a position where it is colliding with another game object.");
-			throw new SnakeGameException("Snake was placed in a position where it is colliding with another game object.");
+			if (!(obj instanceof SnakeUnit))
+			{
+				Logger.log(Logger.Level.FATAL, "Snake was placed in a position where it is colliding with another game object.");
+				throw new SnakeGameException("Snake was placed in a position where it is colliding with another game object.");
+			}
 		}
 	}
 
@@ -244,7 +231,7 @@ public class GameManager
 	{
 		if (this.startingFoodPos == null)
 			return;
-		this.allPossibleFoodPositions = generateAllPossibleFoodPositions();
+		Point[] allPossibleFoodPositions = this.map.getAllPossibleInnerUnitPositions((int)Math.round(this.foodSize), this.snakeSize);
 		boolean isInValidPosition = Arrays.stream(allPossibleFoodPositions).anyMatch(this.startingFoodPos::equals);
 		if (!isInValidPosition)
 		{
@@ -257,10 +244,15 @@ public class GameManager
 	{
 		if (this.startingFoodPos == null)
 			return;
-		if (isFoodColliding())
+
+		GameObject[] objectsOccupying = this.map.getObjectsOccupyingUnit(this.startingFoodPos, this.foodSize);
+		for (GameObject obj : objectsOccupying)
 		{
-			Logger.log(Logger.Level.FATAL, "Food was placed in a position where it is colliding with another game object.");
-			throw new SnakeGameException("Food was placed in a position where it is colliding with another game object.");
+			if (!(obj instanceof IFood))
+			{
+				Logger.log(Logger.Level.FATAL, "Food was placed in a position where it is colliding with another game object.");
+				throw new SnakeGameException("Food was placed in a position where it is colliding with another game object.");
+			}
 		}
 	}
 
@@ -331,105 +323,6 @@ public class GameManager
 		}
 	}
 
-	private boolean isSnakeColliding()
-	{
-		return CollisionManager.collidesAny(generateFillerUnit(this.startingSnakePos, this.snakeSize), this.scene);
-	}
-
-	private boolean isFoodColliding()
-	{
-		for (GameObject collision : CollisionManager.getCollisions(this.food, this.scene))
-			if (!(collision instanceof IFood))
-				return true;
-
-		if (this.startingSnakePos != null)
-		{
-			FillerUnit snakeUnit = generateFillerUnit(this.startingSnakePos, this.snakeSize);
-			if (CollisionManager.collides(this.food, snakeUnit))
-				return true;
-		}
-
-		return false;
-	}
-
-	private Point[] generateAllPossibleFoodPositions()
-	{
-		Point[] points = null;
-		try
-		{
-			Point initialPos = getFirstPossiblePos(this.snakeSize);
-			Point[] allSnakePositions = generateAllPossiblePositions(this.snakeSize);
-			Point[] firstSquarePoints = generateFoodPositions(initialPos);
-			points = new Point[allSnakePositions.length * firstSquarePoints.length];
-
-			int n = 0;
-			for (Point p : allSnakePositions)
-			{
-				Point[] foodPositions = generateFoodPositions(p);
-				System.arraycopy(foodPositions, 0, points, n, foodPositions.length);
-				n += foodPositions.length;
-			}
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "All possible food points must be valid!\n" + e);
-			throw new RuntimeException("All possible food points must be valid!\n" + e.getMessage());
-		}
-		return points;
-	}
-
-	private Point[] generateFoodPositions(Point initialPos) throws GeometricException
-	{
-		int difference = this.snakeSize - (int)Math.round(this.foodSize);
-		int numOffsets = difference + 1;
-		int num = numOffsets * numOffsets;
-		Point[] points = new Point[num];
-
-		double maxOffset = (double)difference / 2.0;
-		for (int i = 0; i < numOffsets; i++)
-			for (int j = 0; j < numOffsets; j++)
-				points[i * numOffsets + j] = initialPos.translate(new Vector(-maxOffset + j, -maxOffset + i));
-		return points;
-	}
-
-	private Point[] generateAllPossiblePositions(int size)
-	{
-		Point[] points = null;
-		try
-		{
-			Point absoluteInitialPoint = getFirstPossiblePos(size);
-
-			int verticalPositions = this.mapHeight / size; 
-			int horizontalPositions = this.mapWidth / size;
-			int maxPositions = verticalPositions * horizontalPositions;
-
-			points = new Point[maxPositions];
-
-			for (int i = 0; i < verticalPositions; i++)
-			{
-				for (int j = 0; j < horizontalPositions; j++)
-				{
-					Vector vector = new Vector(j * size, i * size);
-					Point newPoint = absoluteInitialPoint.translate(vector);
-					points[i * horizontalPositions + j] = newPoint;
-				}
-			}
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "All possible snake points must be valid!\n" + e);
-			throw new RuntimeException("All possible snake points must be valid!\n" + e.getMessage());
-		}
-		return points;
-	}
-
-	private Point getFirstPossiblePos(int size) throws GeometricException
-	{
-		double coordinate = ((double)size / 2.0) - 0.5;
-		Point relativeInitialPoint = new Point(coordinate, coordinate);
-		return getAbsolute(relativeInitialPoint);
-	}
-
 	private ISnakeController generateController()
 	{
 		ISnakeController controller = null;
@@ -455,14 +348,23 @@ public class GameManager
 			for (IObstacle obstacle : obstacles)
 				scene.add((GameObject)obstacle);
 
-		GameMap map = generateMap();
+		this.map = generateMap();
 		scene.add(map);
 
-		this.snake = generateSnake();
-		scene.add(snake);
-
-		this.food = generateFood();
-		scene.add((GameObject)food);
+		if (shouldGenerateSnakeFirst())
+		{
+			this.snake = generateSnake(map);
+			scene.add(snake);
+			this.food = generateFood(map);
+			scene.add((GameObject)food);
+		}
+		else
+		{
+			this.food = generateFood(map);
+			scene.add((GameObject)food);
+			this.snake = generateSnake(map);
+			scene.add(snake);
+		}
 
 		ISnakeController controller = generateController();
 		scene.add((GameObject)controller);
@@ -470,12 +372,18 @@ public class GameManager
 
 		IOverlay overlay = generateOverlay();
 		scene.add((GameObject)overlay);
-		// this.scene = generateScene(map, this.food, this.snake, controller, obstacles, overlay);
+
+		scene.add(this);
 	}
 
-	private Snake generateSnake() throws SnakeGameException
+	private boolean shouldGenerateSnakeFirst()
 	{
-		Point snakePos = this.startingSnakePos == null ? getRandomEmptySnakePos() : this.startingSnakePos;
+		return this.startingSnakePos != null;
+	}
+
+	private Snake generateSnake(GameMap map) throws SnakeGameException
+	{
+		Point snakePos = this.startingSnakePos == null ? map.getRandomUnitSpawnPosition(snakeSize) : this.startingSnakePos;
 		Snake.Direction snakeDir = this.startingSnakeDir == null ? getRandomSnakeDir() : this.startingSnakeDir;
 		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar);
 	}
@@ -485,8 +393,8 @@ public class GameManager
 		GameMap map;
 		try
 		{
-			Rectangle mapRect = new Rectangle(INIT_POS, INIT_POS.translate(new Vector(this.mapWidth - 1, this.mapHeight - 1))); // -1 to behave as expected, not inclusive of last coord
-			map = new GameMap(mapRect, this.mapChar);
+			map = new GameMap(this.mapWidth, this.mapHeight, INIT_POS, this.mapChar);
+			map.setSeed(this.seed);
 		}
 		catch (Exception e)
 		{
@@ -521,45 +429,7 @@ public class GameManager
 	{
 		Random rng = new Random(this.seed);
 		Snake.Direction[] values = Snake.Direction.values();
-		Snake.Direction result = values[rng.nextInt(values.length)];
-		return result;
-	}
-
-	private Point getRandomEmptySnakePos()
-	{
-		Point[] validSpawnPositions = getValidSpawnPositions(this.snakeSize);
-		Random rng = new Random(this.seed);
-		return validSpawnPositions[rng.nextInt(validSpawnPositions.length)];
-	}
-
-	public Point[] getValidSpawnPositions(int size)
-	{
-		if (this.allPossibleSnakePositions == null)
-			this.allPossibleSnakePositions = generateAllPossiblePositions(size);
-
-		ArrayList<Point> validSpawnPositions = new ArrayList<Point>();
-
-		for (Point position : allPossibleSnakePositions)
-		{
-			FillerUnit unit = generateFillerUnit(position, size);
-			if (!CollisionManager.collidesAny(unit, this.scene))
-				validSpawnPositions.add(position);
-		}
-
-		return validSpawnPositions.toArray(new Point[0]);
-	}
-
-	private FillerUnit generateFillerUnit(Point position, int size)
-	{
-		try
-		{
-			return new FillerUnit(position, size, true);
-		}
-		catch (SnakeGameException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen. Position should always be passed as a valid unit position.\n" + e);
-			throw new RuntimeException("Should never happen. Position should always be passed as a valid unit position.");
-		}
+		return values[rng.nextInt(values.length)];
 	}
 
 	private Rectangle generateCamera() throws SnakeGameException
@@ -579,10 +449,21 @@ public class GameManager
 		return camera;
 	}
 
-	private IFood generateFood() throws SnakeGameException
+	private IFood generateFood(GameMap map) throws SnakeGameException
+	{
+		return this.startingFoodPos == null ? generateRandomFruit(map) : generateFood(this.startingFoodPos);
+	}
+
+	private IFood generateRandomFruit(GameMap map) throws SnakeGameException
+	{
+		Point pos = map.getRandomInnerUnitSpawnPosition((int)Math.round(this.foodSize), this.snakeSize);
+		IFood foodGenerated = generateFood(pos);
+		return foodGenerated;
+	}
+
+	private IFood generateFood(Point foodPos) throws SnakeGameException
 	{
 		IFood food;
-		Point foodPos = this.startingFoodPos == null ? generateRandomFoodPos() : this.startingFoodPos;
 		try
 		{
 			switch(foodType)
@@ -606,30 +487,6 @@ public class GameManager
 		return food;
 	}
 
-	private Point generateRandomFoodPos()
-	{
-		Point[] validSpawnPositions = getValidFoodSpawnPositions();
-		Random rng = new Random(this.seed);
-		return validSpawnPositions[rng.nextInt(validSpawnPositions.length)];
-	}
-
-	public Point[] getValidFoodSpawnPositions()
-	{
-		if (this.allPossibleFoodPositions == null)
-			this.allPossibleFoodPositions = generateAllPossibleFoodPositions();
-
-		ArrayList<Point> validSpawnPositions = new ArrayList<Point>();
-
-		for (Point position : this.allPossibleFoodPositions)
-		{
-			FillerUnit unit = generateFillerUnit(position, (int)Math.round(this.foodSize));
-			if (!CollisionManager.collidesAny(unit, this.scene))
-				validSpawnPositions.add(position);
-		}
-
-		return validSpawnPositions.toArray(new Point[0]);
-	}
-
 	private IOverlay generateOverlay()
 	{
 		TextOverlayOutline outline = new TextOverlayOutline();
@@ -649,30 +506,15 @@ public class GameManager
 		engine.init(flags, this.scene, this.camera);
 	}
 
-	public void setMap(char c)
-	{
-		this.mapChar = c;
-	}
+	public void setMap(char c) { this.mapChar = c; }
 
-	public void setObstacle(char c)
-	{
-		this.obstacleChar = c;
-	}
+	public void setObstacle(char c) { this.obstacleChar = c; }
 
-	public void setFood(char c)
-	{
-		this.foodChar = c;
-	}
+	public void setFood(char c) { this.foodChar = c; }
 
-	public void setSnakeHead(char c)
-	{
-		this.snakeHeadChar = c;
-	}
+	public void setSnakeHead(char c) { this.snakeHeadChar = c; }
 
-	public void setSnakeTail(char c)
-	{
-		this.snakeTailChar = c;
-	}
+	public void setSnakeTail(char c) { this.snakeTailChar = c; }
 
 	public void play()
 	{
@@ -685,8 +527,27 @@ public class GameManager
 		return (this.snake.length() - 1) * this.foodScore;
 	}
 
-	public Snake.Direction snakeDir()
+	public Snake.Direction snakeDir() { return this.snake.direction(); }
+
+	@Override
+	public void lateUpdate()
 	{
-		return this.snake.direction();
+		if (this.food.wasConsumed())
+			respawnFood();
+	}
+
+	private void respawnFood()
+	{
+		try
+		{
+			this.food = generateRandomFruit(this.map);
+		}
+		catch (SnakeGameException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Error while respawning fruit: ");
+			throw new RuntimeException("Error while respawning fruit: " + e.getMessage());
+		}
+
+		this.scene.add((GameObject)this.food);
 	}
 }

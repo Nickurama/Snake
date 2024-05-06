@@ -74,4 +74,6 @@ public class Unit extends GameObject implements IRenderable
 	}
 
 	public Square unitSquare() { return this.unit; }
+
+	public double size() { return this.size; }
 }

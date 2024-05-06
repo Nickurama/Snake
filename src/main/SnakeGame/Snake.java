@@ -4,6 +4,7 @@ import Geometry.*;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import GameEngine.*;
 
@@ -28,27 +29,37 @@ public class Snake extends GameObject
 	private int length;
 	private int toGrow;
 	private boolean isAwake;
-	// private ArrayList<IFood> foodFound;
-	// private ArrayList<IFood> reachableFood;
 	private Queue<SnakeUnit> units;
 
 	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
 	{
+		this.units = new LinkedList<SnakeUnit>();
 		this.unitSize = unitSize;
 		this.currDir = currDir;
 		this.isFilled = isFilled;
 		this.tailChar = tailChar;
 		this.headChar = headChar;
-		this.head = new SnakeUnit(this, initialPos, headChar);
-		head.setHead(true);
+		createHead(initialPos);
 		this.isDead = false;
 		this.length = 1;
 		this.toGrow = 0;
 		this.isAwake = false;
-		// this.foodFound = new ArrayList<IFood>();
-		// this.reachableFood = new ArrayList<IFood>();
-		this.units = new LinkedList<SnakeUnit>();
+	}
+
+	private void setHead(SnakeUnit unit)
+	{
+		this.head.setHead(false);
+		unit.setHead(true);
+		this.head = unit;
+	}
+
+	private void createHead(Point initialPos) throws SnakeGameException
+	{
+		this.head = new SnakeUnit(this, initialPos, headChar);
+		head.setHead(true);
 		this.units.add(this.head);
+		if (super.sceneHandle() != null)
+			super.sceneHandle().add(this.head);
 	}
 
 	public void die()
@@ -61,8 +72,8 @@ public class Snake extends GameObject
 
 	private void move()
 	{
-		head.setDrawChar(tailChar);
 		head.setHead(false);
+
 		if (toGrow > 0)
 			growUnit();
 		else
@@ -87,22 +98,16 @@ public class Snake extends GameObject
 
 	private void growUnit()
 	{
-		SnakeUnit newUnit = null;
 		try
 		{
-			newUnit = new SnakeUnit(this, head.position(), headChar);
+			createHead(head.position());
+			toGrow--;
 		}
 		catch (SnakeGameException e)
 		{
 			Logger.log(Logger.Level.FATAL, "Should not happen. there is already a snake unit here therefore it can be created.\n" + e);
 			throw new RuntimeException("Should not happen. there is already a snake unit here therefore it can be created.");
 		}
-
-		head = newUnit;
-		units.add(newUnit);
-		head.setHead(true);
-		super.sceneHandle().add(newUnit);
-		toGrow--;
 	}
 
 	private void swapTailWithHead()
@@ -118,11 +123,9 @@ public class Snake extends GameObject
 			Logger.log(Logger.Level.ERROR, "Snake encountered an error while trying to move.\n" + e);
 			throw new RuntimeException("Snake encountered an error while trying to move: " + e.getMessage());
 		}
-		head.setHead(false);
-		head = newHead;
-		units.add(head);
-		head.setDrawChar(headChar);
-		head.setHead(true);
+
+		setHead(newHead);
+		units.add(newHead);
 	}
 
 	private void moveUp()
@@ -221,12 +224,14 @@ public class Snake extends GameObject
 	}
 
 	@Override
-	public void start()
+	public void initialize()
 	{
 		super.sceneHandle().add(this.head);
+	}
 
-		// if (hasFood())
-		// 	eat();
+	@Override
+	public void start()
+	{
 	}
 
 	@Override
@@ -234,9 +239,6 @@ public class Snake extends GameObject
 	{
 		if (!isDead && isAwake)
 			move();
-
-		// if (hasFood())
-		// 	eat();
 	}
 
 	public void eat(IFood food)
@@ -263,4 +265,8 @@ public class Snake extends GameObject
 	public Direction direction() { return this.currDir; }
 
 	public int length() { return this.length; }
+
+	public char headChar() { return this.headChar; }
+
+	public char tailChar() { return this.tailChar; }
 }

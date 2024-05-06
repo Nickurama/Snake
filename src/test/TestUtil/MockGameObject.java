@@ -19,6 +19,7 @@ public class MockGameObject extends GameObject implements IInputListener
 	protected int earlyUpdateCount;
 	protected int updateCount;
 	protected int lateUpdateCount;
+	private boolean hasInitialized;
 
 	private String inputReceived;
 
@@ -32,6 +33,7 @@ public class MockGameObject extends GameObject implements IInputListener
 		this.lateUpdateCount = 0;
 		this.lastOperation = Operation.NONE;
 		this.inputReceived = null;
+		this.hasInitialized = false;
 	}
 
 	public MockGameObject()
@@ -78,6 +80,12 @@ public class MockGameObject extends GameObject implements IInputListener
 		this.earlyUpdateCount++;
 	}
 
+	@Override
+	public void initialize()
+	{
+		this.hasInitialized = true;
+	}
+
 	public int getNumber() { return number; }
 
 	public Operation lastOperation() { return lastOperation; }
@@ -95,4 +103,6 @@ public class MockGameObject extends GameObject implements IInputListener
 	public int lateUpdateCount() { return lateUpdateCount; }
 
 	public int earlyUpdateCount() { return earlyUpdateCount; }
+
+	public boolean hasInitialized() { return hasInitialized; }
 }

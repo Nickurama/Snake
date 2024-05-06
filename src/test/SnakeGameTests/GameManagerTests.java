@@ -281,15 +281,15 @@ public class GameManagerTests
 			true, UpdateMethod.STEP, ControlMethod.MANUAL, SEED);
 
 		String expected =	"╔═══════════════════════════════════════╗\n" +
-							"║.......................................║\n" +
-							"║.......................................║\n" +
-							"║.......................................║\n" +
+							"║..............................HHH......║\n" +
+							"║..............................HHH......║\n" +
+							"║..............................HHH......║\n" +
 							"║........................FFF............║\n" +
 							"║........................FFF............║\n" +
 							"║........................FFF............║\n" +
-							"║..................HHH..................║\n" +
-							"║..................HHH..................║\n" +
-							"║..................HHH..................║\n" +
+							"║.......................................║\n" +
+							"║.......................................║\n" +
+							"║.......................................║\n" +
 							"║Dir: 270                       Score: 0║\n" +
 							"╚═══════════════════════════════════════╝\n" +
 							"Stopping...\n";
@@ -479,16 +479,16 @@ public class GameManagerTests
 
 		String expected =	"╔════════════════════════════════════════╗\n" +
 							"║........................................║\n" +
+							"║FF......................................║\n" +
+							"║FF......................................║\n" +
+							"║........................................║\n" +
+							"║............HHHH........................║\n" +
+							"║............HHHH........................║\n" +
+							"║............HHHH........................║\n" +
+							"║............HHHH........................║\n" +
 							"║........................................║\n" +
 							"║........................................║\n" +
 							"║........................................║\n" +
-							"║............HHHH........................║\n" +
-							"║............HHHH........................║\n" +
-							"║............HHHH........................║\n" +
-							"║............HHHH........................║\n" +
-							"║.................F......................║\n" +
-							"║................FFF.....................║\n" +
-							"║.................F......................║\n" +
 							"║........................................║\n" +
 							"║Dir: 270                        Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
@@ -498,6 +498,108 @@ public class GameManagerTests
 		ByteArrayOutputStream out = TestUtil.setIOstreams("stop");
 		gameManager.play();
 		String render = out.toString();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldRespawnFoodInReachableArea() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		Rectangle obstacle = new Rectangle(new Point(0, 0), new Point(1, 0.4));
+
+		new GameManagerBuilder()
+			.setSeed(SEED)
+			.addObstacle(obstacle)
+			.setMapWidth(2)
+			.setMapHeight(2)
+			.setSnakePos(new Point(1, 1))
+			.setSnakeSize(1)
+			.setTextual(true)
+			.setFoodSize(1)
+			.setSnakeDir(Snake.Direction.UP)
+			.setFoodScore(2)
+			.setFoodType(GameManager.FoodType.SQUARE)
+			.setFilled(true)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setMapChar(' ')
+			.setSnakeHeadChar('x')
+			.setSnakeTailChar('o')
+			.setFoodChar('f')
+			.build();
+
+		GameEngine engine = GameEngine.getInstance();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("");
+
+		String expected =	"╔══╗\n" +
+							"║fx║\n" +
+							"║OO║\n" +
+							"║  ║\n" +
+							"╚══╝\n";
+
+		// Act
+		engine.start();
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldCallWinWhenCantRespawnFood() throws GeometricException, GameEngineException, SnakeGameException
+	{
+		// Arrange
+		new GameManagerBuilder()
+			.setSeed(SEED)
+			.setMapWidth(2)
+			.setMapHeight(2)
+			.setSnakePos(new Point(0, 0))
+			.setSnakeSize(1)
+			.setTextual(true)
+			.setFoodSize(1)
+			.setSnakeDir(Snake.Direction.RIGHT)
+			.setFoodPos(new Point(1, 0))
+			.setFoodScore(2)
+			.setFoodType(GameManager.FoodType.SQUARE)
+			.setFilled(true)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setMapChar(' ')
+			.setSnakeHeadChar('x')
+			.setSnakeTailChar('o')
+			.setFoodChar('f')
+			.build();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams(	"step\n" +
+															"left\n" +
+															"step\n" +
+															"left\n" +
+															"step\n" +
+															"left\n" +
+															"step\n" +
+															"left\n" +
+															"step\n" +
+															"left\n" +
+															"step\n" +
+															"left\n" +
+															"step\n" +
+															"stop\n"
+		);
+
+		String expected =	"╔══╗\n" +
+							"║fx║\n" +
+							"║OO║\n" +
+							"║  ║\n" +
+							"╚══╝\n";
+
+		// Act
+		GameManager.getInstance().play();
+		String render = out.toString();
+		out.reset();
 
 		// Assert
 		assertEquals(expected, render);

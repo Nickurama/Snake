@@ -73,6 +73,7 @@ public class Scene implements Iterable<GameObject>
 
 		if (this.isActive)
 			object.start();
+		object.initialize();
 	}
 
 	private int nextId()
@@ -87,7 +88,11 @@ public class Scene implements Iterable<GameObject>
 		if (object instanceof IRenderable)
 			this.renderables.put(object.id(), (IRenderable) object);
 		if (object instanceof IOverlay)
+		{
+			if (this.overlay != null)
+				remove((GameObject)this.overlay);
 			this.overlay = (IOverlay) object;
+		}
 		if (object instanceof ICollider)
 			this.colliders.put(object.id(), (ICollider) object);
 	}

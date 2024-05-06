@@ -31,6 +31,8 @@ public class SnakeUnit extends Unit implements ICollider
 	public void setHead(boolean isHead)
 	{
 		this.isHead = isHead;
+		char drawChar = isHead ? this.snakeHandle.headChar() : this.snakeHandle.tailChar();
+		this.setDrawChar(drawChar);
 	}
 
 	public boolean isDeepCollision() { return this.isDeepCollision; }

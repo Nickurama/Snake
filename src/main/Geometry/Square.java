@@ -35,6 +35,12 @@ public class Square extends Rectangle
         validateSquare();
     }
 
+	public Square(Point firstPoint, Point secondPoint) throws GeometricException
+	{
+		super(firstPoint, secondPoint);
+		validateSquare();
+	}
+
     /**
      * Validates the preconditions for the
      * class to work. terminates the program if
