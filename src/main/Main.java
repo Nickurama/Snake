@@ -21,10 +21,16 @@ public class Main
 {
     public static void main(String[] args) throws Exception
     {	
-		long seed = new Random().nextLong();
+		// Arrange
+		Polygon obstacle = new Rectangle(new Point(0, 0), new Point(5, 3));
+		Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(31, 5));
+		Point anchor = new Point(31, 4.5);
+		float speed = (float)Math.PI / 2;
 
 		new GameManagerBuilder()
-			.setSeed(seed)
+			.addObstacle(obstacle)
+			.addObstacle(dynamicObstacle, anchor, speed)
+			.setSeed(137)
 			.setMapWidth(40)
 			.setMapHeight(10)
 			.setSnakePos(new Point(1, 8))
@@ -42,13 +48,35 @@ public class Main
 			.setSnakeHeadChar('h')
 			.setSnakeTailChar('t')
 			.setObstacleChar('-')
-			.setFoodChar('F')
+			.setFoodChar('f')
 			.build();
 
 		GameManager.getInstance().play();
-
-		// System.out.println("Seed: " + seed);
-		// GameManager.getInstance().init(39, 9, 3, false, 2, FoodType.SQUARE, 1, true, UpdateMethod.STEP, ControlMethod.MANUAL, seed);
+		
+		// long seed = new Random().nextLong();
+		//
+		// new GameManagerBuilder()
+		// 	.setSeed(seed)
+		// 	.setMapWidth(40)
+		// 	.setMapHeight(10)
+		// 	.setSnakePos(new Point(1, 8))
+		// 	.setSnakeSize(1)
+		// 	.setTextual(true)
+		// 	.setFoodSize(1)
+		// 	.setSnakeDir(Snake.Direction.UP)
+		// 	.setFoodPos(new Point(1, 9))
+		// 	.setFoodScore(5)
+		// 	.setFoodType(GameManager.FoodType.SQUARE)
+		// 	.setFilled(true)
+		// 	.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+		// 	.setControlMethod(GameManager.ControlMethod.MANUAL)
+		// 	.setMapChar(' ')
+		// 	.setSnakeHeadChar('h')
+		// 	.setSnakeTailChar('t')
+		// 	.setObstacleChar('-')
+		// 	.setFoodChar('F')
+		// 	.build();
+		//
 		// GameManager.getInstance().play();
     }
 }

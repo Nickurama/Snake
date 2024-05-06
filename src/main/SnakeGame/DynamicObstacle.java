@@ -17,13 +17,15 @@ public class DynamicObstacle extends GameObject implements IObstacle
 		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar);
 		this.collider = obstacle;
 		this.rotationPoint = rotationPoint;
+		if (rotationPoint == null)
+			this.rotationPoint = obstacle.getCentroid();
 		this.speed = speed;
 		this.isDeepCollision = false;
 	}
 
 	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, float speed)
 	{
-		this(obstacle, isFilled, drawChar, obstacle.getCentroid(), speed);
+		this(obstacle, isFilled, drawChar, null, speed);
 	}
 
 	public DynamicObstacle(DynamicObstacle obstacle)
@@ -46,7 +48,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 		catch (GeometricException e)
 		{
 			Logger.log(Logger.Level.FATAL, "Dynamic Obstacle rotated to an invalid coordinate.\n" + e);
-			throw new Error("Dynamic Obstacle rotated to an invalid coordinate.");
+			throw new RuntimeException("Dynamic Obstacle rotated to an invalid coordinate.");
 		}
 	}
 

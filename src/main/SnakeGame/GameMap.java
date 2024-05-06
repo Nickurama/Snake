@@ -37,7 +37,6 @@ public class GameMap extends GameObject implements IRenderable
 	private int width;
 	private int height;
 	private long seed;
-	private Random rng;
 
 	public GameMap(Rectangle mapRect, char drawChar) throws SnakeGameException
 	{

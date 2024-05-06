@@ -106,27 +106,6 @@ public class GameEngineTests
 		assertThrows(GameEngineException.class, () -> engine.step());
 	}
 
-	// @Test
-	// public void ShouldNotStartWhenAlreadyRunning() throws GameEngineException
-	// {
-	// 	// Arrange
-	// 	GameEngineFlags flags = new GameEngineFlags();
-	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-	// 	MockGameObject obj = new MockGameObject();
-	// 	Scene scene = new Scene();
-	// 	scene.add(obj);
-	// 	GameEngine engine = GameEngine.getInstance();
-	// 	engine.init(flags, scene);
-	//
-	// 	// Act
-	// 	engine.start();
-	// 	engine.step();
-	// 	engine.start();
-	//
-	// 	// Arrange
-	// 	assertEquals(MockGameObject.Operation.UPDATED, obj.lastOperation());
-	// }
-
 	@Test
 	public void ShouldThrowIfStartingWhenAlreadyRunning() throws GameEngineException
 	{
@@ -273,23 +252,23 @@ public class GameEngineTests
 		assertTrue(s1.isActive());
 		assertFalse(s0.isActive());
 	}
-
-	@Test
-	public void ShouldNotSetSceneIfEngineIsNotStopped() throws GameEngineException
-	{
-		// Arrange
-		Scene s0 = new Scene();
-		Scene s1 = new Scene();
-		GameEngineFlags flags = new GameEngineFlags();
-		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-		GameEngine engine = GameEngine.getInstance();
-		engine.init(flags, s0);
-		engine.start();
-
-		// Act
-		// Assert
-		assertThrows(GameEngineException.class, () -> engine.setScene(s1));
-	}
+	//
+	// @Test
+	// public void ShouldNotSetSceneIfEngineIsNotStopped() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	Scene s0 = new Scene();
+	// 	Scene s1 = new Scene();
+	// 	GameEngineFlags flags = new GameEngineFlags();
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+	// 	GameEngine engine = GameEngine.getInstance();
+	// 	engine.init(flags, s0);
+	// 	engine.start();
+	//
+	// 	// Act
+	// 	// Assert
+	// 	assertThrows(GameEngineException.class, () -> engine.setScene(s1));
+	// }
 
 	@Test
 	public void ShouldTakeDebugCommandInStepMode()

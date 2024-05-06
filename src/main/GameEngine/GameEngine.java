@@ -110,7 +110,7 @@ public class GameEngine
 		{
 			case "step":
 				System.out.println("Stepping...");
-				update();
+				update(1);
 				break;
 			case "stop":
 				System.out.println("Stopping...");
@@ -144,10 +144,16 @@ public class GameEngine
 
 	public void setScene(Scene newScene) throws GameEngineException
 	{
-		if (isRunning)
-			throw new GameEngineException("Can't set scene while engine is still running!");
+		// if (isRunning)
+		// 	throw new GameEngineException("Can't set scene while engine is still running!");
 
 		this.currScene = newScene;
+
+		currScene.setActive(true);
+
+		for (GameObject obj : newScene)
+			obj.start();
+
 	}
 
 	private long getDeltaT()

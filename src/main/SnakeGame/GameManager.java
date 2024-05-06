@@ -47,6 +47,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	private char obstacleChar;
 	private char snakeHeadChar;
 	private char snakeTailChar;
+	private boolean isFirstSetup;
 
 	private boolean isFilled;
 	private int foodScore;
@@ -73,6 +74,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	ArrayList<DynamicObstacle> dynamicObstacles;
 	private GameState gameState;
 	private boolean hasWon;
+	private boolean hasShowedHighscores;
 
 	private GameManager() // Singleton
 	{
@@ -92,12 +94,12 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		}
 		this.maxScoresDisplay = null;
 
+		this.isFirstSetup = true;
 		this.scene = null;
 		this.snake = null;
 		this.food = null;
 		this.staticObstacles = new ArrayList<Polygon>();
 		this.dynamicObstacles = new ArrayList<DynamicObstacle>();
-		this.hasWon = false;
 	}
 
 	public static GameManager getInstance()
@@ -151,6 +153,11 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		try
 		{
 			this.gameState = GameState.INITIALIZATION;
+			this.scene = null;
+			this.snake = null;
+			this.food = null;
+			this.hasWon = false;
+			this.hasShowedHighscores = false;
 			this.mapWidth = mapWidth;
 			this.mapHeight = mapHeight;
 			this.startingSnakePos = getAbsolute(relativeSnakePos);
@@ -167,8 +174,12 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 			this.seed = seed;
 			this.camera = generateCamera();
 			initScene();
-			initGameEngine();
+			if (this.isFirstSetup)
+				initGameEngine();
+			else
+				GameEngine.getInstance().setScene(this.scene);
 			validate();
+			this.isFirstSetup = false;
 		}
 		catch (Exception e)
 		{
@@ -313,6 +324,21 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		}
 	}
 
+	private VirtualPoint getAbsolute(VirtualPoint relative)
+	{
+		if (relative == null)
+			return null;
+		try
+		{
+			return relative.translate(new Vector(INIT_POS));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
+			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
+		}
+	}
+
 	private Polygon getAbsolute(Polygon relative)
 	{
 		try
@@ -433,7 +459,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 
 	public void addDynamicObstacle(Polygon obstacle, VirtualPoint anchor, float speed)
 	{
-		this.dynamicObstacles.add(new DynamicObstacle(getAbsolute(obstacle), this.isFilled, this.obstacleChar, anchor, speed));
+		this.dynamicObstacles.add(new DynamicObstacle(getAbsolute(obstacle), this.isFilled, this.obstacleChar, getAbsolute(anchor), speed));
 	}
 
 	public void setMaxScoresDisplay(int maxScoresDisplay)
@@ -527,7 +553,11 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	{
 		GameEngine engine = GameEngine.getInstance();
 		if (engine.isRunning())
-			engine.stop();
+		{
+			Logger.log(Logger.Level.FATAL, "Tried to setup with game engine still running.");
+			throw new RuntimeException("Tried to setup with game engine still running.");
+		}
+		// 	engine.stop();
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setTextual(this.isTextual);
@@ -550,6 +580,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		this.gameState = GameState.GAMEPLAY;
 		this.snake.awake();
 		GameEngine.getInstance().start();
+		this.isFirstSetup = true;
 	}
 
 	public int score()
@@ -575,6 +606,34 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 
 			if (this.snake.isDead())
 				gameover();
+		}
+	}
+
+	@Override
+	public void update(int deltaT)
+	{
+		if (this.hasShowedHighscores)
+			restart();
+		else if (this.gameState.equals(GameState.HIGHSCORES) && !this.hasShowedHighscores)
+			this.hasShowedHighscores = true;
+	}
+
+	private void restart()
+	{
+		try
+		{
+			this.sceneHandle().remove(this);
+			init(this.mapWidth, this.mapHeight, getRelative(this.startingSnakePos), this.startingSnakeDir,
+				this.snakeSize, this.isFilled, getRelative(this.startingFoodPos), this.foodSize, this.foodType,
+				this.foodScore, this.isTextual, this.updateMethod, this.controlMethod, this.seed);
+			this.gameState = GameState.GAMEPLAY;
+			this.snake.awake();
+			// play();
+		}
+		catch(SnakeGameException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. GameManager was valid, so with the same parameters it should still be valid.\n" + e);
+			throw new RuntimeException("Should never happen. GameManager was valid, so with the same parameters it should still be valid.\n" + e.getMessage());
 		}
 	}
 

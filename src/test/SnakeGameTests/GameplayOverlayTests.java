@@ -17,6 +17,9 @@ public class GameplayOverlayTests
 	public void ShouldSetGameplayOverlay() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
+		GameEngine engine = GameEngine.getInstance();
+		engine.stop();
+
 		new GameManagerBuilder()
 			.setMapWidth(18)
 			.setMapHeight(18)
@@ -37,7 +40,6 @@ public class GameplayOverlayTests
 			.setFoodChar('f')
 			.build();
 
-		GameEngine engine = GameEngine.getInstance();
 
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
@@ -67,6 +69,7 @@ public class GameplayOverlayTests
 		engine.start();
 		String render = out.toString();
 		out.reset();
+		engine.stop();
 
 		// Assert
 		assertEquals(expected, render);
@@ -76,6 +79,9 @@ public class GameplayOverlayTests
 	public void ShouldSwitchGameplayVariables() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
+		GameEngine engine = GameEngine.getInstance();
+		engine.stop();
+
 		new GameManagerBuilder()
 			.setMapWidth(18)
 			.setMapHeight(18)
@@ -96,7 +102,6 @@ public class GameplayOverlayTests
 			.setFoodChar('f')
 			.build();
 
-		GameEngine engine = GameEngine.getInstance();
 
 		ByteArrayOutputStream out = TestUtil.setIOstreams("");
 
@@ -175,6 +180,7 @@ public class GameplayOverlayTests
 		engine.step();
 		String render2 = out.toString();
 		out.reset();
+		engine.stop();
 
 		// Assert
 		assertEquals(expected0, render0);

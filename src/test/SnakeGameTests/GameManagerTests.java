@@ -9,6 +9,8 @@ import SnakeGame.Snake.*;
 import SnakeGame.GameManager.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
@@ -545,6 +547,7 @@ public class GameManagerTests
 		engine.start();
 		String render = out.toString();
 		out.reset();
+		engine.stop();
 
 		// Assert
 		assertEquals(expected, render);
@@ -896,6 +899,127 @@ public class GameManagerTests
 							"╚════════════════════════════════════════╝\n" +
 							"Stopping...\n";
 
+		// Act
+		GameManager.getInstance().play();
+		String render = out.toString();
+		out.reset();
+
+		// Assert
+		assertEquals(expected, render);
+	}
+
+	@Test
+	public void ShouldStartPlayingAgainAfterGameOver() throws SnakeGameException, GeometricException
+	{
+		// Arrange
+		Scoreboard scoreboard = Scoreboard.getInstance();
+		scoreboard.setFile(TEST_FILE);
+		scoreboard.purgeScores();
+
+		Polygon obstacle = new Rectangle(new Point(0, 0), new Point(5, 3));
+
+		Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(31, 5));
+		Point anchor = new Point(31, 4.5);
+		float speed = (float)Math.PI / 2;
+
+		new GameManagerBuilder()
+			.addObstacle(obstacle)
+			.addObstacle(dynamicObstacle, anchor, speed)
+			.setSeed(137)
+			.setMapWidth(40)
+			.setMapHeight(10)
+			.setSnakePos(new Point(1, 8))
+			.setSnakeSize(1)
+			.setTextual(true)
+			.setFoodSize(1)
+			.setSnakeDir(Snake.Direction.UP)
+			.setFoodPos(new Point(1, 9))
+			.setFoodScore(5)
+			.setFoodType(GameManager.FoodType.SQUARE)
+			.setFilled(true)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setMapChar(' ')
+			.setSnakeHeadChar('h')
+			.setSnakeTailChar('t')
+			.setObstacleChar('-')
+			.setFoodChar('f')
+			.build();
+
+		ByteArrayOutputStream out = TestUtil.setIOstreams("step\nstep\ntest name\nstep\nstep\nstop");
+
+
+		String expected =	"╔════════════════════════════════════════╗\n" +
+							"║ f                                      ║\n" +
+							"║ h                                      ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                              OO        ║\n" +
+							"║                              OO        ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║Dir: 90                         Score: 0║\n" +
+							"╚════════════════════════════════════════╝\n" +
+							"Stepping...\n" +
+							"╔════════════════════════════════════════╗\n" +
+							"║ h                                      ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                O       ║\n" +
+							"║                               OO     f ║\n" +
+							"║------                         O        ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║Dir: 90                         Score: 5║\n" +
+							"╚════════════════════════════════════════╝\n" +
+							"Stepping...\n" +
+							"╔════════════════════════════════════════╗\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║               Game Over!               ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                Score: 5                ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║           What is your name?           ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"╚════════════════════════════════════════╝\n" +
+							"Score saved! :3\n" +
+							"Stepping...\n" +
+							"╔════════════════════════════════════════╗\n" +
+							"║                                        ║\n" +
+							"║               Highscores               ║\n" +
+							"║                                        ║\n" +
+							"║ 1. test name  5  06/05/2024            ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"╚════════════════════════════════════════╝\n" +
+							"Stepping...\n" +
+							"╔════════════════════════════════════════╗\n" +
+							"║ f                                      ║\n" +
+							"║ h                                      ║\n" +
+							"║                                        ║\n" +
+							"║                                        ║\n" +
+							"║                              OO        ║\n" +
+							"║                              OO        ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║Dir: 90                         Score: 0║\n" +
+							"╚════════════════════════════════════════╝\n" +
+							"Stopping...\n";
 		// Act
 		GameManager.getInstance().play();
 		String render = out.toString();
