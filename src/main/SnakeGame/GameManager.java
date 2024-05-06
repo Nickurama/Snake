@@ -85,7 +85,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		this.snakeTailChar = DEFAULT_SNAKE_TAIL;
 		try
 		{
-			INIT_POS = new Point(10, 10);
+			INIT_POS = new Point(100, 100);
 		}
 		catch(GeometricException e)
 		{
@@ -233,8 +233,8 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		Point[] allPossibleSnakePositions = this.map.getAllPossibleUnitSpawnPositions(this.snakeSize);
 		if (!Arrays.stream(allPossibleSnakePositions).anyMatch(this.startingSnakePos::equals))
 		{
-			Logger.log(Logger.Level.FATAL, "Snake was placed in an invalid position: " + getRelative(this.startingSnakePos));
-			throw new SnakeGameException("Snake was placed in an invalid position: " + getRelative(this.startingSnakePos));
+			Logger.log(Logger.Level.FATAL, "Snake was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingSnakePos)));
+			throw new SnakeGameException("Snake was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingSnakePos)));
 		}
 	}
 
@@ -262,8 +262,8 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		boolean isInValidPosition = Arrays.stream(allPossibleFoodPositions).anyMatch(this.startingFoodPos::equals);
 		if (!isInValidPosition)
 		{
-			Logger.log(Logger.Level.FATAL, "Food was placed in an invalid position: " + getRelative(this.startingFoodPos));
-			throw new SnakeGameException("Food was placed in an invalid position: " + getRelative(this.startingFoodPos));
+			Logger.log(Logger.Level.FATAL, "Food was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingFoodPos)));
+			throw new SnakeGameException("Food was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingFoodPos)));
 		}
 	}
 
@@ -341,6 +341,8 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 
 	private Polygon getAbsolute(Polygon relative)
 	{
+		if (relative == null)
+			return null;
 		try
 		{
 			return relative.translate(new Vector(INIT_POS));
@@ -352,8 +354,25 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		}
 	}
 
+	private VirtualPoint getRelative(VirtualPoint absolute)
+	{
+		if (absolute == null)
+			return null;
+		try
+		{
+			return absolute.translate(new Vector(-INIT_POS.X(), -INIT_POS.Y()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen, as the absolute point is created from the relative point.\n" + e);
+			throw new RuntimeException("Should never happen, as the absolute point is created from the relative point.");
+		}
+	}
+
 	private Point getRelative(Point absolute)
 	{
+		if (absolute == null)
+			return null;
 		try
 		{
 			return absolute.translate(new Vector(-INIT_POS.X(), -INIT_POS.Y()));
@@ -474,7 +493,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		for (Polygon poly : this.staticObstacles)
 			obstacles[n++] = new StaticObstacle(poly, this.isFilled, this.obstacleChar);
 		for (DynamicObstacle obstacle : this.dynamicObstacles)
-			obstacles[n++] = new DynamicObstacle(obstacle);
+			obstacles[n++] = new DynamicObstacle((Polygon)obstacle.getCollider(), this.isFilled, this.obstacleChar, obstacle.speed());
 		return obstacles;
 	}
 

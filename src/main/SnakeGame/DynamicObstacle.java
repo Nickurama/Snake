@@ -65,4 +65,6 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	public IGeometricShape<Polygon> getCollider() { return this.collider; }
 
 	public boolean isDeepCollision() { return this.isDeepCollision; }
+
+	public float speed() { return this.speed; }
 }
