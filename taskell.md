@@ -1,6 +1,5 @@
 ## To Do
 
-- make replayable
 - SnakeAI
 - Code cleanup
 - --- MILESTONE ---
@@ -101,6 +100,7 @@
 - Food respawn
 - change overlay when lose/win
 - make player be able to submit highscore
+- make replayable
 
 ## On Hold
 
