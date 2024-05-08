@@ -25,89 +25,27 @@ public class AISnakeController extends GameObject implements ISnakeController
 
 	private ISnakeStats snake;
 	private int snakeSize;
-	private ISpatialComponent foodPos;
+	private ISpatialComponent food;
 	private GameMap map;
 
-	public AISnakeController(ISnakeStats snake, int snakeSize, ISpatialComponent foodPos, GameMap map)
+	public AISnakeController(ISnakeStats snake, int snakeSize, IFoodStats food, GameMap map)
 	{
 		this.snake = snake;
 		this.snakeSize = snakeSize;
-		this.foodPos = foodPos;
+		this.food = food;
 		this.map = map;
 	}
 
 	public TurnDirection nextTurn()
 	{
+		// System.out.println("Current pos: " + snake.position());
+		// System.out.println("Food pos: " + food.position());
 		return generateNextDir();
 	}
 
 	private TurnDirection generateNextDir()
 	{
-		return getRelativeDir(generateNextAbsoluteDir());
-	}
-
-	private TurnDirection getRelativeDir(Direction absoluteDir)
-	{
-		TurnDirection result = TurnDirection.NONE;
-
-		if (absoluteDir == null)
-			return TurnDirection.NONE;
-		else if (isLeftTurn(absoluteDir, snake.direction()))
-			result = TurnDirection.LEFT;
-		else if (isRightTurn(absoluteDir, snake.direction()))
-			result = TurnDirection.RIGHT;
-
-		System.out.println("Relative dir: " + result);
-
-		return result;
-	}
-
-	private boolean isLeftTurn(Direction absoluteDir, Direction snakeDir)
-	{
-		switch (snakeDir)
-		{
-			case Direction.UP:
-				if (absoluteDir.equals(Direction.LEFT))
-					return true;
-				break;
-			case Direction.DOWN:
-				if (absoluteDir.equals(Direction.RIGHT))
-					return true;
-				break;
-			case Direction.LEFT:
-				if (absoluteDir.equals(Direction.DOWN))
-					return true;
-				break;
-			case Direction.RIGHT:
-				if (absoluteDir.equals(Direction.UP))
-					return true;
-				break;
-		}
-		return false;
-	}
-
-	private boolean isRightTurn(Direction absoluteDir, Direction snakeDir)
-	{
-		switch (snakeDir)
-		{
-			case Direction.UP:
-				if (absoluteDir.equals(Direction.RIGHT))
-					return true;
-				break;
-			case Direction.DOWN:
-				if (absoluteDir.equals(Direction.LEFT))
-					return true;
-				break;
-			case Direction.LEFT:
-				if (absoluteDir.equals(Direction.UP))
-					return true;
-				break;
-			case Direction.RIGHT:
-				if (absoluteDir.equals(Direction.DOWN))
-					return true;
-				break;
-		}
-		return false;
+		return Direction.getRelativeDir(generateNextAbsoluteDir(), snake.direction());
 	}
 
 	private Direction generateNextAbsoluteDir()
@@ -117,8 +55,8 @@ public class AISnakeController extends GameObject implements ISnakeController
 		if (nextPos == null)
 			return null;
 
-		System.out.println("Current pos: " + snake.position());
-		System.out.println("Next pos: " + nextPos);
+		// System.out.println("Current pos: " + snake.position());
+		// System.out.println("Next pos: " + nextPos);
 
 		if (nextPos.X() > snake.position().X() && MathUtil.areEqual(nextPos.Y(), snake.position().Y()))
 			nextAbsoluteDir = Direction.RIGHT;
@@ -129,7 +67,7 @@ public class AISnakeController extends GameObject implements ISnakeController
 		else if (nextPos.Y() < snake.position().Y() && MathUtil.areEqual(nextPos.X(), snake.position().X()))
 			nextAbsoluteDir = Direction.DOWN;
 
-		System.out.println("Absolute dir: " + nextAbsoluteDir);
+		// System.out.println("Absolute dir: " + nextAbsoluteDir);
 
 		return nextAbsoluteDir;
 	}
@@ -138,11 +76,14 @@ public class AISnakeController extends GameObject implements ISnakeController
 	{
 		Point[] validPositions = this.map.getAllValidUnitSpawnPositions(this.snakeSize);
 		Point start = this.snake.position();
-		Point finish = this.map.getOuterPosition(this.foodPos.position(), this.snakeSize);
+		Point finish = this.map.getOuterPosition(this.food.position(), this.snakeSize);
 
 		Point[] path = findShortestPath(start, finish, validPositions);
 		if (path == null)
+		{
+			// System.out.println("Food not found!");
 			return null;
+		}
 		return path[0];
 	}
 
@@ -151,6 +92,8 @@ public class AISnakeController extends GameObject implements ISnakeController
 		Point startIndex = map.getUnitIndex(start, snakeSize);
 		Point finishIndex = map.getUnitIndex(finish, snakeSize);
 		boolean[][] relativeMap = map.asArray(validPositions, snakeSize);
+		// System.out.println("map height: " + relativeMap.length + "/" + map.height());
+		// System.out.println("map width: " + relativeMap[0].length + "/" + map.width());
 
 		set(finishIndex, relativeMap, true);
 		Point back = moveToDir(startIndex, oppositeDir(snake.direction()), relativeMap);
@@ -172,24 +115,28 @@ public class AISnakeController extends GameObject implements ISnakeController
 
 	private Point moveToDir(Point relativePoint, Direction dir, boolean[][] map)
 	{
-		if (MathUtil.areEqual(relativePoint.Y(), map.length - 1) || MathUtil.areEqual(relativePoint.Y(), 0) ||
-			MathUtil.areEqual(relativePoint.X(), map[0].length - 1) || MathUtil.areEqual(relativePoint.X(), 0))
-			return null;
-
 		Point point = null;
 		switch (dir)
 		{
 			case Direction.UP:
-				point = validPoint(safeTranslate(relativePoint, 0, 1), map);
+				// System.out.println("up " + relativePoint);
+				if (!MathUtil.areEqual(relativePoint.Y(), map.length - 1))
+					point = validPoint(safeTranslate(relativePoint, 0, 1), map);
 				break;
 			case Direction.DOWN:
-				point = validPoint(safeTranslate(relativePoint, 0, -1), map);
+				// System.out.println("down " + relativePoint);
+				if (!MathUtil.areEqual(relativePoint.Y(), 0))
+					point = validPoint(safeTranslate(relativePoint, 0, -1), map);
 				break;
 			case Direction.LEFT:
-				point = validPoint(safeTranslate(relativePoint, 1, 0), map);
+				// System.out.println("left " + relativePoint);
+				if (!MathUtil.areEqual(relativePoint.X(), 0))
+					point = validPoint(safeTranslate(relativePoint, -1, 0), map);
 				break;
 			case Direction.RIGHT:
-				point = validPoint(safeTranslate(relativePoint, -1, 0), map);
+				// System.out.println("right " + relativePoint);
+				if (!MathUtil.areEqual(relativePoint.X(), map[0].length - 1))
+					point = validPoint(safeTranslate(relativePoint, 1, 0), map);
 				break;
 		}
 		return point;
@@ -253,13 +200,16 @@ public class AISnakeController extends GameObject implements ISnakeController
 			Node current = toVisit.remove();
 			// System.out.println("=============");
 			// System.out.println("Visiting: " + current.getValue()); // + " isValid: " + isValidPath(current.getValue(), map));
+			// System.out.println("map:");
 
 			if (current.getValue().equals(finish))
 			{
-				System.out.println("Found!");
 				found = current;
-				break;
+				// System.out.println("Found! " + found.getValue());
+				printMap(map, finish);
+				// break;
 			}
+			// printMap(map, finish);
 
 			addSurroundingUnits(current, toVisit, map);
 			// set(current.getValue(), map, false);
@@ -268,6 +218,27 @@ public class AISnakeController extends GameObject implements ISnakeController
 
 		return found;
 	}
+
+	private void printMap(boolean[][] map, Point finish)
+	{
+		for (int i = map.length - 1; i >= 0; i--)
+		{
+			for (int j = 0; j < map[0].length; j++)
+			{
+				if (map[i][j])
+					System.out.print("-");
+				else
+				{
+					if (i == (int)Math.round(finish.Y()) && j == (int)Math.round(finish.X()))
+						System.out.print("!");
+					else
+						System.out.print("x");
+				}
+			}
+			System.out.println();
+		}
+	}
+
 
 	private void addSurroundingUnits(Node current, Queue<Node> toVisit, boolean[][] map)
 	{

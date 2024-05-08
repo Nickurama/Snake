@@ -236,7 +236,7 @@ public class GameMap extends GameObject implements IRenderable
 
 	public boolean[][] asArray(Point[] points, int size)
 	{
-		boolean[][] mapArray = new boolean[this.height][this.width];
+		boolean[][] mapArray = new boolean[this.height / size][this.width / size];
 		for (Point point : points)
 		{
 			Point index = getUnitIndex(point, size);

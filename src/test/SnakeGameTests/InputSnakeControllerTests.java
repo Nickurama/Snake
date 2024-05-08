@@ -4,6 +4,7 @@ import SnakeGame.*;
 import GameEngine.*;
 import Geometry.*;
 import TestUtil.*;
+import SnakeGame.InputSnakeController.*;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertThrows;
@@ -18,7 +19,7 @@ public class InputSnakeControllerTests
 		// Arrange
 		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
-		InputSnakeController inputController = new InputSnakeController();
+		InputSnakeController inputController = new InputSnakeController(InputPreset.RELATIVE, new SnakeStats(snake));
 		SnakeController controller = new SnakeController(snake, inputController);
 
 		Scene sc = new Scene();
@@ -54,7 +55,7 @@ public class InputSnakeControllerTests
 		// Arrange
 		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
-		InputSnakeController inputController = new InputSnakeController();
+		InputSnakeController inputController = new InputSnakeController(InputPreset.RELATIVE, new SnakeStats(snake));
 		SnakeController controller = new SnakeController(snake, inputController);
 
 		Scene sc = new Scene();
@@ -88,7 +89,7 @@ public class InputSnakeControllerTests
 		// Arrange
 		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
-		InputSnakeController inputController = new InputSnakeController();
+		InputSnakeController inputController = new InputSnakeController(InputPreset.RELATIVE, new SnakeStats(snake));
 		SnakeController controller = new SnakeController(snake, inputController);
 
 		Scene sc = new Scene();
@@ -123,7 +124,7 @@ public class InputSnakeControllerTests
 		// Arrange
 		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
-		InputSnakeController inputController = new InputSnakeController();
+		InputSnakeController inputController = new InputSnakeController(InputPreset.RELATIVE, new SnakeStats(snake));
 		SnakeController controller = new SnakeController(snake, inputController);
 
 		Scene sc = new Scene();

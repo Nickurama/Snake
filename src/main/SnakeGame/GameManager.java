@@ -11,7 +11,7 @@ import java.util.Random;
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
-import SnakeGame.Snake.*;
+import SnakeGame.InputSnakeController.*;
 
 public class GameManager extends GameObject implements IInputListener
 {
@@ -42,6 +42,7 @@ public class GameManager extends GameObject implements IInputListener
 	private static final char DEFAULT_OBSTACLE = 'O';
 	private static final char DEFAULT_SNAKE_HEAD = 'H';
 	private static final char DEFAULT_SNAKE_TAIL = 'T';
+	private static final InputPreset DEFAULT_INPUT_PRESET = InputPreset.WASD;
 	private char mapChar;
 	private char foodChar;
 	private char obstacleChar;
@@ -49,6 +50,7 @@ public class GameManager extends GameObject implements IInputListener
 	private char snakeTailChar;
 	private boolean isFirstSetup;
 
+	private InputPreset inputPreset;
 	private boolean isFilled;
 	private int foodScore;
 	private int mapWidth;
@@ -78,6 +80,7 @@ public class GameManager extends GameObject implements IInputListener
 
 	private GameManager() // Singleton
 	{
+		this.inputPreset = DEFAULT_INPUT_PRESET;
 		this.mapChar = DEFAULT_MAP;
 		this.foodChar = DEFAULT_FOOD;
 		this.obstacleChar = DEFAULT_OBSTACLE;
@@ -391,10 +394,10 @@ public class GameManager extends GameObject implements IInputListener
 		switch(this.controlMethod)
 		{
 			case ControlMethod.MANUAL:
-				controller = new InputSnakeController();
+				controller = new InputSnakeController(this.inputPreset, new SnakeStats(this.snake));
 				break;
 			case ControlMethod.AUTO:
-				controller = new AISnakeController(new SnakeStats(this.snake), this.snakeSize, this.food, this.map);
+				controller = new AISnakeController(new SnakeStats(this.snake), this.snakeSize, new FoodStats(), this.map);
 				break;
 		}
 
@@ -484,6 +487,11 @@ public class GameManager extends GameObject implements IInputListener
 	public void setMaxScoresDisplay(int maxScoresDisplay)
 	{
 		this.maxScoresDisplay = maxScoresDisplay;
+	}
+
+	public void setInputPresetMethod(InputPreset preset)
+	{
+		this.inputPreset = preset;
 	}
 
 	private IObstacle[] generateObstacles()
@@ -714,5 +722,10 @@ public class GameManager extends GameObject implements IInputListener
 		else
 			overlay = new HighscoresOverlay(Scoreboard.getInstance(), this.camera, this.maxScoresDisplay, new TextOverlayOutline());
 		this.scene.add(overlay);
+	}
+
+	public Point foodPos()
+	{
+		return this.food.position();
 	}
 }

@@ -16,6 +16,12 @@ public class SnakeController extends GameObject
 	@Override
 	public void earlyUpdate()
 	{
+		if (!snake.isDead())
+			turnSnake();
+	}
+
+	private void turnSnake()
+	{
 		switch(controller.nextTurn())
 		{
 			case ISnakeController.TurnDirection.NONE:
