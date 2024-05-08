@@ -13,20 +13,22 @@ import java.time.LocalDate;
 
 public class GameoverOverlayTests
 {
+
+	class MockScore implements ISnakeStats
+	{
+		Snake snake;
+		public MockScore(Snake snake) { this.snake = snake; }
+		public Point position() { return this.snake.position(); }
+		public Direction direction() { return this.snake.direction(); }
+		public int score() { return this.snake.length() - 1; }
+	}
+
 	@Test
 	public void ShouldSetGameOverOverlay() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		class MockScore implements ISnakeStats
-		{
-			Snake snake;
-			public MockScore(Snake snake) { this.snake = snake; }
-			public Snake.Direction snakeDir() { return this.snake.direction(); }
-			public int score() { return this.snake.length() - 1; }
-		}
-
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
-		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 3, true, 'o', 'x');
+		Snake snake = new Snake(new Point(5, 5), Direction.UP, 3, true, 'o', 'x');
 		snake.awake();
 		MockScore mScore = new MockScore(snake);
 		GameoverOverlay overlay = new GameoverOverlay(mScore, camera, '╔', '╗', '╚', '╝', '║', '═');
@@ -79,17 +81,9 @@ public class GameoverOverlayTests
 	public void ShouldNotShowAnythingUnderGameOverOverlay() throws GameEngineException, GeometricException, SnakeGameException
 	{
 		// Arrange
-		class MockScore implements ISnakeStats
-		{
-			Snake snake;
-			public MockScore(Snake snake) { this.snake = snake; }
-			public Snake.Direction snakeDir() { return this.snake.direction(); }
-			public int score() { return this.snake.length() - 1; }
-		}
-
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 10), new Point(40, 10), new Point(40, 0)});
 		StaticObstacle obstacle = new StaticObstacle(camera, true, 'x');
-		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 3, true, 'o', 'x');
+		Snake snake = new Snake(new Point(5, 5), Direction.UP, 3, true, 'o', 'x');
 		MockScore mScore = new MockScore(snake);
 		GameoverOverlay overlay = new GameoverOverlay(mScore, camera, '╔', '╗', '╚', '╝', '║', '═');
 		Scene sc = new Scene();

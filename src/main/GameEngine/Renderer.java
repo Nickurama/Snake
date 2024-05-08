@@ -352,122 +352,111 @@ public class Renderer
 
 		// scan every Y
 		for (int currY = minY; currY <= maxY; currY++)
-		{
-			// generate current scanline
-			Line scanLine;
-			try
-			{
-				scanLine = new Line(new Point(0.0, currY), new Point(1.0, currY));
-			}
-			catch (GeometricException e)
-			{
-				throw new Error("Should not happen, the scanline should always be valid.");
-			}
-
-
-			// calculate all intersections
-			ArrayList<RasterPoint> intersections = new ArrayList<RasterPoint>();
-			for (LineSegment segment : poly.sides())
-			{
-				if (segment.line().isParalel(scanLine) && MathUtil.areEqual(segment.firstPoint().Y(), currY))
-				{
-					double firstX = segment.firstPoint().X(); // TODO can be joined with below statements
-					double secondX = segment.secondPoint().X();
-
-					intersections.add(new RasterPoint(firstX, segment));
-					intersections.add(new RasterPoint(secondX, segment));
-				}
-				else if (segment.intersectsInclusive(scanLine))
-				{
-					double x = segment.line().intersection(scanLine).X();
-					intersections.add(new RasterPoint(x, segment));
-				}
-			}
-
-			// sort intersections
-			Collections.sort(intersections, (rp0, rp1) -> MathUtil.areEqual(rp0.x(), rp1.x()) ? 0 : (rp0.x() < rp1.x() ? -1 : 1));
-
-			// add all raster points to list
-			RasterPoint last = null;
-			boolean isPrinting = false;
-			boolean isHorizontal = false;
-			boolean lastHorizontalMin = false;
-			for (RasterPoint curr : intersections)
-			{
-				if (last == null)
-				{
-					last = curr;
-					isPrinting = true;
-					continue;
-				}
-
-				if (MathUtil.areEqual(last.x(), curr.x()))
-				{
-
-					VirtualPoint intersection = new VirtualPoint(curr.x(), currY);
-					VirtualPoint minPointLast = last.segment().firstPoint().Y() < last.segment().secondPoint().Y() ? last.segment().firstPoint() : last.segment().secondPoint();
-					VirtualPoint minPointCurr = curr.segment().firstPoint().Y() < curr.segment().secondPoint().Y() ? curr.segment().firstPoint() : curr.segment().secondPoint();
-
-					boolean isMinPointOfLastSegment = intersection.equals(minPointLast);
-					boolean isMinPointOfCurrSegment = intersection.equals(minPointCurr);
-					if (scanLine.isParalel(last.segment().line()) || scanLine.isParalel(curr.segment().line()))
-					{
-						if (!isHorizontal)
-						{
-							isHorizontal = true;
-							lastHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
-							continue;
-						}
-						else
-						{
-							isHorizontal = false;
-							boolean currHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
-							boolean changedDirection = currHorizontalMin == lastHorizontalMin;
-
-							if (isPrinting)
-							{
-								if (changedDirection)
-									isPrinting = false;
-								// else
-								// 	isPrinting = true;
-							}
-							else
-							{
-								if (changedDirection)
-									isPrinting = true;
-								// else
-								// 	isPrinting = false;
-							}
-						}
-					}
-
-					if ((!isMinPointOfLastSegment && isMinPointOfCurrSegment) || (isMinPointOfLastSegment && !isMinPointOfCurrSegment))
-					{
-						// if reached this part then it's a connection point between segments but not a valley or peak
-						// should not draw yet as it only has the first point
-						continue;
-					}
-					// if reached this part then it's a peak or a valley, so it should continue and draw that one point
-				}
-				
-				if (isPrinting)
-				{
-					// draw from last to curr
-					drawHorizontalLine((int) Math.ceil(last.x()), (int)Math.floor(curr.x()), currY);
-					// for (int x = (int) Math.ceil(last.x()); x <= Math.floor(curr.x()); x++)
-					// 	draw(x, currY);
-					isPrinting = false;
-				}
-				else
-				{
-					isPrinting = true;
-				}
-				last = curr;
-			}
-		}
+			scanLine(poly, currY);
 
 		// Add sides
 		rasterizeSides(poly);
+	}
+
+	private void scanLine(Polygon poly, int currY)
+	{
+		// generate current scanline
+		Line scanLine = getScanLine(currY);
+
+		// calculate all intersections
+		ArrayList<RasterPoint> intersections = getAllScanIntersections(poly, scanLine, currY);
+
+		// sort intersections
+		Collections.sort(intersections, (rp0, rp1) -> MathUtil.areEqual(rp0.x(), rp1.x()) ? 0 : (rp0.x() < rp1.x() ? -1 : 1));
+
+		// add all raster points to list
+		drawScanlinePoints(intersections, scanLine, currY);
+	}
+
+	private Line getScanLine(int currY)
+	{
+		try
+		{
+			return new Line(new Point(0.0, currY), new Point(1.0, currY));
+		}
+		catch (GeometricException e)
+		{
+			throw new Error("Should not happen, the scanline should always be valid.");
+		}
+	}
+
+	private ArrayList<RasterPoint> getAllScanIntersections(Polygon poly, Line scanLine, int currY)
+	{
+		ArrayList<RasterPoint> intersections = new ArrayList<RasterPoint>();
+		for (LineSegment segment : poly.sides())
+		{
+			if (segment.line().isParalel(scanLine) && MathUtil.areEqual(segment.firstPoint().Y(), currY))
+			{
+				double firstX = segment.firstPoint().X(); // TODO can be joined with below statements
+				double secondX = segment.secondPoint().X();
+
+				intersections.add(new RasterPoint(firstX, segment));
+				intersections.add(new RasterPoint(secondX, segment));
+			}
+			else if (segment.intersectsInclusive(scanLine))
+			{
+				double x = segment.line().intersection(scanLine).X();
+				intersections.add(new RasterPoint(x, segment));
+			}
+		}
+		return intersections;
+	}
+
+	private void drawScanlinePoints(ArrayList<RasterPoint> intersections, Line scanLine, int currY)
+	{
+		if (intersections.size() == 0)
+			return;
+
+		RasterPoint last = intersections.getFirst();
+		boolean isPrinting = true;
+		boolean isHorizontal = false;
+		boolean lastHorizontalMin = false;
+		for (int i = 1; i < intersections.size(); i++)
+		{
+			RasterPoint curr = intersections.get(i);
+
+			if (MathUtil.areEqual(last.x(), curr.x()))
+			{
+				VirtualPoint intersection = new VirtualPoint(curr.x(), currY);
+				boolean isMinPointOfLastSegment = intersection.equals(getMinPoint(last));
+				boolean isMinPointOfCurrSegment = intersection.equals(getMinPoint(curr));
+				if (scanLine.isParalel(last.segment().line()) || scanLine.isParalel(curr.segment().line()))
+				{
+					boolean currHorizontalMin = isMinPointOfLastSegment && isMinPointOfCurrSegment;
+					if (!isHorizontal)
+					{
+						isHorizontal = true;
+						lastHorizontalMin = currHorizontalMin;
+						continue;
+					}
+					else
+					{
+						isHorizontal = false;
+						if (currHorizontalMin == lastHorizontalMin)
+							isPrinting = !isPrinting;
+					}
+				}
+
+				if (isMinPointOfLastSegment != isMinPointOfCurrSegment)
+					continue;
+			}
+			
+			if (isPrinting)
+				drawHorizontalLine((int) Math.ceil(last.x()), (int)Math.floor(curr.x()), currY);
+			isPrinting = !isPrinting;
+			last = curr;
+		}
+	}
+
+	private VirtualPoint getMinPoint(RasterPoint minPoint)
+	{
+		return minPoint.segment().firstPoint().Y() < minPoint.segment().secondPoint().Y() ? minPoint.segment().firstPoint() : minPoint.segment().secondPoint();
+
 	}
 
 	private void drawHorizontalLine(int xFrom, int xTo, int y)

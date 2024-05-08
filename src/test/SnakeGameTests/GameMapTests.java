@@ -200,7 +200,7 @@ public class GameMapTests
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, scene);
 
-		Snake snake = new Snake(new Point(16.5, 10.5), Snake.Direction.UP, 2, true, 'T', 'H');
+		Snake snake = new Snake(new Point(16.5, 10.5), Direction.UP, 2, true, 'T', 'H');
 		Polygon obstaclePoly = new Polygon(new Point[] {
 			new Point(10, 10),
 			new Point(10, 13),
@@ -455,5 +455,71 @@ public class GameMapTests
 				contains1 = true;
 		assertTrue(contains0);
 		assertTrue(contains1);
+	}
+
+	@Test
+	public void ShouldGetOuterPosition() throws GeometricException, SnakeGameException
+	{
+		// Arrange
+		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(100, 100));
+		GameMap map = new GameMap(mapRect, ' ');
+
+		Point inner = new Point(18, 27);
+		int outerSize = 4;
+		Point expected = new Point(19.5, 27.5);
+
+		// Act
+		Point gotten = map.getOuterPosition(inner, outerSize);
+
+		// Assert
+		assertEquals(expected, gotten);
+	}
+
+	@Test
+	public void ShouldGetAllValidPositionsAsArray() throws GeometricException, SnakeGameException
+	{
+		// Arrange
+		Scene scene = new Scene();
+		GameEngineFlags flags = new GameEngineFlags();
+		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+		flags.setTextual(true);
+		GameEngine engine = GameEngine.getInstance();
+		engine.init(flags, scene);
+
+		Snake snake = new Snake(new Point(16.5, 10.5), Direction.UP, 2, true, 'T', 'H');
+		Polygon obstaclePoly = new Polygon(new Point[] {
+			new Point(10, 10),
+			new Point(10, 13),
+			new Point(17, 15),
+		});
+		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
+
+		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(19, 15));
+		GameMap map = new GameMap(mapRect, 'o');
+
+		scene.add(snake);
+		scene.add(obstacle);
+		scene.add(map);
+
+		engine.start();
+
+		boolean[][] expected = new boolean[][] {
+			{	false,	false,	true,	false,	true	}, // 10.5
+			{	false,	false,	false,	true,	true	}, // 12.5
+			{	true,	false,	false,	false,	true	}, // 14.5
+			//	10.5	12.5	14.5	16.5	18.5
+		};
+
+		// (10.5, 14.5) (18.5, 14.5)
+		// (16.5, 12.5) (18.5, 12.5)
+		// (14.5, 10.5) (18.5, 10.5)
+
+		// Act
+		boolean[][] gotten = map.asArray(map.getAllValidUnitSpawnPositions(2), 2);
+
+		// Assert
+		for (int i = 0; i < expected.length; i++)
+			for (int j = 0; j < expected[0].length; j++)
+				assertEquals(expected[i][j], gotten[i][j], new Point(i, j).toString());
 	}
 }

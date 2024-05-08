@@ -18,7 +18,7 @@ public class SnakeUnitTests
 		// Arrange
 		// Act
 		// Assert
-		assertThrows(SnakeGameException.class, () -> new Snake(new Point(2.5, 2.5), Snake.Direction.UP, 0, true, 't', 'h'));
+		assertThrows(SnakeGameException.class, () -> new Snake(new Point(2.5, 2.5), Direction.UP, 0, true, 't', 'h'));
 	}
 
 	@Test
@@ -27,14 +27,14 @@ public class SnakeUnitTests
 		// Arrange
 		// Act
 		// Assert
-		assertThrows(SnakeGameException.class, () -> new Snake(new Point(1, 1), Snake.Direction.UP, 5, true, 't', 'h'));
+		assertThrows(SnakeGameException.class, () -> new Snake(new Point(1, 1), Direction.UP, 5, true, 't', 'h'));
 	}
 
 	@Test
 	public void ShouldNotifySnakeOfCollisions() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2.5, 2.5), Snake.Direction.UP, 2, true, 't', 'h');
+		Snake snake = new Snake(new Point(2.5, 2.5), Direction.UP, 2, true, 't', 'h');
 
 		Polygon obstaclePoly = new Polygon(new Point[] { new Point(1, 1), new Point(1, 3), new Point(3, 3), new Point(3, 1) });
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'x');
@@ -60,7 +60,7 @@ public class SnakeUnitTests
 	public void ShouldRender() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2.5, 2.5), Snake.Direction.UP, 2, true, 't', 'h');
+		Snake snake = new Snake(new Point(2.5, 2.5), Direction.UP, 2, true, 't', 'h');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -102,7 +102,7 @@ public class SnakeUnitTests
 	public void ShouldBeMoved() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2.5, 2.5), Snake.Direction.UP, 2, true, 't', 'h');
+		Snake snake = new Snake(new Point(2.5, 2.5), Direction.UP, 2, true, 't', 'h');
 		SnakeUnit unit = new SnakeUnit(snake, new Point(3.5, 3.5), 'x');
 		Point expected = new Point(6.5, 10.5);
 

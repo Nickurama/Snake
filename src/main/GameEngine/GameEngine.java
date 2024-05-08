@@ -100,14 +100,15 @@ public class GameEngine
 
 	private void executeCommand(String command)
 	{
-		if (command == null || command.isEmpty())
-		{
-			System.out.println("Command cannot be null.");
-			return;
-		}
+		// if (command == null || command.isEmpty())
+		// {
+		// 	System.out.println("Command cannot be null.");
+		// 	return;
+		// }
 
 		switch (command)
 		{
+			case "":
 			case "step":
 				System.out.println("Stepping...");
 				update(1);

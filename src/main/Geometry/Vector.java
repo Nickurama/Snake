@@ -32,6 +32,11 @@ public class Vector
         this(new VirtualPoint(x, y));
     }
 
+	public Vector(double coord)
+	{
+		this(new VirtualPoint(coord, coord));
+	}
+
     /**
      * Initializes a vector from two points
      * @param p0 the first point
@@ -60,6 +65,16 @@ public class Vector
     {
         return this.point.X() * that.point.X() + this.point.Y() * that.point.Y();
     }
+
+	public Vector multiply(double quotient)
+	{
+		return new Vector(this.point.X() * quotient, this.point.Y() * quotient);
+	}
+
+	public Vector negate()
+	{
+		return new Vector(-this.point.X(), -this.point.Y());
+	}
 
     // public double angle(Vector that)
     // {

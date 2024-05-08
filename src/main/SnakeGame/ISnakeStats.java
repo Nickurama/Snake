@@ -1,7 +1,7 @@
 package SnakeGame;
 
-public interface ISnakeStats
+public interface ISnakeStats extends ISpatialComponent
 {
 	public int score();
-	public Snake.Direction snakeDir();
+	public Direction direction();
 }

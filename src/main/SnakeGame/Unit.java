@@ -3,7 +3,7 @@ package SnakeGame;
 import Geometry.*;
 import GameEngine.*;
 
-public class Unit extends GameObject implements IRenderable
+public class Unit extends GameObject implements IRenderable, ISpatialComponent
 {
 	public static final double UNIT_OFFSET = 0.001;
 	private Square unit;

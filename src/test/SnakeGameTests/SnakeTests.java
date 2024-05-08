@@ -16,7 +16,7 @@ public class SnakeTests
 	public void ShouldDieWhenCollidingWithObstacle() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.UP, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.UP, 3, true, 't', 'h');
 
 		Polygon p = new Polygon(new Point[] { new Point(2, 2), new Point(2, 5), new Point(5, 5), new Point(5, 2) });
 		StaticObstacle obstacle = new StaticObstacle(p, true, 'x');
@@ -50,7 +50,7 @@ public class SnakeTests
 			new Point(14, 4)
 		});
 		GameMap map = new GameMap(mapRect, ' ');
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.UP, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.UP, 3, true, 't', 'h');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -75,7 +75,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.UP, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.UP, 2, true, 'o', 'x');
 		snake.awake();
 
 		Scene sc = new Scene();
@@ -114,7 +114,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.DOWN, 2, true, 'o', 'x');
 		snake.awake();
 
 		Scene sc = new Scene();
@@ -153,7 +153,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.LEFT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.LEFT, 2, true, 'o', 'x');
 		snake.awake();
 
 		Scene sc = new Scene();
@@ -192,7 +192,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 		snake.awake();
 
 		Scene sc = new Scene();
@@ -229,111 +229,111 @@ public class SnakeTests
 	public void ShouldTurnLeftWhenGoingLeft() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.LEFT, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.LEFT, 3, true, 't', 'h');
 
 		// Act
 		snake.turnLeft();
 		
 		// Arrange
-		assertEquals(Snake.Direction.DOWN, snake.direction());
+		assertEquals(Direction.DOWN, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnRightWhenGoingLeft() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.LEFT, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.LEFT, 3, true, 't', 'h');
 
 		// Act
 		snake.turnRight();
 		
 		// Arrange
-		assertEquals(Snake.Direction.UP, snake.direction());
+		assertEquals(Direction.UP, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnLeftWhenGoingUp() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.UP, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.UP, 3, true, 't', 'h');
 
 		// Act
 		snake.turnLeft();
 		
 		// Arrange
-		assertEquals(Snake.Direction.LEFT, snake.direction());
+		assertEquals(Direction.LEFT, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnRightWhenGoingUp() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.UP, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.UP, 3, true, 't', 'h');
 
 		// Act
 		snake.turnRight();
 		
 		// Arrange
-		assertEquals(Snake.Direction.RIGHT, snake.direction());
+		assertEquals(Direction.RIGHT, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnLeftWhenGoingRight() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.RIGHT, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.RIGHT, 3, true, 't', 'h');
 
 		// Act
 		snake.turnLeft();
 		
 		// Arrange
-		assertEquals(Snake.Direction.UP, snake.direction());
+		assertEquals(Direction.UP, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnRightWhenGoingRight() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.RIGHT, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.RIGHT, 3, true, 't', 'h');
 
 		// Act
 		snake.turnRight();
 		
 		// Arrange
-		assertEquals(Snake.Direction.DOWN, snake.direction());
+		assertEquals(Direction.DOWN, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnLeftWhenGoingDown() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.DOWN, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.DOWN, 3, true, 't', 'h');
 
 		// Act
 		snake.turnLeft();
 		
 		// Arrange
-		assertEquals(Snake.Direction.RIGHT, snake.direction());
+		assertEquals(Direction.RIGHT, snake.direction());
 	}
 
 	@Test
 	public void ShouldTurnRightWhenGoingDown() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(2, 2), Snake.Direction.DOWN, 3, true, 't', 'h');
+		Snake snake = new Snake(new Point(2, 2), Direction.DOWN, 3, true, 't', 'h');
 
 		// Act
 		snake.turnRight();
 		
 		// Arrange
-		assertEquals(Snake.Direction.LEFT, snake.direction());
+		assertEquals(Direction.LEFT, snake.direction());
 	}
 
 	@Test
 	public void ShouldGrowWhenContainingFood() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
+		Snake snake = new Snake(new Point(5, 5), Direction.UP, 5, true, 'x', 'x');
 		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f');
 		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f');
 		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f');
@@ -361,7 +361,7 @@ public class SnakeTests
 	public void ShouldNotGrowWhenCollidingWithFoodButNotContaining() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
+		Snake snake = new Snake(new Point(5, 5), Direction.UP, 5, true, 'x', 'x');
 		FoodSquare food = new FoodSquare(new Point(3, 3), 3, true, 'f');
 
 		Scene sc = new Scene();
@@ -387,7 +387,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 		snake.awake();
 
 		FoodSquare food = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f');
@@ -432,7 +432,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 
 		FoodSquare food0 = new FoodSquare(new Point(22.5, 4.5), 2, true, 'f');
 		FoodSquare food1 = new FoodSquare(new Point(24.5, 4.5), 2, true, 'f');
@@ -537,7 +537,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -585,7 +585,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -633,7 +633,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(1, 1), new Point(1, 10), new Point(40, 10), new Point(40, 1) });
 
-		Snake snake = new Snake(new Point(21.5, 7.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(21.5, 7.5), Direction.DOWN, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -681,7 +681,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(1, 1), new Point(1, 10), new Point(40, 10), new Point(40, 1) });
 
-		Snake snake = new Snake(new Point(21.5, 7.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(21.5, 7.5), Direction.DOWN, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -727,7 +727,7 @@ public class SnakeTests
 	public void ShouldDieWhenCollidingWithOwnBody() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(21.5, 7.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(21.5, 7.5), Direction.DOWN, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -766,7 +766,7 @@ public class SnakeTests
 	public void ShouldDieWhenMovingIntoObstacle() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(21.5, 7.5), Snake.Direction.DOWN, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(21.5, 7.5), Direction.DOWN, 2, true, 'o', 'x');
 		Polygon obstaclePoly = new Polygon(new Point[] { new Point(21, 1), new Point(21, 2), new Point(22, 2), new Point(22, 1)});
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'r');
 
@@ -800,7 +800,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 
 		Scene sc = new Scene();
 		sc.add(snake);
@@ -836,7 +836,7 @@ public class SnakeTests
 	public void ShouldNotGrowWhenDead() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(5, 5), Snake.Direction.UP, 5, true, 'x', 'x');
+		Snake snake = new Snake(new Point(5, 5), Direction.UP, 5, true, 'x', 'x');
 		FoodSquare food0 = new FoodSquare(new Point(5, 5), 3, true, 'f');
 		FoodSquare food1 = new FoodSquare(new Point(4.5, 4.5), 2, true, 'f');
 		FoodCircle food2 = new FoodCircle(new Point(5, 5), 1, true, 'f');
@@ -867,7 +867,7 @@ public class SnakeTests
 		// Arrange
 		Rectangle camera = new Rectangle(new Point[] { new Point(0, 0), new Point(0, 9), new Point(39, 9), new Point(39, 0) });
 
-		Snake snake = new Snake(new Point(20.5, 4.5), Snake.Direction.RIGHT, 2, true, 'o', 'x');
+		Snake snake = new Snake(new Point(20.5, 4.5), Direction.RIGHT, 2, true, 'o', 'x');
 		snake.awake();
 
 		Scene sc = new Scene();
@@ -905,7 +905,7 @@ public class SnakeTests
 	public void ShouldNotEatIfNotHead() throws GeometricException, GameEngineException, SnakeGameException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(3, 3), Snake.Direction.UP, 3, true, 'x', 'x');
+		Snake snake = new Snake(new Point(3, 3), Direction.UP, 3, true, 'x', 'x');
 		snake.awake();
 		FoodSquare food0 = new FoodSquare(new Point(3, 3), 3, true, 'f');
 		FoodSquare food1 = new FoodSquare(new Point(3, 3), 2, true, 'f');

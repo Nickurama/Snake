@@ -44,6 +44,8 @@ public class FoodCircle extends GameObject implements IFood
 		this.wasConsumed = true;
 	}
 
+	public Point position() { return this.collider.getCentroid(); }
+
 	public boolean wasConsumed() { return this.wasConsumed; }
 
 	public RenderData<?> getRenderData() { return this.rData; }

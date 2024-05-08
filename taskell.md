@@ -1,9 +1,9 @@
 ## To Do
 
 - SnakeAI
-- Code cleanup
-- --- MILESTONE ---
+- Easier input
 - Documentation
+- Javadoc
 - UML
 - Report
 

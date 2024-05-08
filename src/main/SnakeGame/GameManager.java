@@ -13,7 +13,7 @@ import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
 import SnakeGame.Snake.*;
 
-public class GameManager extends GameObject implements IInputListener, ISnakeStats
+public class GameManager extends GameObject implements IInputListener
 {
 	public static enum ControlMethod
 	{
@@ -394,7 +394,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 				controller = new InputSnakeController();
 				break;
 			case ControlMethod.AUTO:
-				// TODO !!!!!!!!
+				controller = new AISnakeController(new SnakeStats(this.snake), this.snakeSize, this.food, this.map);
 				break;
 		}
 
@@ -451,7 +451,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	private Snake generateSnake(GameMap map) throws SnakeGameException
 	{
 		Point snakePos = this.startingSnakePos == null ? map.getRandomUnitSpawnPosition(snakeSize) : this.startingSnakePos;
-		Snake.Direction snakeDir = this.startingSnakeDir == null ? getRandomSnakeDir() : this.startingSnakeDir;
+		Direction snakeDir = this.startingSnakeDir == null ? getRandomSnakeDir() : this.startingSnakeDir;
 		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar);
 	}
 
@@ -497,10 +497,10 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 		return obstacles;
 	}
 
-	private Snake.Direction getRandomSnakeDir()
+	private Direction getRandomSnakeDir()
 	{
 		Random rng = new Random(this.seed);
-		Snake.Direction[] values = Snake.Direction.values();
+		Direction[] values = Direction.values();
 		return values[rng.nextInt(values.length)];
 	}
 
@@ -564,7 +564,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	private IOverlay generateOverlay()
 	{
 		TextOverlayOutline outline = new TextOverlayOutline();
-		GameplayOverlay overlay = new GameplayOverlay(this, this.camera, outline);
+		GameplayOverlay overlay = new GameplayOverlay(new SnakeStats(this.snake), this.camera, outline);
 		return overlay;
 	}
 
@@ -612,8 +612,6 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 			score = Integer.MAX_VALUE;
 		return score;
 	}
-
-	public Snake.Direction snakeDir() { return this.snake.direction(); }
 
 	@Override
 	public void lateUpdate()
@@ -680,7 +678,7 @@ public class GameManager extends GameObject implements IInputListener, ISnakeSta
 	private void gameover()
 	{
 		this.gameState = GameState.GAMEOVER;
-		GameObject overlay = new GameoverOverlay(this, this.camera, new TextOverlayOutline());
+		GameObject overlay = new GameoverOverlay(new SnakeStats(this.snake), this.camera, new TextOverlayOutline());
 		this.scene.add(overlay);
 	}
 

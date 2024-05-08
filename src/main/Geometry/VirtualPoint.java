@@ -217,6 +217,16 @@ public class VirtualPoint
         return new VirtualPoint(this.X() + vector.X(), this.Y() + vector.Y());
     }
 
+	public VirtualPoint translate(double x, double y) throws GeometricException
+	{
+		return translate(new Vector(x, y));
+	}
+
+	public VirtualPoint translate(Point vector) throws GeometricException
+	{
+		return translate(new Vector(vector));
+	}
+
     /**
      * Acessor method to return the x coordinate
      */

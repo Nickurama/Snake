@@ -16,7 +16,7 @@ public class SnakeControllerTests
 	public void ShouldTurnSnake() throws GeometricException, SnakeGameException, GameEngineException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(30, 30), Snake.Direction.UP, 3, true, 'T', 'H');
+		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
 		MockSnakeController mockController = new MockSnakeController();
 		SnakeController controller = new SnakeController(snake, mockController);
@@ -31,29 +31,29 @@ public class SnakeControllerTests
 		engine.init(flags, sc);
 		engine.start();
 
-		Snake.Direction expectedDir0 = Snake.Direction.UP;
-		Snake.Direction expectedDir1 = Snake.Direction.LEFT;
-		Snake.Direction expectedDir2 = Snake.Direction.DOWN;
-		Snake.Direction expectedDir3 = Snake.Direction.DOWN;
-		Snake.Direction expectedDir4 = Snake.Direction.LEFT;
+		Direction expectedDir0 = Direction.UP;
+		Direction expectedDir1 = Direction.LEFT;
+		Direction expectedDir2 = Direction.DOWN;
+		Direction expectedDir3 = Direction.DOWN;
+		Direction expectedDir4 = Direction.LEFT;
 
 		// Act
-		Snake.Direction dir0 = snake.direction();
+		Direction dir0 = snake.direction();
 
 		mockController.setNextTurn(ISnakeController.TurnDirection.LEFT);
 		engine.step();
-		Snake.Direction dir1 = snake.direction();
+		Direction dir1 = snake.direction();
 
 		engine.step();
-		Snake.Direction dir2 = snake.direction();
+		Direction dir2 = snake.direction();
 
 		mockController.setNextTurn(ISnakeController.TurnDirection.NONE);
 		engine.step();
-		Snake.Direction dir3 = snake.direction();
+		Direction dir3 = snake.direction();
 
 		mockController.setNextTurn(ISnakeController.TurnDirection.RIGHT);
 		engine.step();
-		Snake.Direction dir4 = snake.direction();
+		Direction dir4 = snake.direction();
 
 		// Assert
 		assertEquals(expectedDir0, dir0);

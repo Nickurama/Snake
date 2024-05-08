@@ -16,7 +16,7 @@ public class InputSnakeControllerTests
 	public void ShouldTurnSnakeLeftFromInput() throws GeometricException, SnakeGameException, GameEngineException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(30, 30), Snake.Direction.UP, 3, true, 'T', 'H');
+		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
 		InputSnakeController inputController = new InputSnakeController();
 		SnakeController controller = new SnakeController(snake, inputController);
@@ -31,17 +31,17 @@ public class InputSnakeControllerTests
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc);
 
-		Snake.Direction expectedDir0 = Snake.Direction.UP;
-		Snake.Direction expectedDir1 = Snake.Direction.LEFT;
+		Direction expectedDir0 = Direction.UP;
+		Direction expectedDir1 = Direction.LEFT;
 
 		// Act
-		Snake.Direction dir0 = snake.direction();
+		Direction dir0 = snake.direction();
 
 		TestUtil.setIOstreams(	"left\n" +
 								"step\n" +
 								"stop\n");
 		engine.start();
-		Snake.Direction dir1 = snake.direction();
+		Direction dir1 = snake.direction();
 		//
 		// Assert
 		assertEquals(expectedDir0, dir0);
@@ -52,7 +52,7 @@ public class InputSnakeControllerTests
 	public void ShouldTurnSnakeTwiceFromInput() throws GeometricException, SnakeGameException, GameEngineException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(30, 30), Snake.Direction.UP, 3, true, 'T', 'H');
+		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
 		InputSnakeController inputController = new InputSnakeController();
 		SnakeController controller = new SnakeController(snake, inputController);
@@ -67,7 +67,7 @@ public class InputSnakeControllerTests
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc);
 
-		Snake.Direction expectedDir = Snake.Direction.DOWN;
+		Direction expectedDir = Direction.DOWN;
 
 		// Act
 		TestUtil.setIOstreams(	"left\n" +
@@ -76,7 +76,7 @@ public class InputSnakeControllerTests
 								"step\n" +
 								"stop\n");
 		engine.start();
-		Snake.Direction dir = snake.direction();
+		Direction dir = snake.direction();
 
 		// Assert
 		assertEquals(expectedDir, dir);
@@ -86,7 +86,7 @@ public class InputSnakeControllerTests
 	public void ShouldTurnSnakeLeftThenFrontFromInput() throws GeometricException, SnakeGameException, GameEngineException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(30, 30), Snake.Direction.UP, 3, true, 'T', 'H');
+		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
 		InputSnakeController inputController = new InputSnakeController();
 		SnakeController controller = new SnakeController(snake, inputController);
@@ -101,7 +101,7 @@ public class InputSnakeControllerTests
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc);
 
-		Snake.Direction expectedDir = Snake.Direction.DOWN;
+		Direction expectedDir = Direction.DOWN;
 
 		// Act
 		TestUtil.setIOstreams(	"left\n" +
@@ -111,7 +111,7 @@ public class InputSnakeControllerTests
 								"step\n" +
 								"stop\n");
 		engine.start();
-		Snake.Direction dir = snake.direction();
+		Direction dir = snake.direction();
 
 		// Assert
 		assertEquals(expectedDir, dir);
@@ -121,7 +121,7 @@ public class InputSnakeControllerTests
 	public void ShouldTurnSnakeLeftThenRightFromInput() throws GeometricException, SnakeGameException, GameEngineException
 	{
 		// Arrange
-		Snake snake = new Snake(new Point(30, 30), Snake.Direction.UP, 3, true, 'T', 'H');
+		Snake snake = new Snake(new Point(30, 30), Direction.UP, 3, true, 'T', 'H');
 
 		InputSnakeController inputController = new InputSnakeController();
 		SnakeController controller = new SnakeController(snake, inputController);
@@ -136,7 +136,7 @@ public class InputSnakeControllerTests
 		GameEngine engine = GameEngine.getInstance();
 		engine.init(flags, sc);
 
-		Snake.Direction expectedDir = Snake.Direction.LEFT;
+		Direction expectedDir = Direction.LEFT;
 
 		// Act
 		TestUtil.setIOstreams(	"left\n" +
@@ -148,7 +148,7 @@ public class InputSnakeControllerTests
 								"step\n" +
 								"stop\n");
 		engine.start();
-		Snake.Direction dir = snake.direction();
+		Direction dir = snake.direction();
 
 		// Assert
 		assertEquals(expectedDir, dir);

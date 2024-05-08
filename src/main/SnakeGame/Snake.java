@@ -8,16 +8,8 @@ import java.util.Random;
 
 import GameEngine.*;
 
-public class Snake extends GameObject
+public class Snake extends GameObject implements ISpatialComponent
 {
-	public static enum Direction
-	{
-		UP,
-		RIGHT,
-		DOWN,
-		LEFT,
-	};
-
 	protected static final int LAYER = 2;
 	private boolean isFilled;
 	private char tailChar;
@@ -269,4 +261,6 @@ public class Snake extends GameObject
 	public char headChar() { return this.headChar; }
 
 	public char tailChar() { return this.tailChar; }
+	
+	public Point position() { return this.head.position(); }
 }

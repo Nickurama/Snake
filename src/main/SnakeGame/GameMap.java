@@ -24,7 +24,6 @@ public class GameMap extends GameObject implements IRenderable
 		public boolean isDeepCollision() { return this.isDeepCollision; }
 	}
 
-
 	private static final int LAYER = 0;
 	private static final long DEFAULT_SEED = 0;
 	private Rectangle map;
@@ -235,6 +234,46 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	public boolean[][] asArray(Point[] points, int size)
+	{
+		boolean[][] mapArray = new boolean[this.height][this.width];
+		for (Point point : points)
+		{
+			Point index = getUnitIndex(point, size);
+			mapArray[(int)index.Y()][(int)index.X()] = true;
+		}
+		return mapArray;
+	}
+
+	public Point getUnitIndex(Point position, int size)
+	{
+		try
+		{
+			int x = (int)(position.X() + 0.5 - this.bounds.minPoint().X()) / size;
+			int y = (int)(position.Y() + 0.5 - this.bounds.minPoint().Y()) / size;
+			return new Point(x, y);
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should not happen! All possible indexes should be valid!\n" + e);
+			throw new RuntimeException("Should not happen! All possible indexes should be valid!\n" + e.getMessage());
+		}
+	}
+
+	public Point getUnitPoint(Point index, int size)
+	{
+		try
+		{
+			Vector offset = new Vector(index).multiply(size);
+			return getFirstPossiblePos(size).translate(offset);
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. the point should always have a positive value.\n" + e);
+			throw new RuntimeException("Should never happen. the point should always have a positive value.");
+		}
+	}
+
 	public Point[] getAllPossibleUnitSpawnPositions(int size)
 	{
 		Point[] points = null;
@@ -263,6 +302,13 @@ public class GameMap extends GameObject implements IRenderable
 			throw new RuntimeException("Should not happen! All possible unit spawn position should be valid!\n" + e.getMessage());
 		}
 		return points;
+	}
+
+	public Point getOuterPosition(Point inner, int outerSize)
+	{
+			return getUnitPoint(getUnitIndex(inner, outerSize), outerSize);
+			// Vector offset = new Vector(getUnitIndex(inner, outerSize)).multiply(outerSize);
+			// return getFirstPossiblePos(outerSize).translate(offset);
 	}
 
 	private Point getFirstPossiblePos(int size) throws GeometricException

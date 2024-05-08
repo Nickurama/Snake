@@ -21,7 +21,10 @@ public class Main
 {
     public static void main(String[] args) throws Exception
     {	
-		long seed = new Random().nextLong();
+		// long seed = new Random().nextLong();
+		long seed = 1478752656328878971L;
+		System.out.println("Seed: " + seed);
+
 		// Arrange
 		// Polygon obstacle = new Rectangle(new Point(0, 0), new Point(5, 3));
 		// Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(31, 5));
@@ -54,7 +57,7 @@ public class Main
 			.setFoodType(GameManager.FoodType.SQUARE)
 			.setFilled(true)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setControlMethod(GameManager.ControlMethod.AUTO)
 			.setMapChar(' ')
 			.setSnakeHeadChar('H')
 			.setSnakeTailChar('T')

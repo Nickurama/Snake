@@ -144,6 +144,16 @@ public class Point extends VirtualPoint
         return new Point(super.translate(vector));
     }
 
+	public Point translate(double x, double y) throws GeometricException
+	{
+		return translate(new Vector(x, y));
+	}
+
+	public Point translate(Point vector) throws GeometricException
+	{
+		return translate(new Vector(vector));
+	}
+
 	@Override
 	public Point rotate(double angle, VirtualPoint anchor) throws GeometricException
 	{
