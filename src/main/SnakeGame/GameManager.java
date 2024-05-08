@@ -481,12 +481,12 @@ public class GameManager extends GameObject implements IInputListener
 
 	public void addStaticObstacle(Polygon obstacle)
 	{
-		this.staticObstacles.add(getAbsolute(obstacle));
+		this.staticObstacles.add(obstacle);
 	}
 
 	public void addDynamicObstacle(Polygon obstacle, VirtualPoint anchor, float speed)
 	{
-		this.dynamicObstacles.add(new DynamicObstacle(getAbsolute(obstacle), this.isFilled, this.obstacleChar, getAbsolute(anchor), speed));
+		this.dynamicObstacles.add(new DynamicObstacle(obstacle, this.isFilled, this.obstacleChar, getAbsolute(anchor), speed));
 	}
 
 	public void setMaxScoresDisplay(int maxScoresDisplay)
@@ -504,9 +504,9 @@ public class GameManager extends GameObject implements IInputListener
 		IObstacle[] obstacles = new IObstacle[this.staticObstacles.size() + this.dynamicObstacles.size()];
 		int n = 0;
 		for (Polygon poly : this.staticObstacles)
-			obstacles[n++] = new StaticObstacle(poly, this.isFilled, this.obstacleChar);
+			obstacles[n++] = new StaticObstacle(getAbsolute(poly), this.isFilled, this.obstacleChar);
 		for (DynamicObstacle obstacle : this.dynamicObstacles)
-			obstacles[n++] = new DynamicObstacle((Polygon)obstacle.getCollider(), this.isFilled, this.obstacleChar, obstacle.speed());
+			obstacles[n++] = new DynamicObstacle(getAbsolute((Polygon)obstacle.getCollider()), this.isFilled, this.obstacleChar, obstacle.speed());
 		return obstacles;
 	}
 

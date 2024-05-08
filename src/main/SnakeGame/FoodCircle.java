@@ -5,6 +5,7 @@ import Geometry.*;
 
 public class FoodCircle extends GameObject implements IFood
 {
+	private static final double CIRCLE_OFFSET = 0.1;
 	private static final int LAYER = 1;
 
 	private RenderData<?> rData;
@@ -19,7 +20,7 @@ public class FoodCircle extends GameObject implements IFood
 		try
 		{
 			// circle = new Circle(position.translate(new Vector(Unit.UNIT_OFFSET, -Unit.UNIT_OFFSET)), radius - Unit.UNIT_OFFSET);
-			circle = new Circle(position, radius - Unit.UNIT_OFFSET);
+			circle = new Circle(position, radius - Unit.UNIT_OFFSET - CIRCLE_OFFSET);
 			if (radius <= 1)
 				this.rData = new FoodSquare(position, radius * 2, isFilled, drawChar).getRenderData();
 			else
