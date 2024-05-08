@@ -43,7 +43,7 @@ public class Main
 		new GameManagerBuilder()
 			// .addObstacle(obstacle)
 			// .addObstacle(dynamicObstacle, anchor, speed)
-			.setInputPreset(InputPreset.VIM)
+			.setInputPreset(InputPreset.WASD)
 			// .addObstacle(dynamicObstacle, anchor, speed)
 			.setSeed(seed)
 			.setMapWidth(80)
@@ -61,10 +61,11 @@ public class Main
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
 			.setMapChar(' ')
-			.setSnakeHeadChar('H')
-			.setSnakeTailChar('T')
-			.setObstacleChar('O')
-			.setFoodChar('F')
+			.setSnakeHeadChar('■')
+			.setSnakeHeadChar('░')
+			.setSnakeTailChar('█')
+			.setObstacleChar('▓')
+			.setFoodChar('■')
 			.build();
 
 		GameManager.getInstance().play();

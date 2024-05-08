@@ -1,7 +1,5 @@
 ## To Do
 
-- SnakeAI
-- Easier input
 - Documentation
 - Javadoc
 - UML
@@ -101,6 +99,8 @@
 - change overlay when lose/win
 - make player be able to submit highscore
 - make replayable
+- SnakeAI
+- Easier input
 
 ## On Hold
 
