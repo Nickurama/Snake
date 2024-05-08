@@ -59,7 +59,7 @@ public class Main
 			.setFoodType(GameManager.FoodType.SQUARE)
 			.setFilled(true)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setControlMethod(GameManager.ControlMethod.AUTO)
 			.setMapChar(' ')
 			.setSnakeHeadChar('■')
 			.setSnakeHeadChar('░')

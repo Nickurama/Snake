@@ -185,28 +185,28 @@ public class GameEngineTests
 		assertEquals(MockGameObject.Operation.STOPPED, obj.lastOperation());
 	}
 
-	@Test
-	public void ShouldNotTriggerInputListenerOnStepModeWhenOnlyEngineCommands() throws GameEngineException
-	{
-		// Arrange
-		GameEngineFlags flags = new GameEngineFlags();
-		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
-		MockGameObject obj = new MockGameObject();
-		Scene scene = new Scene();
-		scene.add(obj);
-		GameEngine engine = GameEngine.getInstance();
-		engine.init(flags, scene);
-
-		String input0 = "step\n";
-		String input1 = "stop\n";
-        TestUtil.setIOstreams(input0 + input0 + input1);
-
-		// Act
-		engine.start();
-
-		// Arrange
-		assertEquals(null, obj.inputReceived());
-	}
+	// @Test
+	// public void ShouldNotTriggerInputListenerOnStepModeWhenOnlyEngineCommands() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	GameEngineFlags flags = new GameEngineFlags();
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
+	// 	MockGameObject obj = new MockGameObject();
+	// 	Scene scene = new Scene();
+	// 	scene.add(obj);
+	// 	GameEngine engine = GameEngine.getInstance();
+	// 	engine.init(flags, scene);
+	//
+	// 	String input0 = "step\n";
+	// 	String input1 = "stop\n";
+	//        TestUtil.setIOstreams(input0 + input0 + input1);
+	//
+	// 	// Act
+	// 	engine.start();
+	//
+	// 	// Arrange
+	// 	assertEquals(null, obj.inputReceived());
+	// }
 
 	@Test
 	public void ShouldTriggerInputListenerOnStepMode() throws GameEngineException

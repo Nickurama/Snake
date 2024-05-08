@@ -832,7 +832,7 @@ public class GameManagerTests
 			.setFoodChar('f')
 			.build();
 
-		ByteArrayOutputStream out = TestUtil.setIOstreams("step\nstep\ntest name\nstep\nstop\n");
+		ByteArrayOutputStream out = TestUtil.setIOstreams("step\nstep\ntest name\nstop\n");
 
 
 		String start =		"╔════════════════════════════════════════╗\n" +
@@ -848,7 +848,6 @@ public class GameManagerTests
 							"║                                        ║\n" +
 							"║Dir: 90                         Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║ h                                      ║\n" +
 							"║                                        ║\n" +
@@ -862,7 +861,6 @@ public class GameManagerTests
 							"║                                        ║\n" +
 							"║Dir: 90                         Score: 5║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║                                        ║\n" +
@@ -877,7 +875,6 @@ public class GameManagerTests
 							"║                                        ║\n" +
 							"╚════════════════════════════════════════╝\n" +
 							"Score saved! :3\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║               Highscores               ║\n" +
@@ -899,8 +896,8 @@ public class GameManagerTests
 		out.reset();
 
 		// Assert
-		assertTrue(render.startsWith(start));
-		assertTrue(render.endsWith(end));
+			assertTrue(render.startsWith(start), "expected:\n" + start + "but got:\n" + render);
+		assertTrue(render.endsWith(end), "expected:\n" + end + "but got:\n" + render);
 	}
 
 	@Test
