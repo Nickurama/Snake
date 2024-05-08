@@ -36,19 +36,21 @@ public class GameManager extends GameObject implements IInputListener
 	}
 
 	private static GameManager instance = null;
-	private final Point INIT_POS;
 	private static final char DEFAULT_MAP = '.';
 	private static final char DEFAULT_FOOD = 'F';
 	private static final char DEFAULT_OBSTACLE = 'O';
 	private static final char DEFAULT_SNAKE_HEAD = 'H';
 	private static final char DEFAULT_SNAKE_TAIL = 'T';
 	private static final InputPreset DEFAULT_INPUT_PRESET = InputPreset.WASD;
+	public static final long DEFAULT_SEED = 137;
+	private Point initialPosition;
 	private char mapChar;
 	private char foodChar;
 	private char obstacleChar;
 	private char snakeHeadChar;
 	private char snakeTailChar;
 	private boolean isFirstSetup;
+	private Random rng;
 
 	private InputPreset inputPreset;
 	private boolean isFilled;
@@ -86,9 +88,11 @@ public class GameManager extends GameObject implements IInputListener
 		this.obstacleChar = DEFAULT_OBSTACLE;
 		this.snakeHeadChar = DEFAULT_SNAKE_HEAD;
 		this.snakeTailChar = DEFAULT_SNAKE_TAIL;
+		this.seed = DEFAULT_SEED;
+		this.rng = new Random(this.seed);
 		try
 		{
-			INIT_POS = new Point(100, 100);
+			initialPosition = new Point(100, 100);
 		}
 		catch(GeometricException e)
 		{
@@ -156,6 +160,7 @@ public class GameManager extends GameObject implements IInputListener
 		try
 		{
 			this.gameState = GameState.INITIALIZATION;
+			this.initialPosition = new Point(snakeSize + 10, snakeSize + 10);
 			this.scene = null;
 			this.snake = null;
 			this.food = null;
@@ -318,7 +323,7 @@ public class GameManager extends GameObject implements IInputListener
 			return null;
 		try
 		{
-			return relative.translate(new Vector(INIT_POS));
+			return relative.translate(new Vector(initialPosition));
 		}
 		catch (GeometricException e)
 		{
@@ -333,7 +338,7 @@ public class GameManager extends GameObject implements IInputListener
 			return null;
 		try
 		{
-			return relative.translate(new Vector(INIT_POS));
+			return relative.translate(new Vector(initialPosition));
 		}
 		catch (GeometricException e)
 		{
@@ -348,7 +353,7 @@ public class GameManager extends GameObject implements IInputListener
 			return null;
 		try
 		{
-			return relative.translate(new Vector(INIT_POS));
+			return relative.translate(new Vector(initialPosition));
 		}
 		catch (GeometricException e)
 		{
@@ -363,7 +368,7 @@ public class GameManager extends GameObject implements IInputListener
 			return null;
 		try
 		{
-			return absolute.translate(new Vector(-INIT_POS.X(), -INIT_POS.Y()));
+			return absolute.translate(new Vector(-initialPosition.X(), -initialPosition.Y()));
 		}
 		catch (GeometricException e)
 		{
@@ -378,7 +383,7 @@ public class GameManager extends GameObject implements IInputListener
 			return null;
 		try
 		{
-			return absolute.translate(new Vector(-INIT_POS.X(), -INIT_POS.Y()));
+			return absolute.translate(new Vector(-initialPosition.X(), -initialPosition.Y()));
 		}
 		catch (GeometricException e)
 		{
@@ -463,7 +468,7 @@ public class GameManager extends GameObject implements IInputListener
 		GameMap map;
 		try
 		{
-			map = new GameMap(this.mapWidth, this.mapHeight, INIT_POS, this.mapChar);
+			map = new GameMap(this.mapWidth, this.mapHeight, initialPosition, this.mapChar);
 			map.setSeed(this.seed);
 		}
 		catch (Exception e)
@@ -507,7 +512,6 @@ public class GameManager extends GameObject implements IInputListener
 
 	private Direction getRandomSnakeDir()
 	{
-		Random rng = new Random(this.seed);
 		Direction[] values = Direction.values();
 		return values[rng.nextInt(values.length)];
 	}
@@ -517,8 +521,8 @@ public class GameManager extends GameObject implements IInputListener
 		Rectangle camera;
 		try
 		{
-			Point p0 = INIT_POS.translate(new Vector(-1, -2));
-			Point p1 = INIT_POS.translate(new Vector(this.mapWidth, this.mapHeight)); // already is +1 because it's inclusive
+			Point p0 = initialPosition.translate(new Vector(-1, -2));
+			Point p1 = initialPosition.translate(new Vector(this.mapWidth, this.mapHeight)); // already is +1 because it's inclusive
 			camera = new Rectangle(p0, p1);
 		}
 		catch (Exception e)
@@ -651,8 +655,10 @@ public class GameManager extends GameObject implements IInputListener
 			init(this.mapWidth, this.mapHeight, getRelative(this.startingSnakePos), this.startingSnakeDir,
 				this.snakeSize, this.isFilled, getRelative(this.startingFoodPos), this.foodSize, this.foodType,
 				this.foodScore, this.isTextual, this.updateMethod, this.controlMethod, this.seed);
+
 			this.gameState = GameState.GAMEPLAY;
 			this.snake.awake();
+			this.seed = rng.nextLong();
 			// play();
 		}
 		catch(SnakeGameException e)
@@ -701,6 +707,12 @@ public class GameManager extends GameObject implements IInputListener
 
 	private void registerScore(String name)
 	{
+		if (name.isEmpty())
+		{
+			System.out.println("Score not saved.");
+			return;
+		}
+
 		Score newScore = new Score(name, LocalDate.now(), this.score());
 		try
 		{

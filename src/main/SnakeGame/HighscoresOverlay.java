@@ -88,15 +88,19 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 			maxNameLen = Math.max(maxNameLen, scores[i].name().length());
 
 		for (int i = 0; i < numScoresDisplayed; i++)
-			overlay.writeLeft(formatScore(scores[i], i + 1, maxNameLen, maxScoreLen), writeIndex + i);
+			overlay.writeLeft(formatScore(scores[i], i + 1, numScoresDisplayed, maxNameLen, maxScoreLen), writeIndex + i);
 	}
 
-	private String formatScore(Score s, int place, int maxNameLen, int maxScoreLen)
+	private String formatScore(Score s, int place, int maxPlace, int maxNameLen, int maxScoreLen)
 	{
+		int maxNumLen = Integer.toString(maxPlace).length();
+
 		StringBuilder builder = new StringBuilder();
 		builder.append(" ");
 		builder.append(place);
 		builder.append(". ");
+		for (int i = 0; i < maxNumLen - Integer.toString(place).length(); i++)
+			builder.append(" ");
 		builder.append(s.name());
 		for (int i = 0; i < maxNameLen - s.name().length() + 2; i++)
 			builder.append(" ");

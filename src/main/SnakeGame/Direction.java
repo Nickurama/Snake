@@ -5,8 +5,8 @@ import SnakeGame.ISnakeController.*;
 public enum Direction
 {
 	UP,
-	DOWN,
 	LEFT,
+	DOWN,
 	RIGHT;
 
 	public static TurnDirection getRelativeDir(Direction absoluteDir, Direction currentDir)

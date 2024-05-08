@@ -79,7 +79,6 @@ public class GameManagerTests
 							"║.......................................║\n" +
 							"║Dir: 0                         Score: 0║\n" +
 							"╚═══════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔═══════════════════════════════════════╗\n" +
 							"║.......................................║\n" +
 							"║.......................................║\n" +
@@ -112,6 +111,7 @@ public class GameManagerTests
 			GameEngine.getInstance().stop();
 
 		GameManager gameManager = GameManager.getInstance();
+		gameManager.setInputPresetMethod(InputSnakeController.InputPreset.RELATIVE);
 		gameManager.init(39, 9, new Point(13, 4), Direction.RIGHT, 3, true, new Point(25, 4), 3, FoodType.SQUARE, 1,
 			true, UpdateMethod.STEP, ControlMethod.MANUAL, SEED);
 
@@ -127,8 +127,6 @@ public class GameManagerTests
 							"║.......................................║\n" +
 							"║Dir: 0                         Score: 0║\n" +
 							"╚═══════════════════════════════════════╝\n" +
-							"Snake will turn right.\n" +
-							"Stepping...\n" +
 							"╔═══════════════════════════════════════╗\n" +
 							"║.......................................║\n" +
 							"║.......................................║\n" +
@@ -144,7 +142,7 @@ public class GameManagerTests
 							"Stopping...\n";
 
 		// Act
-		ByteArrayOutputStream out = TestUtil.setIOstreams("right\n" + "step\n" + "stop");
+		ByteArrayOutputStream out = TestUtil.setIOstreams("right\nstop");
 		gameManager.play();
 		String render = out.toString();
 
@@ -577,6 +575,7 @@ public class GameManagerTests
 			.setFilled(true)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setInputPreset(InputSnakeController.InputPreset.RELATIVE)
 			.setMapChar(' ')
 			.setSnakeHeadChar('h')
 			.setSnakeTailChar('t')
@@ -584,21 +583,31 @@ public class GameManagerTests
 			.setFoodChar('F')
 			.build();
 
-		ByteArrayOutputStream out = TestUtil.setIOstreams(	"step\n" +
+		ByteArrayOutputStream out = TestUtil.setIOstreams(	"\n" +
 															"left\n" +
-															"step\n" +
 															"left\n" +
-															"step\n" +
 															"left\n" +
-															"step\n" +
 															"left\n" +
-															"step\n" +
 															"left\n" +
-															"step\n" +
 															"left\n" +
-															"step\n" +
 															"stop\n"
 		);
+
+		// ByteArrayOutputStream out = TestUtil.setIOstreams(	"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"left\n" +
+		// 													"step\n" +
+		// 													"stop\n"
+		// );
 
 		String expected =	"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
@@ -613,7 +622,6 @@ public class GameManagerTests
 							"║hF--------------------------------------║\n" +
 							"║Dir: 0                          Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -627,8 +635,6 @@ public class GameManagerTests
 							"║Fh--------------------------------------║\n" +
 							"║Dir: 0                          Score: 2║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -642,8 +648,6 @@ public class GameManagerTests
 							"║Ft--------------------------------------║\n" +
 							"║Dir: 90                         Score: 2║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -657,8 +661,6 @@ public class GameManagerTests
 							"║F --------------------------------------║\n" +
 							"║Dir: 180                        Score: 2║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -672,8 +674,6 @@ public class GameManagerTests
 							"║h --------------------------------------║\n" +
 							"║Dir: 270                        Score: 4║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -687,8 +687,6 @@ public class GameManagerTests
 							"║th--------------------------------------║\n" +
 							"║Dir: 0                          Score: 4║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║----------------------------------------║\n" +
 							"║----------------------------------------║\n" +
@@ -702,8 +700,6 @@ public class GameManagerTests
 							"║tt--------------------------------------║\n" +
 							"║Dir: 90                         Score: 6║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Snake will turn left.\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║                                        ║\n" +
@@ -769,7 +765,6 @@ public class GameManagerTests
 							"║ f                                      ║\n" +
 							"║Dir: 90                         Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║ h                                      ║\n" +
 							"║                                        ║\n" +
@@ -783,7 +778,6 @@ public class GameManagerTests
 							"║ f                                      ║\n" +
 							"║Dir: 90                         Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║                                        ║\n" +
@@ -963,7 +957,6 @@ public class GameManagerTests
 							"║------                                  ║\n" +
 							"║Dir: 90                         Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║ h                                      ║\n" +
 							"║                               -        ║\n" +
@@ -977,7 +970,6 @@ public class GameManagerTests
 							"║------                                  ║\n" +
 							"║Dir: 90                         Score: 5║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║                                        ║\n" +
@@ -992,7 +984,6 @@ public class GameManagerTests
 							"║                                        ║\n" +
 							"╚════════════════════════════════════════╝\n" +
 							"Score saved! :3\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║                                        ║\n" +
 							"║               Highscores               ║\n" +
@@ -1006,7 +997,6 @@ public class GameManagerTests
 							"║                                        ║\n" +
 							"║                                        ║\n" +
 							"╚════════════════════════════════════════╝\n" +
-							"Stepping...\n" +
 							"╔════════════════════════════════════════╗\n" +
 							"║ f                                      ║\n" +
 							"║ h                                      ║\n" +
@@ -1020,6 +1010,19 @@ public class GameManagerTests
 							"║------                                  ║\n" +
 							"║Dir: 90                         Score: 0║\n" +
 							"╚════════════════════════════════════════╝\n" +
+							"╔════════════════════════════════════════╗\n" +
+							"║ h                                      ║\n" +
+							"║                               -        ║\n" +
+							"║                              ----      ║\n" +
+							"║                              -----     ║\n" +
+							"║                             -----   f  ║\n" +
+							"║                              ----      ║\n" +
+							"║------                          -       ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║------                                  ║\n" +
+							"║Dir: 90                         Score: 5║\n" +
+							"╚════════════════════════════════════════╝\n" +
 							"Stopping...\n";
 		// Act
 		GameManager.getInstance().play();
@@ -1027,7 +1030,7 @@ public class GameManagerTests
 		out.reset();
 
 		// Assert
-		assertTrue(render.startsWith(start));
-		assertTrue(render.endsWith(end));
+		assertTrue(render.startsWith(start), "expected:\n" + start + "but got:\n" + render);
+		assertTrue(render.endsWith(end), "expected:\n" + end + "but got:\n" + render);
 	}
 }

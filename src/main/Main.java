@@ -8,7 +8,7 @@ import java.util.Random;
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
-import SnakeGame.Snake.*;
+import SnakeGame.InputSnakeController.*;
 import SnakeGame.GameManager.*;
 
 /**
@@ -21,8 +21,8 @@ public class Main
 {
     public static void main(String[] args) throws Exception
     {	
-		// long seed = new Random().nextLong();
-		long seed = 1478752656328878971L;
+		long seed = new Random().nextLong();
+		// long seed = 3947318154746772141L;
 		System.out.println("Seed: " + seed);
 
 		// Arrange
@@ -43,7 +43,8 @@ public class Main
 		new GameManagerBuilder()
 			// .addObstacle(obstacle)
 			// .addObstacle(dynamicObstacle, anchor, speed)
-			.addObstacle(dynamicObstacle, anchor, speed)
+			.setInputPreset(InputPreset.VIM)
+			// .addObstacle(dynamicObstacle, anchor, speed)
 			.setSeed(seed)
 			.setMapWidth(80)
 			.setMapHeight(40)
@@ -51,13 +52,14 @@ public class Main
 			.setSnakeSize(4)
 			.setTextual(true)
 			.setFoodSize(2)
+			.setMaxScoresDisplay(10)
 			// .setSnakeDir(Snake.Direction.UP)
 			// .setFoodPos(new Point(1, 9))
 			.setFoodScore(5)
 			.setFoodType(GameManager.FoodType.SQUARE)
 			.setFilled(true)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setControlMethod(GameManager.ControlMethod.AUTO)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
 			.setMapChar(' ')
 			.setSnakeHeadChar('H')
 			.setSnakeTailChar('T')

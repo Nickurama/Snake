@@ -172,6 +172,12 @@ public class GameManagerBuilder
 		return this;
 	}
 
+	public GameManagerBuilder setInputPreset(InputSnakeController.InputPreset inputPreset)
+	{
+		this.gmInstance.setInputPresetMethod(inputPreset);
+		return this;
+	}
+
 	private void validate() throws SnakeGameException
 	{
 		if (this.foodType == null)

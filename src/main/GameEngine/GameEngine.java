@@ -108,11 +108,10 @@ public class GameEngine
 
 		switch (command)
 		{
-			case "":
-			case "step":
-				System.out.println("Stepping...");
-				update(1);
-				break;
+			// case "":
+			// case "step":
+			// 	System.out.println("Stepping...");
+			// 	break;
 			case "stop":
 				System.out.println("Stopping...");
 				stop();
@@ -124,6 +123,7 @@ public class GameEngine
 			default:
 				for (IInputListener listener : currScene.inputListeners())
 					listener.onInputReceived(command);
+				update(1);
 				break;
 		}
 	}
