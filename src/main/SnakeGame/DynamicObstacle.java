@@ -67,4 +67,6 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	public boolean isDeepCollision() { return this.isDeepCollision; }
 
 	public float speed() { return this.speed; }
+
+	public VirtualPoint rotationPoint() { return this.rotationPoint; }
 }

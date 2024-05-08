@@ -49,7 +49,7 @@ public class SnakeTests
 			new Point(14, 14),
 			new Point(14, 4)
 		});
-		GameMap map = new GameMap(mapRect, ' ');
+		GameMap map = new GameMap(mapRect, ' ', 0);
 		Snake snake = new Snake(new Point(2, 2), Direction.UP, 3, true, 't', 'h');
 
 		Scene sc = new Scene();

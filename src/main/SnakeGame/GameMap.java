@@ -25,7 +25,6 @@ public class GameMap extends GameObject implements IRenderable
 	}
 
 	private static final int LAYER = 0;
-	private static final long DEFAULT_SEED = 0;
 	private Rectangle map;
 	private RenderData<Rectangle> rData;
 	private StaticObstacle topBound;
@@ -35,14 +34,14 @@ public class GameMap extends GameObject implements IRenderable
 	private BoundingBox bounds;
 	private int width;
 	private int height;
-	private long seed;
+	private Random rng;
 
-	public GameMap(Rectangle mapRect, char drawChar) throws SnakeGameException
+	public GameMap(Rectangle mapRect, char drawChar, long seed) throws SnakeGameException
 	{
-		initialize(mapRect, drawChar);
+		initialize(mapRect, drawChar, seed);
 	}
 
-	public GameMap(int width, int height, Point startPos, char drawChar) throws SnakeGameException
+	public GameMap(int width, int height, Point startPos, char drawChar, long seed) throws SnakeGameException
 	{
 		if (width <= 1 || height <= 1)
 		{
@@ -60,12 +59,12 @@ public class GameMap extends GameObject implements IRenderable
 			Logger.log(Logger.Level.FATAL, "Could not .\n" + e);
 			throw new RuntimeException("Could not build map colliders, map is too close to origin.");
 		}
-		initialize(mapRect, drawChar);
+		initialize(mapRect, drawChar, seed);
 	}
 
-	private void initialize(Rectangle mapRect, char drawChar) throws SnakeGameException
+	private void initialize(Rectangle mapRect, char drawChar, long seed) throws SnakeGameException
 	{
-		this.seed = DEFAULT_SEED;
+		this.rng = new Random(seed);
 		this.map = mapRect;
 		this.rData = new RenderData<Rectangle>(map, true, LAYER, drawChar);
 		this.bounds = new BoundingBox(mapRect);
@@ -135,7 +134,7 @@ public class GameMap extends GameObject implements IRenderable
 	{
 		if (arr == null || arr.length == 0)
 			return null;
-		return arr[new Random(this.seed).nextInt(arr.length)];
+		return arr[rng.nextInt(arr.length)];
 	}
 
 	public Point[] getAllValidInnerUnitSpawnPositions(int innerSize, int outerSize)
@@ -318,7 +317,7 @@ public class GameMap extends GameObject implements IRenderable
 		return getAbsolute(relativeInitialPoint);
 	}
 
-	private Point getAbsolute(Point relative) throws GeometricException
+	public Point getAbsolute(Point relative) throws GeometricException
 	{
 		if (relative == null)
 			return null;
@@ -336,8 +335,6 @@ public class GameMap extends GameObject implements IRenderable
 	public int width() { return this.width; }
 
 	public int height() { return this.height; }
-
-	public void setSeed(long seed) { this.seed = seed; }
 
 	public boolean isUnitOccupied(Point pos, double unitSize)
 	{
@@ -365,6 +362,81 @@ public class GameMap extends GameObject implements IRenderable
 			return null;
 		}
 		return CollisionManager.getCollisions(unit, super.sceneHandle());
+	}
+
+	// private Point getAbsolute(Point relative) throws GeometricException
+	// {
+	// 	if (relative == null)
+	// 		return null;
+	// 	try
+	// 	{
+	// 		return relative.translate(new Vector(initialPosition));
+	// 	}
+	// 	catch (GeometricException e)
+	// 	{
+	// 		Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
+	// 		throw new RuntimeException("Should never happen. the absolute points should always be valid.");
+	// 	}
+	// }
+
+	public VirtualPoint getAbsolute(VirtualPoint relative)
+	{
+		if (relative == null)
+			return null;
+		try
+		{
+			return relative.translate(new Vector(bounds.minPoint()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
+			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
+		}
+	}
+
+	public Polygon getAbsolute(Polygon relative)
+	{
+		if (relative == null)
+			return null;
+		try
+		{
+			return relative.translate(new Vector(bounds.minPoint()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
+			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
+		}
+	}
+
+	public VirtualPoint getRelative(VirtualPoint absolute)
+	{
+		if (absolute == null)
+			return null;
+		try
+		{
+			return absolute.translate(new Vector(-bounds.minPoint().X(), -bounds.minPoint().Y()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen, as the absolute point is created from the relative point.\n" + e);
+			throw new RuntimeException("Should never happen, as the absolute point is created from the relative point.");
+		}
+	}
+
+	public Point getRelative(Point absolute)
+	{
+		if (absolute == null)
+			return null;
+		try
+		{
+			return absolute.translate(new Vector(-bounds.minPoint().X(), -bounds.minPoint().Y()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen, as the absolute point is created from the relative point.\n" + e);
+			throw new RuntimeException("Should never happen, as the absolute point is created from the relative point.");
+		}
 	}
 
 	@Override

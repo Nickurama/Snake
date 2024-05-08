@@ -392,11 +392,8 @@ public class Renderer
 		{
 			if (segment.line().isParalel(scanLine) && MathUtil.areEqual(segment.firstPoint().Y(), currY))
 			{
-				double firstX = segment.firstPoint().X(); // TODO can be joined with below statements
-				double secondX = segment.secondPoint().X();
-
-				intersections.add(new RasterPoint(firstX, segment));
-				intersections.add(new RasterPoint(secondX, segment));
+				intersections.add(new RasterPoint(segment.firstPoint().X(), segment));
+				intersections.add(new RasterPoint(segment.secondPoint().X(), segment));
 			}
 			else if (segment.intersectsInclusive(scanLine))
 			{

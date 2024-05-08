@@ -28,7 +28,7 @@ public class GameMapTests
 			new Point(12, 6),
 			new Point(12, 3)
 		});
-		GameMap map = new GameMap(mapRect, 'o');
+		GameMap map = new GameMap(mapRect, 'o', SEED);
 
 		Rectangle camera = new Rectangle(new Point[] { new Point(3, 3), new Point(3, 6), new Point(12, 6), new Point(12, 3)});
 		Scene sc = new Scene();
@@ -78,7 +78,7 @@ public class GameMapTests
 
 		// Act
 		// Assert
-		assertThrows(SnakeGameException.class, () -> new GameMap(mapRect, 'o'));
+		assertThrows(SnakeGameException.class, () -> new GameMap(mapRect, 'o', SEED));
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class GameMapTests
 			new Point(12, 6),
 			new Point(12, 3)
 		});
-		GameMap map = new GameMap(mapRect, 'o');
+		GameMap map = new GameMap(mapRect, 'o', SEED);
 
 		Square colliderSq = new Square(new Point[] {
 			new Point(0, 0),
@@ -138,7 +138,7 @@ public class GameMapTests
 		GameMap map;
 
 		// Act
-		map = new GameMap(5, 10, new Point(5, 5), 'o');
+		map = new GameMap(5, 10, new Point(5, 5), 'o', SEED);
 		Rectangle mapRect = map.getRenderData().getShape();
 
 		// Assert
@@ -151,8 +151,8 @@ public class GameMapTests
 		// Arrange
 		// Act
 		// Assert
-		assertThrows(SnakeGameException.class, () -> new GameMap(-1, 4, new Point(5, 5), 'o'));
-		assertThrows(SnakeGameException.class, () -> new GameMap(6, 0, new Point(5, 5), 'o'));
+		assertThrows(SnakeGameException.class, () -> new GameMap(-1, 4, new Point(5, 5), 'o', SEED));
+		assertThrows(SnakeGameException.class, () -> new GameMap(6, 0, new Point(5, 5), 'o', SEED));
 	}
 
 	@Test
@@ -160,7 +160,7 @@ public class GameMapTests
 	{
 		// Arrange
 		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(19, 15));
-		GameMap map = new GameMap(mapRect, 'o');
+		GameMap map = new GameMap(mapRect, 'o', SEED);
 		int size0 = 2;
 		int size1 = 3;
 		int size2 = 7;
@@ -209,7 +209,7 @@ public class GameMapTests
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
 
 		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(19, 15));
-		GameMap map = new GameMap(mapRect, 'o');
+		GameMap map = new GameMap(mapRect, 'o', SEED);
 
 		scene.add(snake);
 		scene.add(obstacle);
@@ -248,7 +248,7 @@ public class GameMapTests
 		});
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
 
-		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ');
+		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ', SEED);
 
 		scene.add(obstacle);
 		scene.add(map);
@@ -343,7 +343,7 @@ public class GameMapTests
 		});
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
 
-		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ');
+		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ', SEED);
 
 		scene.add(obstacle);
 		scene.add(map);
@@ -351,7 +351,6 @@ public class GameMapTests
 		int size = 3;
 
 		// Act
-		map.setSeed(SEED);
 		Point randomSpawnPosition = map.getRandomUnitSpawnPosition(size);
 
 		// Assert
@@ -376,7 +375,7 @@ public class GameMapTests
 		});
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
 
-		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ');
+		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ', SEED);
 
 		scene.add(obstacle);
 		scene.add(map);
@@ -385,7 +384,6 @@ public class GameMapTests
 		int outerSize = 5;
 
 		// Act
-		map.setSeed(SEED);
 		Point randomSpawnPosition = map.getRandomInnerUnitSpawnPosition(size, outerSize);
 
 		// Assert
@@ -396,10 +394,8 @@ public class GameMapTests
 	public void ShouldGetNullWhenCallingRandomPositionButThereIsNoPosition() throws GeometricException, SnakeGameException
 	{
 		// Arrange
-		GameMap map0 = new GameMap(13, 8, new Point(10, 10), ' ');
-		map0.setSeed(SEED);
-		GameMap map1 = new GameMap(2, 2, new Point(10, 10), ' ');
-		map1.setSeed(SEED);
+		GameMap map0 = new GameMap(13, 8, new Point(10, 10), ' ', SEED);
+		GameMap map1 = new GameMap(2, 2, new Point(10, 10), ' ', SEED);
 
 		// Act
 		Point randomSpawnPosition0 = map0.getRandomInnerUnitSpawnPosition(10, 5);
@@ -434,7 +430,7 @@ public class GameMapTests
 		StaticObstacle obstacle0 = new StaticObstacle(obstaclePoly0, true, 'O');
 		StaticObstacle obstacle1 = new StaticObstacle(obstaclePoly1, true, 'O');
 
-		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ');
+		GameMap map = new GameMap(13, 8, new Point(10, 10), ' ', SEED);
 
 		scene.add(obstacle0);
 		scene.add(obstacle1);
@@ -462,7 +458,7 @@ public class GameMapTests
 	{
 		// Arrange
 		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(100, 100));
-		GameMap map = new GameMap(mapRect, ' ');
+		GameMap map = new GameMap(mapRect, ' ', SEED);
 
 		Point inner = new Point(18, 27);
 		int outerSize = 4;
@@ -495,7 +491,7 @@ public class GameMapTests
 		StaticObstacle obstacle = new StaticObstacle(obstaclePoly, true, 'O');
 
 		Rectangle mapRect = new Rectangle(new Point(10, 10), new Point(19, 15));
-		GameMap map = new GameMap(mapRect, 'o');
+		GameMap map = new GameMap(mapRect, 'o', SEED);
 
 		scene.add(snake);
 		scene.add(obstacle);

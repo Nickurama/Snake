@@ -168,18 +168,20 @@ public class GameManager extends GameObject implements IInputListener
 			this.hasShowedHighscores = false;
 			this.mapWidth = mapWidth;
 			this.mapHeight = mapHeight;
-			this.startingSnakePos = getAbsolute(relativeSnakePos);
+			this.seed = seed;
+			this.rng = new Random(seed);
+			GameMap map = new GameMap(mapWidth, mapHeight, initialPosition, ' ', seed);
+			this.startingSnakePos = map.getAbsolute(relativeSnakePos);
 			this.startingSnakeDir = snakeDir;
 			this.snakeSize = snakeSize;
 			this.isFilled = isFilled;
-			this.startingFoodPos = getAbsolute(relativeFoodPos);
+			this.startingFoodPos = map.getAbsolute(relativeFoodPos);
 			this.foodSize = foodSize;
 			this.foodType = foodType;
 			this.foodScore = foodScore;
 			this.isTextual = isTextual;
 			this.updateMethod = updateMethod;
 			this.controlMethod = controlMethod;
-			this.seed = seed;
 			this.camera = generateCamera();
 			initScene();
 			if (this.isFirstSetup)
@@ -241,8 +243,8 @@ public class GameManager extends GameObject implements IInputListener
 		Point[] allPossibleSnakePositions = this.map.getAllPossibleUnitSpawnPositions(this.snakeSize);
 		if (!Arrays.stream(allPossibleSnakePositions).anyMatch(this.startingSnakePos::equals))
 		{
-			Logger.log(Logger.Level.FATAL, "Snake was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingSnakePos)));
-			throw new SnakeGameException("Snake was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingSnakePos)));
+			Logger.log(Logger.Level.FATAL, "Snake was placed in an invalid position: " + this.map.getRelative(new VirtualPoint(this.startingSnakePos)));
+			throw new SnakeGameException("Snake was placed in an invalid position: " + this.map.getRelative(new VirtualPoint(this.startingSnakePos)));
 		}
 	}
 
@@ -270,8 +272,8 @@ public class GameManager extends GameObject implements IInputListener
 		boolean isInValidPosition = Arrays.stream(allPossibleFoodPositions).anyMatch(this.startingFoodPos::equals);
 		if (!isInValidPosition)
 		{
-			Logger.log(Logger.Level.FATAL, "Food was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingFoodPos)));
-			throw new SnakeGameException("Food was placed in an invalid position: " + getRelative(new VirtualPoint(this.startingFoodPos)));
+			Logger.log(Logger.Level.FATAL, "Food was placed in an invalid position: " + this.map.getRelative(new VirtualPoint(this.startingFoodPos)));
+			throw new SnakeGameException("Food was placed in an invalid position: " + this.map.getRelative(new VirtualPoint(this.startingFoodPos)));
 		}
 	}
 
@@ -317,80 +319,6 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
-	private Point getAbsolute(Point relative) throws GeometricException
-	{
-		if (relative == null)
-			return null;
-		try
-		{
-			return relative.translate(new Vector(initialPosition));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
-			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
-		}
-	}
-
-	private VirtualPoint getAbsolute(VirtualPoint relative)
-	{
-		if (relative == null)
-			return null;
-		try
-		{
-			return relative.translate(new Vector(initialPosition));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
-			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
-		}
-	}
-
-	private Polygon getAbsolute(Polygon relative)
-	{
-		if (relative == null)
-			return null;
-		try
-		{
-			return relative.translate(new Vector(initialPosition));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
-			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
-		}
-	}
-
-	private VirtualPoint getRelative(VirtualPoint absolute)
-	{
-		if (absolute == null)
-			return null;
-		try
-		{
-			return absolute.translate(new Vector(-initialPosition.X(), -initialPosition.Y()));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen, as the absolute point is created from the relative point.\n" + e);
-			throw new RuntimeException("Should never happen, as the absolute point is created from the relative point.");
-		}
-	}
-
-	private Point getRelative(Point absolute)
-	{
-		if (absolute == null)
-			return null;
-		try
-		{
-			return absolute.translate(new Vector(-initialPosition.X(), -initialPosition.Y()));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen, as the absolute point is created from the relative point.\n" + e);
-			throw new RuntimeException("Should never happen, as the absolute point is created from the relative point.");
-		}
-	}
 
 	private ISnakeController generateController()
 	{
@@ -412,13 +340,14 @@ public class GameManager extends GameObject implements IInputListener
 	private void generateScene() throws SnakeGameException
 	{
 		this.scene = new Scene();
-		IObstacle[] obstacles = generateObstacles();
-		if (obstacles != null)
-			for (IObstacle obstacle : obstacles)
-				scene.add((GameObject)obstacle);
 
 		this.map = generateMap();
 		scene.add(map);
+
+		IObstacle[] obstacles = generateObstacles(map);
+		if (obstacles != null)
+			for (IObstacle obstacle : obstacles)
+				scene.add((GameObject)obstacle);
 
 		if (shouldGenerateSnakeFirst())
 		{
@@ -468,8 +397,7 @@ public class GameManager extends GameObject implements IInputListener
 		GameMap map;
 		try
 		{
-			map = new GameMap(this.mapWidth, this.mapHeight, initialPosition, this.mapChar);
-			map.setSeed(this.seed);
+			map = new GameMap(this.mapWidth, this.mapHeight, initialPosition, this.mapChar, this.seed);
 		}
 		catch (Exception e)
 		{
@@ -486,7 +414,7 @@ public class GameManager extends GameObject implements IInputListener
 
 	public void addDynamicObstacle(Polygon obstacle, VirtualPoint anchor, float speed)
 	{
-		this.dynamicObstacles.add(new DynamicObstacle(obstacle, this.isFilled, this.obstacleChar, getAbsolute(anchor), speed));
+		this.dynamicObstacles.add(new DynamicObstacle(obstacle, this.isFilled, this.obstacleChar, anchor, speed));
 	}
 
 	public void setMaxScoresDisplay(int maxScoresDisplay)
@@ -499,14 +427,21 @@ public class GameManager extends GameObject implements IInputListener
 		this.inputPreset = preset;
 	}
 
-	private IObstacle[] generateObstacles()
+	private IObstacle[] generateObstacles(GameMap map)
 	{
 		IObstacle[] obstacles = new IObstacle[this.staticObstacles.size() + this.dynamicObstacles.size()];
 		int n = 0;
 		for (Polygon poly : this.staticObstacles)
-			obstacles[n++] = new StaticObstacle(getAbsolute(poly), this.isFilled, this.obstacleChar);
+		{
+			Polygon absoluteCollider = map.getAbsolute(poly);
+			obstacles[n++] = new StaticObstacle(absoluteCollider, this.isFilled, this.obstacleChar);
+		}
 		for (DynamicObstacle obstacle : this.dynamicObstacles)
-			obstacles[n++] = new DynamicObstacle(getAbsolute((Polygon)obstacle.getCollider()), this.isFilled, this.obstacleChar, obstacle.speed());
+		{
+			Polygon absoluteCollider = map.getAbsolute((Polygon)obstacle.getCollider());
+			VirtualPoint absoluteAnchor = map.getAbsolute(((DynamicObstacle)obstacle).rotationPoint());
+			obstacles[n++] = new DynamicObstacle(absoluteCollider, this.isFilled, this.obstacleChar, absoluteAnchor, obstacle.speed());
+		}
 		return obstacles;
 	}
 
@@ -652,13 +587,12 @@ public class GameManager extends GameObject implements IInputListener
 		try
 		{
 			this.sceneHandle().remove(this);
-			init(this.mapWidth, this.mapHeight, getRelative(this.startingSnakePos), this.startingSnakeDir,
-				this.snakeSize, this.isFilled, getRelative(this.startingFoodPos), this.foodSize, this.foodType,
-				this.foodScore, this.isTextual, this.updateMethod, this.controlMethod, this.seed);
+			init(this.mapWidth, this.mapHeight, this.map.getRelative(this.startingSnakePos), this.startingSnakeDir,
+				this.snakeSize, this.isFilled, this.map.getRelative(this.startingFoodPos), this.foodSize, this.foodType,
+				this.foodScore, this.isTextual, this.updateMethod, this.controlMethod, rng.nextLong());
 
 			this.gameState = GameState.GAMEPLAY;
 			this.snake.awake();
-			this.seed = rng.nextLong();
 			// play();
 		}
 		catch(SnakeGameException e)
