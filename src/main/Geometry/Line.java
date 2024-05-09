@@ -25,7 +25,7 @@ public class Line
 	 * @param coefficientX the coefficient of the x variable
 	 * @param coefficientY the coefficient of the y variable
 	 * @param containedPoint a point contained in the line
-	 * @throws GeometricException
+	 * @throws GeometricException if both coefficients are 0
 	 */
 	public Line(double coefficientX, double coefficientY, Point containedPoint) throws GeometricException
 	{

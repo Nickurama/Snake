@@ -42,7 +42,7 @@ public interface IGeometricShape<T>
 	 * @param angle the angle (in radians) to rotate the shape by
 	 * @param anchor the point to rotate the shape around
 	 * @return a rotated copy of the shape
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is rotated to an invalid position
 	 */
 	public T rotate(double angle, VirtualPoint anchor) throws GeometricException;
 
@@ -51,7 +51,7 @@ public interface IGeometricShape<T>
 	 * around it's centroid
 	 * @param angle the angle (in radians) to rotate the shape by
 	 * @return a rotated copy of the shape
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is rotated to an invalid position
 	 */
 	public T rotate(double angle) throws GeometricException;
 
@@ -61,7 +61,7 @@ public interface IGeometricShape<T>
 	 * @param angle the angle (int degrees) to rotate the shape by
 	 * @param anchor the point to rotate the shape around
 	 * @return a rotated copy of the shape
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is rotated to an invalid position
 	 */
 	public T rotateDegrees(double angle, VirtualPoint anchor) throws GeometricException;
 
@@ -70,7 +70,7 @@ public interface IGeometricShape<T>
 	 * around it's centroid
 	 * @param angle the angle (in degrees) to rotate the shape by
 	 * @return a rotated copy of the shape
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is rotated to an invalid position
 	 */
 	public T rotateDegrees(double angle) throws GeometricException;
 
@@ -78,7 +78,7 @@ public interface IGeometricShape<T>
 	 * Returns a copy of the shape, translated by a vector
 	 * @param vector the vector to apply to the shape
 	 * @return a translated copy of the shape
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is translated to an invalid position
 	 */
 	public T translate(Vector vector) throws GeometricException;
 
@@ -87,7 +87,7 @@ public interface IGeometricShape<T>
 	 * it's centroid is located at the specified point
 	 * @param newCentroid the new centroid of the shape
 	 * @return a copy of the shape, relocated to then new centroid
-	 * @throws GeometricException
+	 * @throws GeometricException if the shape is moved to an invalid position
 	 */
 	public T moveCentroid(Point newCentroid) throws GeometricException;
 

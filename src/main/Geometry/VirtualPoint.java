@@ -222,7 +222,7 @@ public class VirtualPoint
 	 * @param dx the difference to the x coordinate
 	 * @param dy the difference to the y coordinate
 	 * @return the translated point
-	 * @throws GeometricException
+	 * @throws GeometricException if the point is translated into an invalid position
 	 */
 	public VirtualPoint translate(double dx, double dy) throws GeometricException
 	{
@@ -233,7 +233,7 @@ public class VirtualPoint
 	 * Translates a point by a vector
 	 * @param vector the vector represented as a point to translate the point
 	 * @return the translated point
-	 * @throws GeometricException
+	 * @throws GeometricException if the point is translated into an invalid position
 	 */
 	public VirtualPoint translate(Point vector) throws GeometricException
 	{

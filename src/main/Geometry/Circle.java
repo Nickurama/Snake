@@ -18,11 +18,16 @@ public class Circle implements IGeometricShape<Circle>
 	 * Initializes a circle
 	 * @param center the center of the circle
 	 * @param radius the radius of the circle
-	 * @throws GeometricException
+	 * @throws GeometricException if the center and radius don't define a valid circle
 	 */
 	public Circle(Point center, double radius) throws GeometricException
 	{
 		validateCircle(center, radius);
+		initialize(center, radius);
+	}
+
+	private void initialize(Point center, double radius)
+	{
 		this.center = center;
 		this.radius = radius;
 	}
@@ -30,18 +35,17 @@ public class Circle implements IGeometricShape<Circle>
 	/**
 	 * Copies a circle
 	 * @param toCopy the circle to copy
-	 * @throws GeometricException
 	 */
-	public Circle(Circle toCopy) throws GeometricException
+	public Circle(Circle toCopy)
 	{
-		this(toCopy.center, toCopy.radius);
+		initialize(center, radius);
 	}
 
 	/**
 	 * Checks if a circle is valid
 	 * @param center the center of the circle to check
 	 * @param radius the radius of the circle to check
-	 * @throws GeometricException
+	 * @throws GeometricException if the circle is not valid
 	 */
 	private void validateCircle(Point center, double radius) throws GeometricException
 	{

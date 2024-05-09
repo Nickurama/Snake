@@ -46,7 +46,7 @@ public class Rectangle extends Polygon
 	 * @param firstPoint a corner of the rectangle
 	 * @param secondPoint the opposite corner of the rectangle
 	 * @pre the points must not be within the same x or y
-	 * @throws GeometricException
+	 * @throws GeometricException if the two points don't define a rectangle (same x or same y)
 	 */
 	public Rectangle(Point firstPoint, Point secondPoint) throws GeometricException
 	{
@@ -59,7 +59,7 @@ public class Rectangle extends Polygon
 	 * @param firstPoint a corner of the rectangle
 	 * @param secondPoint the opposite corner of the rectangle
 	 * @return a rectangle formed by the two corners
-	 * @throws GeometricException
+	 * @throws GeometricException if the two points don't define a rectangle (same x or same y)
 	 */
 	private static Point[] makeRectangleFromTwoPoints(Point firstPoint, Point secondPoint) throws GeometricException
 	{

@@ -43,7 +43,7 @@ public class Square extends Rectangle
 	 * @param secondPoint the opposite corner of the square
 	 *
 	 * @pre the two points must form a valid square
-	 * @throws GeometricException
+	 * @throws GeometricException if the two points don't define a square
 	 */
 	public Square(Point firstPoint, Point secondPoint) throws GeometricException
 	{
