@@ -2,7 +2,7 @@
 
 - GameEngine Documentation
     * [ ] CollisionManager
-    * [ ] GameEngine
+    * [x] GameEngine
     * [x] GameEngineException
     * [ ] GameEngineFlags
     * [ ] GameObject
@@ -18,8 +18,8 @@
     * [ ] TextOverlayOutline
 - GameEngine Report
     * [ ] CollisionManager
-    * [ ] GameEngine
-    * [ ] GameEngineException
+    * [x] GameEngine
+    * [x] GameEngineException
     * [ ] GameEngineFlags
     * [ ] GameObject
     * [ ] ICollider
@@ -94,7 +94,7 @@
     * [ ] Unit
 - Report Notes/Design Patterns
 - Report Tutorial
-- Main examples
+- Main examples presets
 - Javadoc
 - UML
 - Report UML
