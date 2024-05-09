@@ -43,6 +43,15 @@ public class GameManager extends GameObject implements IInputListener
 	private static final char DEFAULT_SNAKE_TAIL = 'T';
 	private static final InputPreset DEFAULT_INPUT_PRESET = InputPreset.WASD;
 	public static final long DEFAULT_SEED = 137;
+	private static final Colour.Background DEFAULT_COLOUR_BG = null;
+	private static final Colour.Foreground DEFAULT_COLOUR_SNAKE = null;
+	private static final Colour.Foreground DEFAULT_COLOUR_FOOD = null;
+	private static final Colour.Foreground DEFAULT_COLOUR_OBSTACLES = null;
+	// private static final Colour.Background COLOUR_BG = Colour.Background.BLACK;
+	// private static final Colour.Foreground COLOUR_SNAKE = Colour.Foreground.GREEN;
+	// private static final Colour.Foreground COLOUR_FOOD = Colour.Foreground.RED;
+	// private static final Colour.Foreground COLOUR_OBSTACLES = Colour.Foreground.WHITE;
+
 	private Point initialPosition;
 	private char mapChar;
 	private char foodChar;
@@ -68,6 +77,10 @@ public class GameManager extends GameObject implements IInputListener
 	private ControlMethod controlMethod;
 	private Integer maxScoresDisplay;
 	private long seed;
+	private Colour.Background bgColour;
+	private Colour.Foreground snakeColour;
+	private Colour.Foreground foodColour;
+	private Colour.Foreground obstaclesColour;
 
 	private Scene scene;
 	private Snake snake;
@@ -89,6 +102,10 @@ public class GameManager extends GameObject implements IInputListener
 		this.snakeHeadChar = DEFAULT_SNAKE_HEAD;
 		this.snakeTailChar = DEFAULT_SNAKE_TAIL;
 		this.seed = DEFAULT_SEED;
+		this.bgColour = DEFAULT_COLOUR_BG;
+		this.snakeColour = DEFAULT_COLOUR_SNAKE;
+		this.foodColour = DEFAULT_COLOUR_FOOD;
+		this.obstaclesColour = DEFAULT_COLOUR_OBSTACLES;
 		this.rng = new Random(this.seed);
 		try
 		{
@@ -100,7 +117,6 @@ public class GameManager extends GameObject implements IInputListener
 			throw new RuntimeException("Should never happen. initial position should always be valid.\n" + e.getMessage());
 		}
 		this.maxScoresDisplay = null;
-
 		this.isFirstSetup = true;
 		this.scene = null;
 		this.snake = null;
@@ -389,7 +405,7 @@ public class GameManager extends GameObject implements IInputListener
 	{
 		Point snakePos = this.startingSnakePos == null ? map.getRandomUnitSpawnPosition(snakeSize) : this.startingSnakePos;
 		Direction snakeDir = this.startingSnakeDir == null ? getRandomSnakeDir() : this.startingSnakeDir;
-		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar);
+		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar, this.snakeColour);
 	}
 
 	private GameMap generateMap()
@@ -434,13 +450,13 @@ public class GameManager extends GameObject implements IInputListener
 		for (Polygon poly : this.staticObstacles)
 		{
 			Polygon absoluteCollider = map.getAbsolute(poly);
-			obstacles[n++] = new StaticObstacle(absoluteCollider, this.isFilled, this.obstacleChar);
+			obstacles[n++] = new StaticObstacle(absoluteCollider, this.isFilled, this.obstacleChar, this.obstaclesColour);
 		}
 		for (DynamicObstacle obstacle : this.dynamicObstacles)
 		{
 			Polygon absoluteCollider = map.getAbsolute((Polygon)obstacle.getCollider());
 			VirtualPoint absoluteAnchor = map.getAbsolute(((DynamicObstacle)obstacle).rotationPoint());
-			obstacles[n++] = new DynamicObstacle(absoluteCollider, this.isFilled, this.obstacleChar, absoluteAnchor, obstacle.speed());
+			obstacles[n++] = new DynamicObstacle(absoluteCollider, this.isFilled, this.obstacleChar, absoluteAnchor, obstacle.speed(), this.obstaclesColour);
 		}
 		return obstacles;
 	}
@@ -490,10 +506,10 @@ public class GameManager extends GameObject implements IInputListener
 			switch(foodType)
 			{
 				case FoodType.SQUARE:
-					food = new FoodSquare(foodPos, this.foodSize, this.isFilled, this.foodChar);
+					food = new FoodSquare(foodPos, this.foodSize, this.isFilled, this.foodChar, this.foodColour);
 					break;
 				case FoodType.CIRCLE:
-					food = new FoodCircle(foodPos, this.foodSize / 2, this.isFilled, this.foodChar);
+					food = new FoodCircle(foodPos, this.foodSize / 2, this.isFilled, this.foodChar, this.foodColour);
 					break;
 				default:
 					Logger.log(Logger.Level.FATAL, "Unrecognized food type.");
@@ -523,23 +539,13 @@ public class GameManager extends GameObject implements IInputListener
 			Logger.log(Logger.Level.FATAL, "Tried to setup with game engine still running.");
 			throw new RuntimeException("Tried to setup with game engine still running.");
 		}
-		// 	engine.stop();
 
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setTextual(this.isTextual);
 		flags.setUpdateMethod(this.updateMethod);
 		engine.init(flags, this.scene, this.camera);
+		Renderer.getInstance().setBackgroundColour(this.bgColour);
 	}
-
-	public void setMap(char c) { this.mapChar = c; }
-
-	public void setObstacle(char c) { this.obstacleChar = c; }
-
-	public void setFood(char c) { this.foodChar = c; }
-
-	public void setSnakeHead(char c) { this.snakeHeadChar = c; }
-
-	public void setSnakeTail(char c) { this.snakeTailChar = c; }
 
 	public void play()
 	{
@@ -670,8 +676,24 @@ public class GameManager extends GameObject implements IInputListener
 		this.scene.add(overlay);
 	}
 
-	public Point foodPos()
-	{
-		return this.food.position();
-	}
+	public Point foodPos() { return this.food.position(); }
+
+	public void setBackgroundColour(Colour.Background colour) { this.bgColour = colour; }
+
+	public void setSnakeColour(Colour.Foreground colour) { this.snakeColour = colour; }
+
+	public void setFoodColour(Colour.Foreground colour) { this.foodColour = colour; }
+
+	public void setObstaclesColour(Colour.Foreground colour) { this.obstaclesColour = colour; }
+
+	public void setMap(char c) { this.mapChar = c; }
+
+	public void setObstacle(char c) { this.obstacleChar = c; }
+
+	public void setFood(char c) { this.foodChar = c; }
+
+	public void setSnakeHead(char c) { this.snakeHeadChar = c; }
+
+	public void setSnakeTail(char c) { this.snakeTailChar = c; }
+
 }

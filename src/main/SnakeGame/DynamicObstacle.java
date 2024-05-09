@@ -12,15 +12,20 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	private IGeometricShape<Polygon> collider;
 	private boolean isDeepCollision;
 	
-	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed)
+	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed, Colour.Foreground colour)
 	{
-		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar);
+		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, colour);
 		this.collider = obstacle;
 		this.rotationPoint = rotationPoint;
 		if (rotationPoint == null)
 			this.rotationPoint = obstacle.getCentroid();
 		this.speed = speed;
 		this.isDeepCollision = false;
+	}
+
+	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed)
+	{
+		this(obstacle, isFilled, drawChar, rotationPoint, speed, null);
 	}
 
 	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, float speed)
@@ -30,7 +35,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 
 	public DynamicObstacle(DynamicObstacle obstacle)
 	{
-		this((Polygon)obstacle.collider, obstacle.rData.isFilled(), obstacle.rData.getCharacter(), obstacle.rotationPoint, obstacle.speed);
+		this((Polygon)obstacle.collider, obstacle.rData.isFilled(), obstacle.rData.getCharacter(), obstacle.rotationPoint, obstacle.speed, obstacle.rData.getColour());
 	}
 
 	@Override
@@ -54,7 +59,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 
 	public RenderData<Polygon> getRenderData()
 	{
-		this.rData = new RenderData<Polygon>((Polygon)this.collider, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter());
+		this.rData = new RenderData<Polygon>((Polygon)this.collider, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), this.rData.getColour());
 		return this.rData;
 	}
 

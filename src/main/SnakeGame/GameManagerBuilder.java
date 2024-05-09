@@ -178,6 +178,30 @@ public class GameManagerBuilder
 		return this;
 	}
 
+	public GameManagerBuilder setBackgroundColour(Colour.Background colour)
+	{
+		this.gmInstance.setBackgroundColour(colour);
+		return this;
+	}
+
+	public GameManagerBuilder setSnakeColour(Colour.Foreground colour)
+	{
+		this.gmInstance.setSnakeColour(colour);
+		return this;
+	}
+
+	public GameManagerBuilder setFoodColour(Colour.Foreground colour)
+	{
+		this.gmInstance.setFoodColour(colour);
+		return this;
+	}
+
+	public GameManagerBuilder setObstaclesColour(Colour.Foreground colour)
+	{
+		this.gmInstance.setObstaclesColour(colour);
+		return this;
+	}
+
 	private void validate() throws SnakeGameException
 	{
 		if (this.foodType == null)

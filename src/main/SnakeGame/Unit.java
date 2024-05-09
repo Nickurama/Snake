@@ -14,10 +14,15 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 	// cannot use zero based coordinates
 	public Unit(Point position, double size, boolean isFilled, char drawChar, int layer) throws SnakeGameException
 	{
+		this(position, size, isFilled, drawChar, null, layer);
+	}
+
+	public Unit(Point position, double size, boolean isFilled, char drawChar, Colour.Foreground colour, int layer) throws SnakeGameException
+	{
 		this.position = position;
 		this.size = size;
 		generateUnit();
-		this.rData = new RenderData<Square>(this.unit, isFilled, layer, drawChar);
+		this.rData = new RenderData<Square>(this.unit, isFilled, layer, drawChar, colour);
 	}
 
 	private void generateUnit() throws SnakeGameException
@@ -63,14 +68,19 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 
 	public void setDrawChar(char newChar)
 	{
-		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), newChar);
+		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), newChar, this.rData.getColour());
+	}
+
+	public void setDrawColour(Colour.Foreground newColour)
+	{
+		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), newColour);
 	}
 
 	public Point position() { return this.position; }
 
 	public RenderData<Square> getRenderData()
 	{
-		return this.rData = new RenderData<Square>(this.unit, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter());
+		return this.rData = new RenderData<Square>(this.unit, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), this.rData.getColour());
 	}
 
 	public Square unitSquare() { return this.unit; }

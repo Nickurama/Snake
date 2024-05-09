@@ -12,7 +12,12 @@ public class FoodSquare extends Unit implements IFood
 
 	public FoodSquare(Point position, double size, boolean isFilled, char drawChar) throws SnakeGameException
 	{
-		super(position, size, isFilled, drawChar, LAYER);
+		this(position, size, isFilled, drawChar, null);
+	}
+
+	public FoodSquare(Point position, double size, boolean isFilled, char drawChar, Colour.Foreground colour) throws SnakeGameException
+	{
+		super(position, size, isFilled, drawChar, colour, LAYER);
 		this.wasConsumed = false;
 		this.isDeepCollision = true;
 	}

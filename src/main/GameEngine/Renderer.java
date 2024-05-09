@@ -25,13 +25,18 @@ public class Renderer
 
 	private static Renderer instance = null;
 	private BoundingBox camera;
+	private Colour.Background bgColour;
 	private char backgroundChar;
 	private char drawChar;
+	private Colour.Foreground drawColour;
 	private char[][] raster;
+	private boolean isFrameUsingColour;
+	private String[][] colourRaster;
 
 	private Renderer()
 	{
 		// Singleton
+		this.bgColour = null;
 	}
 
 	public static Renderer getInstance()
@@ -50,9 +55,16 @@ public class Renderer
 
 	public void init(Rectangle camera, char backgroundChar)
 	{
+		this.isFrameUsingColour = false;
 		this.camera = new BoundingBox(camera);
 		this.backgroundChar = backgroundChar;
 		generateRaster(this.camera);
+		generateColourRaster(this.camera);
+	}
+
+	public void setBackgroundColour(Colour.Background colour)
+	{
+		this.bgColour = colour;
 	}
 
 	private void generateRaster(BoundingBox cam)
@@ -71,6 +83,16 @@ public class Renderer
 		}
 	}
 
+	private void generateColourRaster(BoundingBox cam)
+	{
+		int dy = (int)Math.floor(cam.maxPoint().Y()) - (int)Math.ceil(cam.minPoint().Y()) + 1;
+		int dx = (int)Math.floor(cam.maxPoint().X()) - (int)Math.ceil(cam.minPoint().X()) + 1;
+
+		colourRaster = new String[dy][dx];
+		for (int i = 0; i < dy; i++) // iterate over y
+			colourRaster[i] = new String[dx];
+	}
+
 	private void draw(int x, int y)
 	{
 		if (x < camera.minPoint().X() || x > camera.maxPoint().X())
@@ -82,16 +104,68 @@ public class Renderer
 		y = (raster.length - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
 
 		raster[y][x] = drawChar;
+
+		if (drawColour != null)
+			drawColour(x, y);
+	}
+
+	private void drawColour(int x, int y)
+	{
+		this.isFrameUsingColour = true;
+		int next = x + 1;
+		colourRaster[y][x] = drawColour.toString();
+		if (next < colourRaster[0].length && colourRaster[y][next] == null)
+		{
+			colourRaster[y][next] = Colour.RESET.toString();
+			if (this.bgColour != null)
+				colourRaster[y][next] += bgColour.toString();
+		}
+		else if (y + 1 < colourRaster.length && colourRaster[y + 1][0] == null)
+		{
+			colourRaster[y + 1][0] = Colour.RESET.toString();
+			if (this.bgColour != null)
+				colourRaster[y + 1][0] += bgColour.toString();
+		}
 	}
 
 	private void print()
 	{
+		if (drawColour != null)
+		{
+			printColour();
+			return;
+		}
+
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < raster.length; i++) // iterate over y
 		{
+			if (bgColour != null)
+				builder.append(this.bgColour);
 			builder.append(new String(raster[i]));
 			builder.append('\n');
 		}
+		if (bgColour != null)
+			builder.append(Colour.RESET);
+		System.out.print(builder.toString());
+	}
+
+	private void printColour()
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < raster.length; i++) // iterate over y
+		{
+			if (bgColour != null)
+				builder.append(this.bgColour);
+			for (int j = 0; j < raster[0].length; j++) // iterate over x
+			{
+				if (colourRaster[i][j] != null)
+					builder.append(colourRaster[i][j]);
+				builder.append(raster[i][j]);
+			}
+			builder.append('\n');
+		}
+		if (bgColour != null)
+			builder.append(Colour.RESET);
 		System.out.print(builder.toString());
 	}
 
@@ -184,40 +258,70 @@ public class Renderer
 
 	public void render(Circle circle, char drawChar) throws GameEngineException
 	{
+		render(circle, drawChar, null);
+	}
+
+	public void render(Circle circle, char drawChar, Colour.Foreground colour) throws GameEngineException
+	{
 		validateRender();
 		this.drawChar = drawChar;
+		this.drawColour = colour;
 		rasterize(circle);
 		print();
 	}
 
 	public void renderSides(Circle circle, char drawChar) throws GameEngineException
 	{
+		renderSides(circle, drawChar, null);
+	}
+
+	public void renderSides(Circle circle, char drawChar, Colour.Foreground colour) throws GameEngineException
+	{
 		validateRender();
 		this.drawChar = drawChar;
+		this.drawColour = colour;
 		rasterizeSides(circle);
 		print();
 	}
 
 	public void render(Polygon poly, char drawChar) throws GameEngineException
 	{
+		render(poly, drawChar, null);
+	}
+
+	public void render(Polygon poly, char drawChar, Colour.Foreground colour) throws GameEngineException
+	{
 		validateRender();
 		this.drawChar = drawChar;
+		this.drawColour = colour;
 		rasterize(poly);
 		print();
 	}
 
 	public void renderSides(Polygon poly, char drawChar) throws GameEngineException
 	{
+		renderSides(poly, drawChar, null);
+	}
+
+	public void renderSides(Polygon poly, char drawChar, Colour.Foreground colour) throws GameEngineException
+	{
 		validateRender();
 		this.drawChar = drawChar;
+		this.drawColour = colour;
 		rasterizeSides(poly);
 		print();
 	}
 
 	public void render(LineSegment segment, char drawChar) throws GameEngineException
 	{
+		render(segment, drawChar, null);
+	}
+
+	public void render(LineSegment segment, char drawChar, Colour.Foreground colour) throws GameEngineException
+	{
 		validateRender();
 		this.drawChar = drawChar;
+		this.drawColour = colour;
 		rasterize(segment);
 		print();
 	}
@@ -238,6 +342,12 @@ public class Renderer
 				if (overlayRaster[i][j] == '\0')
 					continue;
 				raster[i][j] = overlayRaster[i][j];
+				if (isFrameUsingColour)
+				{
+					colourRaster[i][j] = Colour.RESET.toString();
+					if (this.bgColour != null)
+						colourRaster[i][j] += this.bgColour.toString();
+				}
 			}
 		}
 	}
@@ -249,6 +359,7 @@ public class Renderer
 		for (RenderData<?> rData : renderDataArr)
 		{
 			IGeometricShape<?> shape = rData.getShape();
+			this.drawColour = rData.getColour();
 			this.drawChar = rData.getCharacter();
 			if (shape instanceof Polygon)
 			{

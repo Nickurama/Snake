@@ -15,18 +15,20 @@ public class FoodCircle extends GameObject implements IFood
 
 	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar) throws SnakeGameException
 	{
+		this(position, radius, isFilled, drawChar, null);
+	}
+
+	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar, Colour.Foreground colour) throws SnakeGameException
+	{
 		Circle circle = null;
 
 		try
 		{
-			// circle = new Circle(position.translate(new Vector(Unit.UNIT_OFFSET, -Unit.UNIT_OFFSET)), radius - Unit.UNIT_OFFSET);
 			circle = new Circle(position, radius - Unit.UNIT_OFFSET - CIRCLE_OFFSET);
 			if (radius <= 1)
-				this.rData = new FoodSquare(position, radius * 2, isFilled, drawChar).getRenderData();
+				this.rData = new FoodSquare(position, radius * 2, isFilled, drawChar, colour).getRenderData();
 			else
-			{
-				this.rData = new RenderData<Circle>(circle, isFilled, LAYER, drawChar);
-			}
+				this.rData = new RenderData<Circle>(circle, isFilled, LAYER, drawChar, colour);
 		}
 		catch (GeometricException e)
 		{

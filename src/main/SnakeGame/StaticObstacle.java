@@ -12,7 +12,12 @@ public class StaticObstacle extends GameObject implements IObstacle
 
 	public StaticObstacle(Polygon obstacle, boolean isFilled, char drawChar)
 	{
-		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar);
+		this(obstacle, isFilled, drawChar, null);
+	}
+
+	public StaticObstacle(Polygon obstacle, boolean isFilled, char drawChar, Colour.Foreground colour)
+	{
+		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, colour);
 		this.shape = obstacle;
 		this.isDeepCollision = false;
 	}

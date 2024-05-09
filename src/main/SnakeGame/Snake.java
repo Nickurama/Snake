@@ -22,9 +22,16 @@ public class Snake extends GameObject implements ISpatialComponent
 	private int toGrow;
 	private boolean isAwake;
 	private Queue<SnakeUnit> units;
+	private Colour.Foreground colour;
 
 	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
 	{
+		this(initialPos, currDir, unitSize, isFilled, tailChar, headChar, null);
+	}
+
+	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar, Colour.Foreground colour) throws SnakeGameException
+	{
+		this.colour = colour;
 		this.units = new LinkedList<SnakeUnit>();
 		this.unitSize = unitSize;
 		this.currDir = currDir;
@@ -48,6 +55,7 @@ public class Snake extends GameObject implements ISpatialComponent
 	private void createHead(Point initialPos) throws SnakeGameException
 	{
 		this.head = new SnakeUnit(this, initialPos, headChar);
+		this.head.setDrawColour(this.colour);
 		head.setHead(true);
 		this.units.add(this.head);
 		if (super.sceneHandle() != null)
