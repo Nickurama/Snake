@@ -145,7 +145,6 @@ public class Polygon implements IGeometricShape<Polygon>
 
 	/**
 	 * Checks if the polygon is intercected by a segment
-	 * 
 	 * @param that the segment to check intercection with
 	 * @return if the polygon is intercected by the segment
 	 */
@@ -158,8 +157,7 @@ public class Polygon implements IGeometricShape<Polygon>
 	}
 
 	/**
-	 * Returns true if a polygon intercepts another one
-	 * 
+	 * Checks if a polygon intercepts another polygon
 	 * @param that the polygon to test collision with
 	 * @return if the polygon intercepts the other
 	 */
@@ -171,11 +169,17 @@ public class Polygon implements IGeometricShape<Polygon>
 		return false;
 	}
 
+	/**
+	 * Checks for intersection with a circle
+	 * @param that the circle to check intersection with
+	 * @return if the polygon intersects with the circle
+	 */
 	public boolean intersects(Circle that)
 	{
 		return that.intersects(this);
 	}
 
+	@Override
 	public boolean intersectsInclusive(IGeometricShape<?> that)
 	{
 		if (that instanceof Circle)
@@ -186,11 +190,21 @@ public class Polygon implements IGeometricShape<Polygon>
 			throw new UnsupportedOperationException(this.getClass() + " doesn't have intersect method for " + that.getClass());
 	}
 
+	/**
+	 * Checks for intersection with a circle (inclusive)
+	 * @param that the circle to check intersection with
+	 * @return if the polygon intersects with the circle (inclusive)
+	 */
 	public boolean intersectsInclusive(Circle that)
 	{
 		return that.intersectsInclusive(this);
 	}
 
+	/**
+	 * Checks if the polygon intersects a segment (inclusive)
+	 * @param that the segment to check intersection with
+	 * @return if the polygon intersects with the segment (inclusive)
+	 */
 	public boolean intersectsInclusive(LineSegment that)
 	{
 		for (LineSegment side : sides)
@@ -199,6 +213,11 @@ public class Polygon implements IGeometricShape<Polygon>
 		return false;
 	}
 
+	/**
+	 * Checks if the polygon intersects another polygon (inclusive)
+	 * @param that the polygon to check intersection with
+	 * @return if the polygon intersects the other polygon (inclusive)
+	 */
 	public boolean intersectsInclusive(Polygon that)
 	{
 		for (LineSegment segment : this.sides)
@@ -207,6 +226,7 @@ public class Polygon implements IGeometricShape<Polygon>
 		return false;
 	}
 
+	@Override
 	public boolean contains(IGeometricShape<?> that)
 	{
 		if (that instanceof Circle)
@@ -217,6 +237,11 @@ public class Polygon implements IGeometricShape<Polygon>
 			throw new UnsupportedOperationException(this.getClass() + " doesn't have contain method for " + that.getClass());
 	}
 
+	/**
+	 * Checks if the polygon contains a point
+	 * @param that the point to check if is inside the polygon
+	 * @return if the polygon contains the point
+	 */
 	public boolean contains(Point that)
 	{
 		Line scan;
@@ -254,6 +279,11 @@ public class Polygon implements IGeometricShape<Polygon>
 		return !(intersectNum % 2 == 0);
 	}
 
+	/**
+	 * Checks if the polygon contains a circle
+	 * @param that the circle to check if is inside the polygon
+	 * @return if the polygon contains the circle
+	 */
 	public boolean contains(Circle that)
 	{
 		if (this.intersects(that))
@@ -265,6 +295,11 @@ public class Polygon implements IGeometricShape<Polygon>
 		return false;
 	}
 
+	/**
+	 * Checks if the polygon contains another polygon
+	 * @param that the polygon to check if is inside this polygon
+	 * @return if the polygon is current one
+	 */
 	public boolean contains(Polygon that)
 	{
 		if (this.intersects(that))
@@ -277,8 +312,7 @@ public class Polygon implements IGeometricShape<Polygon>
 	}
 
 	/**
-	 * Calculates the perimeter of the polygon
-	 * 
+	 * The perimeter of the polygon
 	 * @return the perimeter of the polygon
 	 */
 	public double perimeter()
@@ -474,7 +508,15 @@ public class Polygon implements IGeometricShape<Polygon>
 		return this.translate(new Vector(this.getCentroid(), newCentroid));
 	}
 
+	/**
+	 * The sides of the polygon
+	 * @return the sides of the polygon
+	 */
 	public LineSegment[] sides() { return this.sides; }
 
+	/**
+	 * The vertices of the polygon
+	 * @return the vertices of the polygon
+	 */
 	public Point[] vertices() { return this.vertices; }
 }

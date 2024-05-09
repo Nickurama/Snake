@@ -79,11 +79,6 @@ public class Point extends VirtualPoint
 			}
 		}
         return result;
-
-        // Point[] result = new Point[array.length]; //! Issue: if not implemented, could use the parent class's implementation which will break
-        // for (int i = 0; i < array.length; i++)
-        //     result[i] = new Point(array[i]);
-        // return result;
     }
 
     /**
@@ -135,7 +130,6 @@ public class Point extends VirtualPoint
 			}
 		}
         return result;
-        // return parseToArray(String.valueOf(numPoints) + " " + str);
     }
 
     @Override
@@ -144,11 +138,13 @@ public class Point extends VirtualPoint
         return new Point(super.translate(vector));
     }
 
+	@Override
 	public Point translate(double x, double y) throws GeometricException
 	{
 		return translate(new Vector(x, y));
 	}
 
+	@Override
 	public Point translate(Point vector) throws GeometricException
 	{
 		return translate(new Vector(vector));

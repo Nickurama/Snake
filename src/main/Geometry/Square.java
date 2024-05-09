@@ -35,6 +35,14 @@ public class Square extends Rectangle
         validateSquare();
     }
 
+	/**
+	 * Initializes a square from two points
+	 * @param firstPoint a corner of the square
+	 * @param secondPoint the opposite corner of the square
+	 *
+	 * @pre the two points must form a valid square
+	 * @throws GeometricException
+	 */
 	public Square(Point firstPoint, Point secondPoint) throws GeometricException
 	{
 		super(firstPoint, secondPoint);

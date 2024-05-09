@@ -20,6 +20,13 @@ public class Line
     private double constant;
     private Point containedPoint;
 
+	/**
+	 * Initializes a line
+	 * @param coefficientX the coefficient of the x variable
+	 * @param coefficientY the coefficient of the y variable
+	 * @param containedPoint a point contained in the line
+	 * @throws GeometricException
+	 */
 	public Line(double coefficientX, double coefficientY, Point containedPoint) throws GeometricException
 	{
 		if (MathUtil.areEqual(coefficientX, 0) && MathUtil.areEqual(coefficientY, 0))
@@ -109,6 +116,11 @@ public class Line
         return MathUtil.areEqual(this.coefficientX * that.coefficientX + this.coefficientY * that.coefficientY, 0);
     }
 
+	/**
+	 * Generates a perpendicular line
+	 * @param containedPoint the line to get a perpendicular line to
+	 * @return the perpendicular line
+	 */
 	public Line generatePerpendicular(Point containedPoint)
 	{
 		try
@@ -121,11 +133,6 @@ public class Line
 		}
 	}
 
-    /**
-     * Checks if two lines are equivalent (if they describe the same line in space)
-     * @param that the other line to compare with the current one
-     * @return if the two lines are equivalent
-     */
     @Override
     public boolean equals(Object other)
     {

@@ -1,21 +1,22 @@
 package Geometry;
 
 /**
- * Represents an exception of the geometric type.
+ * Represents an exception within a geometric component.
  */
 public class GeometricException extends Exception
 {
 	/**
-	* Empty geometric exception
-	*/
+	 * Exception within a geometric component
+	 */
 	public GeometricException()
 	{
 		super();
 	}
 
 	/**
-	* Geometric exception with an error message
-	*/
+	 * Exception within a geometric component
+	 * @param message the error message
+	 */
 	public GeometricException(String message)
 	{
 		super(message);

@@ -78,7 +78,7 @@ public class BoundingBoxTests
         });
 
         // Act
-        boolean intercepts = bb0.intercepts(bb1);
+        boolean intercepts = bb0.intersects(bb1);
 
         // Assert
         assertFalse(intercepts);
@@ -102,7 +102,7 @@ public class BoundingBoxTests
         });
 
         // Act
-        boolean intercepts = bb0.intercepts(bb1);
+        boolean intercepts = bb0.intersects(bb1);
 
         // Assert
         assertTrue(intercepts);
@@ -126,7 +126,7 @@ public class BoundingBoxTests
         });
 
         // Act
-        boolean intercepts = bb0.intercepts(bb1);
+        boolean intercepts = bb0.intersects(bb1);
 
         // Assert
         assertFalse(intercepts);

@@ -34,7 +34,7 @@ public class LineSegment
     }
 
     /**
-     * Checks if a segment intersects the current segment
+     * Checks if the segment intersects the current segment
      * @param that the segment to check intersection with
      * @return if the segment intersects the current one
      */
@@ -42,7 +42,6 @@ public class LineSegment
     {
         if (this.line.isParalel(that.line))
             return false;
-            // return doParalelSegmentsCollide(that);
         VirtualPoint intersection = this.line.intersection(that.line);
 
         // checks if a point is exactly on one of the bounds of the segment
@@ -52,6 +51,11 @@ public class LineSegment
         return this.contains(intersection) && that.contains(intersection);
     }
 
+    /**
+	 * Checks if the segment intersects the current segment (inclusive)
+     * @param that the segment to check intersection with
+     * @return if the segment intersects the current one (inclusive)
+     */
     public boolean intersectsInclusive(LineSegment that)
     {
         if (this.line.isParalel(that.line))
@@ -65,6 +69,11 @@ public class LineSegment
         return this.contains(intersection) && that.contains(intersection);
     }
 
+	/**
+	 * Checks if the segment intersects a line
+	 * @param that the line to check intersection with
+	 * @return if the segment intersects the line
+	 */
 	public boolean intersects(Line that)
 	{
 		if (this.line.isParalel(that))
@@ -78,6 +87,11 @@ public class LineSegment
 		return contains(intersection);
 	}
 
+	/**
+	 * Checks if the segment intersects a line (inclusive)
+	 * @param that the line to check intersection with
+	 * @return if the segment intersects the line (inclusive)
+	 */
 	public boolean intersectsInclusive(Line that)
 	{
 		if (this.line.isParalel(that))
@@ -116,7 +130,7 @@ public class LineSegment
 
     /**
      * Checks if the point is contained in the line segment
-     * @param pointOnSegment a collinear point to check if is withing the line segment
+     * @param pointOnSegment the point to check if is withing the line segment
      * @return if the point is contained within the line segment
      */
     public boolean contains(VirtualPoint pointOnSegment)
@@ -137,6 +151,11 @@ public class LineSegment
         return containsX && containsY;
     }
 
+	/**
+	 * Checks if the point is contained in the line segment (exclusive)
+	 * @param pointOnSegment the point to check if is within the line segment
+	 * @return if the point is contained within the line segment
+	 */
 	public boolean containsExclusive(VirtualPoint pointOnSegment)
 	{
 		if (!this.line().isCollinear(pointOnSegment))
@@ -168,17 +187,17 @@ public class LineSegment
     }
 
     /**
-     * Accessor method to return the first bound of the segment
+	 * The first bounding point of the segment
      */
     public Point firstPoint() { return this.point1; }
 
     /**
-     * Accessor method to return the second bound of the segmend
+	 * The second bounding point of the segment
      */
     public Point secondPoint() { return this.point2; }
 
     /**
-     * Accessor method to return the line containing the segment
+	 * The line the segment is in
      */
     public Line line() { return this.line; }
 }

@@ -217,23 +217,36 @@ public class VirtualPoint
         return new VirtualPoint(this.X() + vector.X(), this.Y() + vector.Y());
     }
 
-	public VirtualPoint translate(double x, double y) throws GeometricException
+	/**
+	 * Translates a point by dx and dy
+	 * @param dx the difference to the x coordinate
+	 * @param dy the difference to the y coordinate
+	 * @return the translated point
+	 * @throws GeometricException
+	 */
+	public VirtualPoint translate(double dx, double dy) throws GeometricException
 	{
-		return translate(new Vector(x, y));
+		return translate(new Vector(dx, dy));
 	}
 
+	/**
+	 * Translates a point by a vector
+	 * @param vector the vector represented as a point to translate the point
+	 * @return the translated point
+	 * @throws GeometricException
+	 */
 	public VirtualPoint translate(Point vector) throws GeometricException
 	{
 		return translate(new Vector(vector));
 	}
 
     /**
-     * Acessor method to return the x coordinate
+	 * The x coordinate
      */
     public double X() { return this.x; }
 
     /**
-     * Accessor method to return the y coordinate
+     * The y coordinate
      */
     public double Y() { return this.y; }
 }

@@ -2,9 +2,10 @@ package Geometry;
 
 /**
  * Creates a box of bounds, useful for knowing the bounds of a bunch of points
+ * Such as the minimum coordinates and maximum coordinates
  * 
  * @author Diogo Fonseca a79858
- * @version 04/03/2024
+ * @version 29/04/2024
  * 
  * @inv min is the lower (left) point of the bounding box
  * @inv max is the upper (right) point of the bounding box
@@ -21,16 +22,24 @@ public class BoundingBox
     public BoundingBox(Point[] points) throws GeometricException
     {
         if (points.length == 0)
-            throw new GeometricException("BoundingBox::BoundingBox error: points should be greater than 0");
+            throw new GeometricException("BoundingBox error: points should be greater than 0");
         
 		initialize(points);
     }
 
+	/**
+	 * Initializes a bounding box from a polygon
+	 * @param poly the polygon to bound
+	 */
 	public BoundingBox(Polygon poly)
 	{
 		initialize(poly.vertices());
 	}
 
+	/**
+	 * Initializes the bounding box with an array of points
+	 * @param points
+	 */
 	private void initialize(Point[] points)
 	{
         this.min = points[0];
@@ -62,7 +71,7 @@ public class BoundingBox
      * @param that the bounding box to check interception with
      * @return if the two bounding boxes intercept
      */
-    public boolean intercepts(BoundingBox that)
+    public boolean intersects(BoundingBox that)
     {
         boolean interceptsX = !(MathUtil.isLessOrEqualThan(this.max.X(), that.min.X()) ||
                                 MathUtil.isGreaterOrEqualThan(this.min.X(), that.max.X()));
@@ -72,6 +81,15 @@ public class BoundingBox
         return interceptsX && interceptsY;
     }
 
+	/**
+	 * Returns the minimum xy coordinates
+	 * @return The point containing the minimum xy coordinates
+	 */
 	public Point minPoint() { return this.min; }
+
+	/**
+	 * Returns the maximum xy coordinates
+	 * @return The point containing the maximum xy coordinates
+	 */
 	public Point maxPoint() { return this.max; }
 }

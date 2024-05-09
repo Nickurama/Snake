@@ -32,6 +32,10 @@ public class Vector
         this(new VirtualPoint(x, y));
     }
 
+	/**
+	 * Initializes a vector with the same value for x and y
+	 * @param coord the x and y value
+	 */
 	public Vector(double coord)
 	{
 		this(new VirtualPoint(coord, coord));

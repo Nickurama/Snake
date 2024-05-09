@@ -17,9 +17,21 @@
 + can't initialize IGeometricShape<Rectangle> or anything that isn't polygon or circle
 - ICollider getGameObject() shouldn't be needed, Renderer should figure out what the GameObject is
 + return IGeometricShape<T> instead of T in IGeometricShape
++ colours have no tests
 
 
 
+! bug: bresenham line algorithm sometimes "overshoots" causing a gap between the scanLine and Bresenham algorithm
+	recreation:
+		Polygon dynamicObstacle = new Polygon(new Point[]{
+			new Point(3, 10),
+			new Point(4, 13),
+			new Point(8, 6),
+			new Point(7, 5),
+		});
+		Point anchor = new Point(6, 7);
+		float speed = 0.1f;
+	(once rotated twice counter clockwise (by 0.1 radians each time), it will show a gap)
 
 
 

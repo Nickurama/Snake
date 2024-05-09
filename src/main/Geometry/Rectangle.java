@@ -38,12 +38,26 @@ public class Rectangle extends Polygon
         validateRectangle(poly.getNumSides());
     }
 
+	/**
+	 * Initializes a rectangle from two points
+	 * @param firstPoint a corner of the rectangle
+	 * @param secondPoint the opposite corner of the rectangle
+	 * @pre the points must not be within the same x or y
+	 * @throws GeometricException
+	 */
 	public Rectangle(Point firstPoint, Point secondPoint) throws GeometricException
 	{
 		super(makeRectangleFromTwoPoints(firstPoint, secondPoint));
 		validateRectangle(4);
 	}
 
+	/**
+	 * Generates a rectangle from two points
+	 * @param firstPoint a corner of the rectangle
+	 * @param secondPoint the opposite corner of the rectangle
+	 * @return a rectangle formed by the two corners
+	 * @throws GeometricException
+	 */
 	private static Point[] makeRectangleFromTwoPoints(Point firstPoint, Point secondPoint) throws GeometricException
 	{
 		return new Point[] {
