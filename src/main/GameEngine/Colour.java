@@ -1,13 +1,25 @@
 package GameEngine;
 
+/**
+ * Represents a colour as an ANSI code string
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ */
 public enum Colour
 {
+	/**
+	 * Represents a reset of background/foreground colour
+	 */
 	RESET
 	{
 		@Override
 		public String toString() { return "\u001B[0m"; }
 	};
 
+	/**
+	 * Represents a foreground colour as an ANSI code string
+	 */
 	public enum Foreground
 	{
 		BLACK
@@ -51,6 +63,10 @@ public enum Colour
 			public String toString() { return "\u001B[37m"; }
 		},
 	}
+
+	/**
+	 * Represents a background colour as an ANSI code string
+	 */
 	public enum Background
 	{
 		BLACK

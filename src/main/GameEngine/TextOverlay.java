@@ -2,17 +2,32 @@ package GameEngine;
 
 import Geometry.*;
 
+/**
+ * Utility class for creating text overlays.
+ * Should be inherited. (or contained)
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 03/05/2024
+ * @see TextOverlayOutline
+ */
 public class TextOverlay extends GameObject implements IOverlay
 {
 	private BoundingBox bounds;
 	private char[][] overlay;
 
+	/**
+	 * Initializes a TextOverlay overlay
+	 * @param camera the camera to generate the overlay in
+	 */
 	public TextOverlay(Rectangle camera)
 	{
 		this.bounds = new BoundingBox(camera);
 		reset();
 	}
 
+	/**
+	 * Resets the overlay, making it a blank canvas
+	 */
 	public void reset()
 	{
 		int dx = (int)Math.floor(bounds.maxPoint().X()) - (int)Math.ceil(bounds.minPoint().X()) + 1;
@@ -20,11 +35,24 @@ public class TextOverlay extends GameObject implements IOverlay
 		overlay = new char[dy][dx];
 	}
 
+	/**
+	 * Sets an outline for the overlay
+	 * @param outline the outline for the overlay
+	 */
 	public void setOutline(TextOverlayOutline outline)
 	{
 		setOutline(outline.getTopLeft(), outline.getTopRight(), outline.getBottomLeft(), outline.getBottomRight(), outline.getLeftRight(), outline.getTopBottom());
 	}
 
+	/**
+	 * Sets an outline for the overlay
+	 * @param cornerTL the top left corner character
+	 * @param cornerTR the top right corner character
+	 * @param cornerDL the bottom left corner character
+	 * @param cornerDR the bottom right corner character
+	 * @param sideLR the left and right sides character
+	 * @param sideTD the top and bottom character
+	 */
 	public void setOutline(char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
 		setCorners(cornerTL, cornerTR, cornerDL, cornerDR);
@@ -46,6 +74,13 @@ public class TextOverlay extends GameObject implements IOverlay
 			overlay[overlay.length - 1][i] = sideTD;
 	}
 
+	/**
+	 * Sets the corners for the outline
+	 * @param cornerTL the top left corner character
+	 * @param cornerTR the top right corner character
+	 * @param cornerDL the bottom left corner character
+	 * @param cornerDR the bottom right corner character
+	 */
 	private void setCorners(char cornerTL, char cornerTR, char cornerDL, char cornerDR)
 	{
 		overlay[0][0] = cornerTL;
@@ -54,11 +89,18 @@ public class TextOverlay extends GameObject implements IOverlay
 		overlay[overlay.length - 1][overlay[0].length - 1] = cornerDR;
 	}
 
+	/**
+	 * Fills the entire inside of the overlay with a whitespace
+	 */
 	public void fillEmpty()
 	{
 		fill(' ');
 	}
 
+	/**
+	 * Fills the entire inside of the overlay
+	 * @param c the character to fill the inside of the overlay with
+	 */
 	public void fill(char c)
 	{
 		for (int i = 1; i < overlay.length - 1; i++)
@@ -66,11 +108,23 @@ public class TextOverlay extends GameObject implements IOverlay
 				overlay[i][j] = c;
 	}
 
+	/**
+	 * Checks if an index is valid on the overlay array
+	 * @param index the index to check if is valid
+	 * @return if the index is valid for the overlay array
+	 */
 	private boolean isValidIndex(int index)
 	{
 		return !(index < 0 || index >= overlay.length);
 	}
 
+	/**
+	 * Writes a text centered on the overlay on the provided index
+	 * the 0 index is the top of the overlay
+	 * if the index is invalid or if the text is too big, nothing will be written
+	 * @param str the text to write
+	 * @param index the index to write on (starts on top)
+	 */
 	public void writeCentered(String str, int index)
 	{
 		if (!isValidIndex(index))
@@ -86,6 +140,13 @@ public class TextOverlay extends GameObject implements IOverlay
 			overlay[index][1 + leftSize + i] = str.charAt(i);
 	}
 
+	/**
+	 * Writes a text aligned to the left of the overlay
+	 * the 0 index is the top of the overlay
+	 * if the index is invalid or if the text is too big, nothing will be written
+	 * @param str the text to write
+	 * @param index the index to write on (starts on top)
+	 */
 	public void writeLeft(String str, int index)
 	{
 		if (!isValidIndex(index))
@@ -99,6 +160,13 @@ public class TextOverlay extends GameObject implements IOverlay
 			overlay[index][i] = str.charAt(n++);
 	}
 
+	/**
+	 * Writes a text aligned to the right of the overlay
+	 * the 0 index is the top of the overlay
+	 * if the index is invalid or if the text is too big, nothing will be written
+	 * @param str the text to write
+	 * @param index the index to write on (starts on top)
+	 */
 	public void writeRight(String str, int index)
 	{
 		if (!isValidIndex(index))
@@ -112,6 +180,14 @@ public class TextOverlay extends GameObject implements IOverlay
 			overlay[index][i] = str.charAt(n++);
 	}
 
+	/**
+	 * Writes a paragraph aligned to the left of the overlay,
+	 * possibly spanning multiple lines
+	 * the 0 index is the top of the overlay
+	 * if the index is invalid nothing will be written
+	 * @param str the text to write
+	 * @param index the index to start writing on
+	 */
 	public void writeParagraph(String str, int index)
 	{
 		if (!isValidIndex(index))
@@ -131,26 +207,43 @@ public class TextOverlay extends GameObject implements IOverlay
 		}
 	}
 
+	@Override
 	public char[][] getOverlay()
 	{
 		return this.overlay;
 	}
 
+	/**
+	 * The width of the overlay
+	 * @return the width of the overlay
+	 */
 	public int width()
 	{
 		return this.overlay[0].length;
 	}
 
+	/**
+	 * The height of the overlay
+	 * @return the height of the overlay
+	 */
 	public int height()
 	{
 		return this.overlay.length;
 	}
 
+	/**
+	 * The inner widht of the overlay (excluding the outline)
+	 * @return the inner width of the overlay (excluding the outline)
+	 */
 	public int innerWidth()
 	{
 		return width() - 2;
 	}
 
+	/**
+	 * The inner height of the overlay (excluding the outline)
+	 * @return the inner height of the overlay (excluding the outline)
+	 */
 	public int innerHeight()
 	{
 		return height() - 2;

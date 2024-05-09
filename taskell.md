@@ -1,39 +1,5 @@
 ## To Do
 
-- GameEngine Documentation
-    * [x] CollisionManager
-    * [x] GameEngine
-    * [x] GameEngineException
-    * [x] GameEngineFlags
-    * [ ] Colour
-    * [x] GameObject
-    * [x] ICollider
-    * [x] IInputListener
-    * [ ] IOverlay
-    * [ ] IRenderable
-    * [ ] Logger
-    * [ ] RenderData
-    * [ ] Renderer
-    * [x] Scene
-    * [ ] TextOverlay
-    * [ ] TextOverlayOutline
-- GameEngine Report
-    * [ ] CollisionManager
-    * [x] GameEngine
-    * [x] GameEngineException
-    * [ ] GameEngineFlags
-    * [ ] Colour
-    * [ ] GameObject
-    * [ ] ICollider
-    * [ ] IInputListener
-    * [ ] IOverlay
-    * [ ] IRenderable
-    * [ ] Logger
-    * [ ] RenderData
-    * [ ] Renderer
-    * [ ] Scene
-    * [ ] TextOverlay
-    * [ ] TextOverlayOutline
 - SnakeGame Documentation
     * [ ] AISnakeController
     * [ ] Direction
@@ -135,6 +101,40 @@
     * [x] Triangle
     * [x] Vector
     * [x] VirtualPoint
+- GameEngine Documentation
+    * [x] CollisionManager
+    * [x] GameEngine
+    * [x] GameEngineException
+    * [x] GameEngineFlags
+    * [x] Colour
+    * [x] GameObject
+    * [x] ICollider
+    * [x] IInputListener
+    * [x] IOverlay
+    * [x] IRenderable
+    * [x] Logger
+    * [x] RenderData
+    * [x] Renderer
+    * [x] Scene
+    * [x] TextOverlay
+    * [x] TextOverlayOutline
+- GameEngine Report
+    * [x] CollisionManager
+    * [x] GameEngine
+    * [x] GameEngineException
+    * [x] GameEngineFlags
+    * [x] Colour
+    * [x] GameObject
+    * [x] ICollider
+    * [x] IInputListener
+    * [x] IOverlay
+    * [x] IRenderable
+    * [x] Logger
+    * [x] RenderData
+    * [x] Renderer
+    * [x] Scene
+    * [x] TextOverlay
+    * [x] TextOverlayOutline
 
 ## Doing
 
