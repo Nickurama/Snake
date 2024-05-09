@@ -3,33 +3,56 @@ package GameEngine;
 /**
  * Represents the flags the engine will look out for when running
  * In other words, the arguments/options of the engine
+ *
+ * @author Diogo Fonseca a79858
+ * @version 30/04/2024
+ *
+ * @see GameEngine
  */
 public class GameEngineFlags
 {
+	/**
+	 * The method the game engine is going to use for
+	 * iterating through cycles/updates
+	*/
 	public enum UpdateMethod {
+		/**
+		 * Updates in a stepped fashion, through user input.
+		 * Updates every time an input is read.
+		 */
 		STEP,
+		/**
+		 * Updates automatically.
+		 */
 		AUTO,
+		/**
+		 * Updates through code, by calling the {@link GameEngine#step() Step} method.
+		 */
 		CODE,
 	}
+	private static final UpdateMethod DEFAULT_UPDATE_METHOD = UpdateMethod.STEP;
+	private static final boolean DEFAULT_IS_TEXTUAL = true;
+
 	private UpdateMethod updateMethod;
 	private boolean isTextual;
-	// private boolean isRasterized;
 
 	/**
-	 * Initalizes GameEngineFlags
+	 * Initalizes GameEngineFlags with default values
 	 */
 	public GameEngineFlags()
 	{
-		this.isTextual = true;
-		// this.isRasterized = true;
-		updateMethod = UpdateMethod.STEP;
+		this.isTextual = DEFAULT_IS_TEXTUAL;
+		updateMethod = DEFAULT_UPDATE_METHOD;
 	}
 
+	/**
+	 * Copies flags
+	 * @param that the flags to copy
+	 */
 	public GameEngineFlags(GameEngineFlags that)
 	{
 		this.updateMethod = that.updateMethod();
 		this.isTextual = that.isTextual();
-		// this.isRasterized = that.isRasterized();
 	}
 
 	/**
@@ -40,33 +63,18 @@ public class GameEngineFlags
 
 	/**
 	 * Sets if the screen is to be rendered textually or graphically
-	 * @param arg If the screen is to be rendered textually or graphically
+	 * @param arg if the screen is to be rendered textually or graphically
 	 */
 	public void setTextual(boolean arg) { this.isTextual = arg; }
 
-	// /**
-	//  * If the objects's should be filled when drawn
-	//  * @return If the objects's should be filled when drawn
-	//  */
-	// public boolean isRasterized() { return this.isRasterized; }
-	//
-	// /**
-	//  * Sets if the objects's should be filled when drawn
-	//  * @param arg If the objects's should be filled when drawn
-	//  */
-	// public void setRasterized(boolean arg) { this.isRasterized = arg; }
-
 	/**
-	 * Returns the method in which the engine should be updated
-	 * @return If the engine should update step by step or automatically
+	 * The method in which the engine should be updated
+	 * @return the method in which the engine should be updated
 	 */
 	public UpdateMethod updateMethod() { return this.updateMethod; }
 
 	/**
 	 * Sets the method the engine should update
-	 * STEP - update via input
-	 * AUTO - update automatically
-	 * CODE - update through function call
 	 * @param the method how the engine should update
 	 */
 	public void setUpdateMethod(UpdateMethod method) { this.updateMethod = method; }

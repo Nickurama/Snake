@@ -28,6 +28,11 @@ import Geometry.Rectangle;
  * @version 08/05/2024
  *
  * @inv singleton
+ * @inv isRunning is true when the engine is running and false otherwise
+ * @see Scene
+ * @see GameObject
+ * @see Renderer
+ * @see CollisionManager
  */
 public class GameEngine
 {

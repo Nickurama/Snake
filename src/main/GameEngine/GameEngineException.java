@@ -2,6 +2,9 @@ package GameEngine;
 
 /**
  * Represents an exception within the game engine
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 30/04/2024
  */
 public class GameEngineException extends Exception
 {

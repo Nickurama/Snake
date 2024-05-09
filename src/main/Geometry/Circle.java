@@ -38,7 +38,7 @@ public class Circle implements IGeometricShape<Circle>
 	 */
 	public Circle(Circle toCopy)
 	{
-		initialize(center, radius);
+		initialize(toCopy.center, toCopy.radius);
 	}
 
 	/**
