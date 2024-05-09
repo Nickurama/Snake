@@ -3,6 +3,12 @@ package GameEngine;
 import java.util.Scanner;
 import Geometry.Rectangle;
 
+/**
+ * Represents an immutable circle
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ */
 public class GameEngine
 {
 	private static GameEngine instance = null;

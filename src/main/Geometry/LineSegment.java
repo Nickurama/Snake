@@ -4,7 +4,7 @@ package Geometry;
  * Represents an immutable segment within a two dimensional line
  *
  * @author Diogo Fonseca a79858
- * @version 23/02/2024
+ * @version 02/05/2024
  * 
  * @inv point1 is the first point defining a bound within the line
  * @inv point2 is the second point defining a bound within the line

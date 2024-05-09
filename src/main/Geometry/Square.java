@@ -8,7 +8,9 @@ import java.text.ParseException;
  * all the same length
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 06/05/2024
+ *
+ * @inv all the sides have the same length
  */
 public class Square extends Rectangle
 {

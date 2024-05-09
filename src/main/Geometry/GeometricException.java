@@ -2,6 +2,9 @@ package Geometry;
 
 /**
  * Represents an exception within a geometric component.
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 07/04/2024
  */
 public class GeometricException extends Exception
 {

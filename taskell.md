@@ -1,41 +1,9 @@
 ## To Do
 
-- Geometry Documentation
-    * [ ] BoundingBox
-    * [ ] Circle
-    * [ ] GeometricException
-    * [ ] IGeometricShape
-    * [ ] Line
-    * [ ] LineSegment
-    * [ ] MathUtil
-    * [ ] Path
-    * [ ] Point
-    * [ ] Polygon
-    * [ ] Rectangle
-    * [ ] Square
-    * [ ] Triangle
-    * [ ] Vector
-    * [ ] VirtualPoint
-- Geometry Report
-    * [ ] BoundingBox
-    * [ ] Circle
-    * [ ] GeometricException
-    * [ ] IGeometricShape
-    * [ ] Line
-    * [ ] LineSegment
-    * [ ] MathUtil
-    * [ ] Path
-    * [ ] Point
-    * [ ] Polygon
-    * [ ] Rectangle
-    * [ ] Square
-    * [ ] Triangle
-    * [ ] Vector
-    * [ ] VirtualPoint
 - GameEngine Documentation
     * [ ] CollisionManager
     * [ ] GameEngine
-    * [ ] GameEngineException
+    * [x] GameEngineException
     * [ ] GameEngineFlags
     * [ ] GameObject
     * [ ] ICollider
@@ -130,6 +98,41 @@
 - Javadoc
 - UML
 - Report UML
+
+## Done recent
+
+- Geometry Documentation
+    * [x] BoundingBox
+    * [x] Circle
+    * [x] GeometricException
+    * [x] IGeometricShape
+    * [x] Line
+    * [x] LineSegment
+    * [x] MathUtil
+    * [x] Path
+    * [x] Point
+    * [x] Polygon
+    * [x] Rectangle
+    * [x] Square
+    * [x] Triangle
+    * [x] Vector
+    * [x] VirtualPoint
+- Geometry Report
+    * [x] BoundingBox
+    * [x] Circle
+    * [x] GeometricException
+    * [x] IGeometricShape
+    * [x] Line
+    * [x] LineSegment
+    * [x] MathUtil
+    * [x] Path
+    * [x] Point
+    * [x] Polygon
+    * [x] Rectangle
+    * [x] Square
+    * [x] Triangle
+    * [x] Vector
+    * [x] VirtualPoint
 
 ## Doing
 

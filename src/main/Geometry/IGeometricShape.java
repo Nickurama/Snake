@@ -1,5 +1,12 @@
 package Geometry;
 
+/**
+ * Represents a geometric shape, containing common
+ * operations within geometric shapes
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 02/05/2024
+ */
 public interface IGeometricShape<T>
 {
 	/**

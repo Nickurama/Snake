@@ -11,7 +11,7 @@ import java.util.Locale;
  * Represents an immutable point in two dimensional space
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 08/05/2024
  * 
  * @inv x the x coordinate
  * @inv y the y coordinate

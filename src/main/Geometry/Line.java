@@ -5,7 +5,7 @@ package Geometry;
  * Uses the general equation for a line in 2D space: ax + by + c = 0
  * 
  * @author Diogo Fonseca a79858
- * @version 13/03/2024
+ * @version 28/04/2024
  * 
  * @inv coefficientX is immutable and set when line is created (represents the "a" coefficient)
  * @inv coefficientY is immutable and set when line is created (represents the "b" coefficient)

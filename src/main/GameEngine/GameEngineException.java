@@ -1,21 +1,22 @@
 package GameEngine;
 
 /**
- * Represents an exception of Game Engine.
+ * Represents an exception within the game engine
  */
 public class GameEngineException extends Exception
 {
 	/**
-	* Empty GameEngine exception
-	*/
+	 * An empty GameEngine exception
+	 */
 	public GameEngineException()
 	{
 		super();
 	}
 
 	/**
-	* GameEngine exception with an error message
-	*/
+	 * An exception within the game engine, with a message
+	 * @param message the error message
+	 */
 	public GameEngineException(String message)
 	{
 		super(message);

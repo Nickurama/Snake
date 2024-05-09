@@ -8,7 +8,10 @@ import java.text.ParseException;
  * an inner angle of 90 degrees
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 03/05/2024
+ *
+ * @inv has 4 sides
+ * @inv all the inner angles make right angles
  */
 public class Rectangle extends Polygon
 {

@@ -7,7 +7,9 @@ import java.text.ParseException;
  * A triangle is a polygon with 3 sides
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 07/04/2024
+ *
+ * @inv has 3 sides
  */
 public class Triangle extends Polygon
 {

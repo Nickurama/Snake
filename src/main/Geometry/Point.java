@@ -6,7 +6,10 @@ import java.text.ParseException;
  * Represents an immutable point in two dimensional space, in the first quadrant only
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 08/05/2024
+ * 
+ * @inv the x coordinate is always positive
+ * @inv the y coordinate is always positive
  */
 public class Point extends VirtualPoint
 {

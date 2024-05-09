@@ -6,7 +6,7 @@ import java.text.ParseException;
  * Represents an immutable simple polygon
  * 
  * @author Diogo Fonseca a79858
- * @version 18/03/2024
+ * @version 06/05/2024
  * 
  * @inv sides are the sides of the polygon
  * @inv vertices are the vertices of the polygon

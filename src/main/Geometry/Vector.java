@@ -4,7 +4,7 @@ package Geometry;
  * Represents an immutable vector
  * 
  * @author Diogo Fonseca a79858
- * @version 17/03/2024
+ * @version 08/05/2024
  */
 public class Vector
 {
