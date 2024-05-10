@@ -4,10 +4,21 @@ import Geometry.*;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
 import GameEngine.*;
 
+/**
+ * Represents the snake
+ * the snake has a series of SnakeUnits as it's body.
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 09/05/2024
+ * 
+ * @inv the minimum length for the snake is 1 (when it only has a head)
+ * @inv the snake will not move untill {@link Snake#awake() awake} is called
+ * @inv the snake will not move, eat or grow if is dead.
+ * @see SnakeUnit
+ */
 public class Snake extends GameObject implements ISpatialComponent
 {
 	protected static final int LAYER = 2;
@@ -24,17 +35,32 @@ public class Snake extends GameObject implements ISpatialComponent
 	private Queue<SnakeUnit> units;
 	private Colour.Foreground colour;
 
-	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
+	/**
+	 * Instantiates a snake.
+	 * same as {@link Snake#Snake(Point,Direction,int,boolean,char,char,Colour.Foreground)} but with no colour
+	 */
+	public Snake(Point initialPos, Direction initialDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
 	{
-		this(initialPos, currDir, unitSize, isFilled, tailChar, headChar, null);
+		this(initialPos, initialDir, unitSize, isFilled, tailChar, headChar, null);
 	}
 
-	public Snake(Point initialPos, Direction currDir, int unitSize, boolean isFilled, char tailChar, char headChar, Colour.Foreground colour) throws SnakeGameException
+	/**
+	 * Instantiates a snake.
+	 * @param initialPos the initial snake position
+	 * @param initialDir the initial snake direction
+	 * @param unitSize the size of one snake segment
+	 * @param isFilled if the snake should be drawn with filled segments
+	 * @param tailChar the character for the snake's tail
+	 * @param headChar the character for the snake's head
+	 * @param colour the colour of the snake
+	 * @throws SnakeGameException if trying to instantiate a snake in an invalid position
+	 */
+	public Snake(Point initialPos, Direction initialDir, int unitSize, boolean isFilled, char tailChar, char headChar, Colour.Foreground colour) throws SnakeGameException
 	{
 		this.colour = colour;
 		this.units = new LinkedList<SnakeUnit>();
 		this.unitSize = unitSize;
-		this.currDir = currDir;
+		this.currDir = initialDir;
 		this.isFilled = isFilled;
 		this.tailChar = tailChar;
 		this.headChar = headChar;
@@ -45,6 +71,10 @@ public class Snake extends GameObject implements ISpatialComponent
 		this.isAwake = false;
 	}
 
+	/**
+	 * Sets a snake unit to be the snake's head
+	 * @param unit the unit to set as the head
+	 */
 	private void setHead(SnakeUnit unit)
 	{
 		this.head.setHead(false);
@@ -52,6 +82,12 @@ public class Snake extends GameObject implements ISpatialComponent
 		this.head = unit;
 	}
 
+	/**
+	 * Creates a snake unit as a head and appends it to the snake.
+	 * Instantiates the snake unit in the scene
+	 * @param initialPos the position of the head to create
+	 * @throws SnakeGameException if the position is invalid
+	 */
 	private void createHead(Point initialPos) throws SnakeGameException
 	{
 		this.head = new SnakeUnit(this, initialPos, headChar);
@@ -62,6 +98,9 @@ public class Snake extends GameObject implements ISpatialComponent
 			super.sceneHandle().add(this.head);
 	}
 
+	/**
+	 * Kills the snake, setting it's state to dead.
+	 */
 	public void die()
 	{
 		if (isDead)
@@ -70,6 +109,10 @@ public class Snake extends GameObject implements ISpatialComponent
 		this.isDead = true;
 	}
 
+	/**
+	 * Moves the snake by one unit in the current direction set
+	 * Grows the snake if it has eated food
+	 */
 	private void move()
 	{
 		head.setHead(false);
@@ -96,6 +139,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Grows the snake by one unit
+	 */
 	private void growUnit()
 	{
 		try
@@ -110,6 +156,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Swaps the last tail unit with the head unit, setting it as the new head
+	 */
 	private void swapTailWithHead()
 	{
 		SnakeUnit newHead = units.remove();
@@ -128,6 +177,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		units.add(newHead);
 	}
 
+	/**
+	 * Moves the snake's head up by one unit
+	 */
 	private void moveUp()
 	{
 		try
@@ -141,6 +193,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Moves the snake's head down by one unit
+	 */
 	private void moveDown()
 	{
 		try
@@ -154,6 +209,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Moves the snake's head left by one unit
+	 */
 	private void moveLeft()
 	{
 		try
@@ -167,6 +225,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Moves the snake's head right by one unit
+	 */
 	private void moveRight()
 	{
 		try
@@ -180,6 +241,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Makes the snake turn left on next update;
+	 */
 	public void turnLeft()
 	{
 		switch(currDir)
@@ -199,6 +263,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Makes the snake turn right on next update;
+	 */
 	public void turnRight()
 	{
 		switch(currDir)
@@ -218,6 +285,9 @@ public class Snake extends GameObject implements ISpatialComponent
 		}
 	}
 
+	/**
+	 * Awakes the snake, making it start moving
+	 */
 	public void awake()
 	{
 		this.isAwake = true;
@@ -241,6 +311,11 @@ public class Snake extends GameObject implements ISpatialComponent
 			move();
 	}
 
+	/**
+	 * Eats a food, consuming it.
+	 * Grows the snake on next update.
+	 * @param food the food to eat
+	 */
 	public void eat(IFood food)
 	{
 		if (isDead)
@@ -250,25 +325,57 @@ public class Snake extends GameObject implements ISpatialComponent
 		grow();
 	}
 
+	/**
+	 * Sets the snake to grow on next update
+	 */
 	public void grow()
 	{
 		this.length++;
 		this.toGrow++;
 	}
 
+	/**
+	 * The snake's unit size
+	 * @return the snake's unit size
+	 */
 	public int unitSize() { return this.unitSize; }
 
+	/**
+	 * If the snake should be filled
+	 * @return if the snake should be filled
+	 */
 	public boolean isFilled() { return this.isFilled; }
 
+	/**
+	 * If the snake is dead
+	 * @return if the snake is dead
+	 */
 	public boolean isDead() { return this.isDead; }
 
+	/**
+	 * The snake's direction
+	 * @return the snake's direction
+	 */
 	public Direction direction() { return this.currDir; }
 
+	/**
+	 * The snake's current length
+	 * @return the snake's current length
+	 */
 	public int length() { return this.length; }
 
+	/**
+	 * The snake's head character
+	 * @return the snake's head character
+	 */
 	public char headChar() { return this.headChar; }
 
+	/**
+	 * The snake's tail character
+	 * @return the snake's tail character
+	 */
 	public char tailChar() { return this.tailChar; }
 	
+	@Override
 	public Point position() { return this.head.position(); }
 }

@@ -39,18 +39,18 @@ public class SnakeControllerTests
 		// Act
 		Direction dir0 = snake.direction();
 
-		mockController.setNextTurn(ISnakeController.TurnDirection.LEFT);
+		mockController.setNextTurn(Direction.TurnDirection.LEFT);
 		engine.step();
 		Direction dir1 = snake.direction();
 
 		engine.step();
 		Direction dir2 = snake.direction();
 
-		mockController.setNextTurn(ISnakeController.TurnDirection.NONE);
+		mockController.setNextTurn(Direction.TurnDirection.NONE);
 		engine.step();
 		Direction dir3 = snake.direction();
 
-		mockController.setNextTurn(ISnakeController.TurnDirection.RIGHT);
+		mockController.setNextTurn(Direction.TurnDirection.RIGHT);
 		engine.step();
 		Direction dir4 = snake.direction();
 

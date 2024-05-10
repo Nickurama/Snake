@@ -7,20 +7,44 @@ import java.util.Random;
 
 import GameEngine.*;
 
+/**
+ * Represents the game map, where the game will take place and the {@link GameObject GameObjects} will be in.
+ * Provides the utility necessary to instantiate and do operations on a grid-like map.
+ * Holds the edge obstacles that maintain the snake from leaving the map.
+ * Is built such that the rendered map will have the width and height dimentions
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ * 
+ * @see Unit
+ */
 public class GameMap extends GameObject implements IRenderable
 {
+	/**
+	 * A unit meant to act as filler, just for probing
+	*/
 	private class FillerUnit extends Unit implements ICollider
 	{
 		private boolean isDeepCollision;
+
+		/**
+		 * Instantiates a FillerUnit
+		 * @param position the position to place the unit in
+		 * @param size the size of the unit
+		 * @param isDeepCollision if it should check for deep collisions
+		 * @throws SnakeGameException if placed at an invalid position
+		 */
 		public FillerUnit(Point position, int size, boolean isDeepCollision) throws SnakeGameException
 		{
 			super(position, size, true, ' ', 0);
 			this.isDeepCollision = isDeepCollision;
 		}
 
+		@Override
 		public IGeometricShape<Polygon> getCollider() { return super.getRenderData().getShape(); }
-		public GameObject getGameObject() { return this; }
+		@Override
 		public void onCollision(GameObject other) { }
+		@Override
 		public boolean isDeepCollision() { return this.isDeepCollision; }
 	}
 
@@ -36,11 +60,29 @@ public class GameMap extends GameObject implements IRenderable
 	private int height;
 	private Random rng;
 
+	/**
+	 * Instantiates a GameMap
+	 * Can't be close to origin since it has to generate surrounding colliders
+	 * @param mapRect the rectangle to base the map on
+	 * @param drawChar the character used to draw the map
+	 * @param seed the seed for random usage
+	 * @throws SnakeGameException if the map is instantiated in an invalid position
+	 */
 	public GameMap(Rectangle mapRect, char drawChar, long seed) throws SnakeGameException
 	{
 		initialize(mapRect, drawChar, seed);
 	}
 
+	/**
+	 * Instantiates a GameMap
+	 * Can't be close to origin since it has to generate surrounding colliders
+	 * @param width the width of the map
+	 * @param height the height of the map
+	 * @param startPos the position the map should start at
+	 * @param drawChar the character used to draw the map
+	 * @param seed the seed for random usage
+	 * @throws SnakeGameException if the map is instantiated in an invalid position
+	 */
 	public GameMap(int width, int height, Point startPos, char drawChar, long seed) throws SnakeGameException
 	{
 		if (width <= 1 || height <= 1)
@@ -62,6 +104,13 @@ public class GameMap extends GameObject implements IRenderable
 		initialize(mapRect, drawChar, seed);
 	}
 
+	/**
+	 * Initializes the GameMap
+	 * @param mapRect the rectangle to use as the map
+	 * @param drawChar the character to draw the map as
+	 * @param seed the seed for random usage
+	 * @throws SnakeGameException if the map is placed in an invalid position
+	 */
 	private void initialize(Rectangle mapRect, char drawChar, long seed) throws SnakeGameException
 	{
 		this.rng = new Random(seed);
@@ -82,6 +131,10 @@ public class GameMap extends GameObject implements IRenderable
 		this.height = (int)Math.round(this.bounds.maxPoint().Y() - this.bounds.minPoint().Y() + 1);
 	}
 
+	/**
+	 * Builds the Obstacles surrounding the map
+	 * @throws GeometricException if the obstacles can't be placed
+	 */
 	private void buildBounds() throws GeometricException
 	{
 		Point min = new Point(bounds.minPoint().X() - 2, bounds.minPoint().Y() - 2);
@@ -120,16 +173,35 @@ public class GameMap extends GameObject implements IRenderable
 		this.rightBound = new StaticObstacle(rightPoly, false, ' ');
 	}
 
+	/**
+	 * Generates a random valid spawn position
+	 * @param size the size of the unit to spawn
+	 * @return a valid random spawn position
+	 */
 	public Point getRandomUnitSpawnPosition(int size)
 	{
 		return getRandomPoint(getAllValidUnitSpawnPositions(size));
 	}
 
+	/**
+	 * Generates a random valid spawn position for an unit that must be
+	 * contained within another one
+	 * @param innerSize the size of the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return a valid random spawn position for the inner unit
+	 * @pre innerSize > 0
+	 * @pre outerSize > innerSize
+	 */
 	public Point getRandomInnerUnitSpawnPosition(int innerSize, int outerSize)
 	{
 		return getRandomPoint(getAllValidInnerUnitSpawnPositions(innerSize, outerSize));
 	}
 
+	/**
+	 * Generates a random point from an array of points
+	 * @param arr the sample of points to pick from
+	 * @return a random point from the array
+	 */
 	public Point getRandomPoint(Point[] arr)
 	{
 		if (arr == null || arr.length == 0)
@@ -137,6 +209,15 @@ public class GameMap extends GameObject implements IRenderable
 		return arr[rng.nextInt(arr.length)];
 	}
 
+	/**
+	 * Generates all the valid spawn positions for an unit that must be
+	 * contained within another one
+	 * @param innerSize the size of the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return all the valid positions for the inner unit
+	 * @pre innerSize > 0
+	 * @pre outerSize > innerSize
+	 */
 	public Point[] getAllValidInnerUnitSpawnPositions(int innerSize, int outerSize)
 	{
 		Point[] points = null;
@@ -161,6 +242,14 @@ public class GameMap extends GameObject implements IRenderable
 		return points;
 	}
 
+	/**
+	 * Calculates the ammount of possible inner positions in the map
+	 * @param innerSize the size of the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return the ammount of possible inner positions
+	 * @pre innerSize > 0
+	 * @pre outerSize > innerSize
+	 */
 	private int getNumberOfInnerUnitPositions(int innerSize, int outerSize)
 	{
 		int difference = outerSize - (int)Math.round(innerSize);
@@ -168,7 +257,17 @@ public class GameMap extends GameObject implements IRenderable
 		return numOffsets * numOffsets;
 	}
 
-	private Point[] getPossibleInnerUnitPositions(Point position, int innerSize, int outerSize) throws GeometricException
+	/**
+	 * Generates all possible inner unit positions in the map
+	 * @param outerPos the position of the outer unit
+	 * @param innerSize the size of the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return all possible inner unit positions on the map
+	 * @pre innerSize > 0
+	 * @pre outerSize > innerSize
+	 * @throws GeometricException if the innerSize/outerSize are negative
+	 */
+	private Point[] getPossibleInnerUnitPositions(Point outerPos, int innerSize, int outerSize) throws GeometricException
 	{
 		int difference = outerSize - (int)Math.round(innerSize);
 		int numOffsets = difference + 1;
@@ -178,10 +277,18 @@ public class GameMap extends GameObject implements IRenderable
 		double maxOffset = (double)difference / 2.0;
 		for (int i = 0; i < numOffsets; i++)
 			for (int j = 0; j < numOffsets; j++)
-				points[i * numOffsets + j] = position.translate(new Vector(-maxOffset + j, -maxOffset + i));
+				points[i * numOffsets + j] = outerPos.translate(new Vector(-maxOffset + j, -maxOffset + i));
 		return points;
 	}
 
+	/**
+	 * Generates all the possible inner unit positions based on the first possible position
+	 * @param innerSize the size of the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return all possible inner unit positions on the map
+	 * @pre innerSize > 0
+	 * @pre outerSize > innerSize
+	 */
 	public Point[] getAllPossibleInnerUnitPositions(int innerSize, int outerSize)
 	{
 		Point[] points = null;
@@ -206,6 +313,12 @@ public class GameMap extends GameObject implements IRenderable
 		return points;
 	}
 
+	/**
+	 * Generates all valid unit spawn positions
+	 * @param size the size of the unit
+	 * @return all valid unit spawn positions
+	 * @pre size > 0
+	 */
 	public Point[] getAllValidUnitSpawnPositions(int size)
 	{
 		ArrayList<Point> validPositions = new ArrayList<Point>();
@@ -218,6 +331,16 @@ public class GameMap extends GameObject implements IRenderable
 		return validPositions.toArray(new Point[0]);
 	}
 
+	/**
+	 * Checks if two units are overlapping
+	 * @param pos0 position of the first unit
+	 * @param size0 size of the first unit
+	 * @param pos1 position of the second unit
+	 * @param size1 size of the second unit
+	 * @return if the two units overlap
+	 * @pre size0 > 0
+	 * @pre size1 > 0
+	 */
 	public boolean doUnitsOverlap(Point pos0, double size0, Point pos1, double size1)
 	{
 		try
@@ -233,6 +356,14 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Parses the map to a boolean map array representation, where the values
+	 * are true on the location of the given points
+	 * @param points the points to mark as true on the map array
+	 * @param size the size of each unit represented in the map array
+	 * @return the map boolean array representation of the current map
+	 * @pre size > 0
+	 */
 	public boolean[][] asArray(Point[] points, int size)
 	{
 		boolean[][] mapArray = new boolean[this.height / size][this.width / size];
@@ -244,6 +375,14 @@ public class GameMap extends GameObject implements IRenderable
 		return mapArray;
 	}
 
+	/**
+	 * Gets the the index of an unit on the map given it's
+	 * position and the size of units
+	 * @param position the position to get the index of
+	 * @param size the size of an unit
+	 * @return the index of the position
+	 * @pre size > 0
+	 */
 	public Point getUnitIndex(Point position, int size)
 	{
 		try
@@ -259,6 +398,13 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Gets the point of the unit at the given index
+	 * @param index the index of the unit in the map
+	 * @param size the size of an unit
+	 * @return the point of the unit
+	 * @pre size > 0
+	 */
 	public Point getUnitPoint(Point index, int size)
 	{
 		try
@@ -273,6 +419,12 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Gets all possible unit spawn positions
+	 * @param size the size of an unit
+	 * @return all the possible unit spawn positions
+	 * @pre size > 0
+	 */
 	public Point[] getAllPossibleUnitSpawnPositions(int size)
 	{
 		Point[] points = null;
@@ -303,13 +455,26 @@ public class GameMap extends GameObject implements IRenderable
 		return points;
 	}
 
+	/**
+	 * Calculates the position of an outer unit based on the location
+	 * of an unit inside the outer unit (inner unit)
+	 * @param inner the inner unit
+	 * @param outerSize the size of the outer unit
+	 * @return the position of the outer unit
+	 * @pre outerSize > 0
+	 */
 	public Point getOuterPosition(Point inner, int outerSize)
 	{
-			return getUnitPoint(getUnitIndex(inner, outerSize), outerSize);
-			// Vector offset = new Vector(getUnitIndex(inner, outerSize)).multiply(outerSize);
-			// return getFirstPossiblePos(outerSize).translate(offset);
+		return getUnitPoint(getUnitIndex(inner, outerSize), outerSize);
 	}
 
+	/**
+	 * Calculates the first possible position for an unit on the map
+	 * @param size the size of an unit
+	 * @return the first possible position for an unit on the map
+	 * @throws GeometricException if the size is lower than one
+	 * @pre size >= 1
+	 */
 	private Point getFirstPossiblePos(int size) throws GeometricException
 	{
 		double coordinate = ((double)size / 2.0) - 0.5;
@@ -317,25 +482,12 @@ public class GameMap extends GameObject implements IRenderable
 		return getAbsolute(relativeInitialPoint);
 	}
 
-	public Point getAbsolute(Point relative) throws GeometricException
-	{
-		if (relative == null)
-			return null;
-		try
-		{
-			return relative.translate(new Vector(this.bounds.minPoint()));
-		}
-		catch (GeometricException e)
-		{
-			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
-			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
-		}
-	}
-
-	public int width() { return this.width; }
-
-	public int height() { return this.height; }
-
+	/**
+	 * Checks if a unit is occupied at a given position
+	 * @param pos the position of the unit to check if is occupied
+	 * @param unitSize the size of an unit
+	 * @return if the unit is occupied
+	 */
 	public boolean isUnitOccupied(Point pos, double unitSize)
 	{
 		FillerUnit unit;
@@ -350,6 +502,12 @@ public class GameMap extends GameObject implements IRenderable
 		return CollisionManager.collidesAny(unit, super.sceneHandle());
 	}
 
+	/**
+	 * Gets the objects occupying a given unit
+	 * @param pos the position of the unit
+	 * @param unitSize the size of the unit
+	 * @return the objects occupying the unit
+	 */
 	public GameObject[] getObjectsOccupyingUnit(Point pos, double unitSize)
 	{
 		FillerUnit unit;
@@ -364,21 +522,31 @@ public class GameMap extends GameObject implements IRenderable
 		return CollisionManager.getCollisions(unit, super.sceneHandle());
 	}
 
-	// private Point getAbsolute(Point relative) throws GeometricException
-	// {
-	// 	if (relative == null)
-	// 		return null;
-	// 	try
-	// 	{
-	// 		return relative.translate(new Vector(initialPosition));
-	// 	}
-	// 	catch (GeometricException e)
-	// 	{
-	// 		Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
-	// 		throw new RuntimeException("Should never happen. the absolute points should always be valid.");
-	// 	}
-	// }
+	/**
+	 * Gets the absolute value of a point relative to the map (witht the origin set as the minimum point of the map)
+	 * @param relative the relative point
+	 * @return the absolute point
+	 */
+	public Point getAbsolute(Point relative)
+	{
+		if (relative == null)
+			return null;
+		try
+		{
+			return relative.translate(new Vector(this.bounds.minPoint()));
+		}
+		catch (GeometricException e)
+		{
+			Logger.log(Logger.Level.FATAL, "Should never happen. the absolute points should always be valid.\n" + e);
+			throw new RuntimeException("Should never happen. the absolute points should always be valid.");
+		}
+	}
 
+	/**
+	 * Calculates the absolute position based on the relative position in relation to the map for the given point
+	 * @param relative the point relative to the map
+	 * @return the absolute position
+	 */
 	public VirtualPoint getAbsolute(VirtualPoint relative)
 	{
 		if (relative == null)
@@ -394,6 +562,11 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Calculates the absolute position for a polygon relative to the map
+	 * @param relative the polygon in relation to the map
+	 * @return the absolute polygon
+	 */
 	public Polygon getAbsolute(Polygon relative)
 	{
 		if (relative == null)
@@ -409,6 +582,11 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Calculates the relative position of a point to the map's origin
+	 * @param absolute the point to get the relative position
+	 * @return the position of the point in relation to the map
+	 */
 	public VirtualPoint getRelative(VirtualPoint absolute)
 	{
 		if (absolute == null)
@@ -424,6 +602,11 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * Calculates the relative position of a point to the map's origin
+	 * @param absolute the point to get the relative position
+	 * @return the position of the point in relation to the map
+	 */
 	public Point getRelative(Point absolute)
 	{
 		if (absolute == null)
@@ -439,6 +622,18 @@ public class GameMap extends GameObject implements IRenderable
 		}
 	}
 
+	/**
+	 * The maps's width
+	 * @return the map's width
+	 */
+	public int width() { return this.width; }
+
+	/**
+	 * The map's height
+	 * @return the map's height
+	 */
+	public int height() { return this.height; }
+
 	@Override
 	public void start()
 	{
@@ -448,9 +643,6 @@ public class GameMap extends GameObject implements IRenderable
 		super.sceneHandle().add(rightBound);
 	}
 
+	@Override
 	public RenderData<Rectangle> getRenderData() { return this.rData; }
-
-	public GameObject getGameObject() { return this; }
-
-	public void onCollision(GameObject other) { } // do nothing
 }

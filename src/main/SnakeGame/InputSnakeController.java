@@ -2,8 +2,20 @@ package SnakeGame;
 
 import GameEngine.*;
 
+/**
+ * Responsible for turning the snake via input
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ * 
+ * @see ISnakeController
+ * @see GameEngine.IInputListener
+ */
 public class InputSnakeController extends GameObject implements ISnakeController, IInputListener
 {
+	/**
+	 * Represents a set of inputs that translate to snake movement
+	*/
 	public enum InputPreset
 	{
 		WASD,
@@ -42,18 +54,32 @@ public class InputSnakeController extends GameObject implements ISnakeController
 	private static final String RELATIVE_FOWARD_INPUT_STR_0 = "foward";
 	private static final String RELATIVE_FOWARD_INPUT_STR_1 = "f";
 
-	private TurnDirection nextDir;
+	private Direction.TurnDirection nextDir;
 	private InputPreset inputPreset;
 	private ISnakeStats snake;
 
+	/**
+	 * Instantiates an InputSnakeController
+	 * @param preset the preset to interpret input as
+	 * @param snake the snake's properties
+	 */
 	public InputSnakeController(InputPreset preset, ISnakeStats snake)
 	{
 		this.inputPreset = preset;
 		this.snake = snake;
 
-		this.nextDir = TurnDirection.NONE;
+		this.nextDir = Direction.TurnDirection.NONE;
 	}
 
+	@Override
+	public Direction.TurnDirection nextTurn()
+	{
+		Direction.TurnDirection result = this.nextDir;
+		this.nextDir = Direction.TurnDirection.NONE;
+		return result;
+	}
+
+	@Override
 	public void onInputReceived(String input)
 	{
 		input = input.toLowerCase();
@@ -74,6 +100,10 @@ public class InputSnakeController extends GameObject implements ISnakeController
 		}
 	}
 
+	/**
+	 * Moves the snake with the wasd keys as input
+	 * @param input the player input
+	 */
 	private void turnWasd(String input)
 	{
 		switch (input)
@@ -93,6 +123,10 @@ public class InputSnakeController extends GameObject implements ISnakeController
 		}
 	}
 
+	/**
+	 * Moves the snake with the vim keybindings as input
+	 * @param input the player input
+	 */
 	private void turnVim(String input)
 	{
 		switch (input)
@@ -112,6 +146,10 @@ public class InputSnakeController extends GameObject implements ISnakeController
 		}
 	}
 
+	/**
+	 * Moves the snake with absolute directions as input
+	 * @param input the player input
+	 */
 	private void turnAbsolute(String input)
 	{
 		switch(input)
@@ -135,29 +173,26 @@ public class InputSnakeController extends GameObject implements ISnakeController
 		}
 	}
 
+	/**
+	 * Moves the snake with relative turn directions as input
+	 * @param input the player input
+	 */
 	private void turnRelative(String input)
 	{
 		switch(input)
 		{
 			case RELATIVE_LEFT_INPUT_STR_0:
 			case RELATIVE_LEFT_INPUT_STR_1:
-				this.nextDir = TurnDirection.LEFT;
+				this.nextDir = Direction.TurnDirection.LEFT;
 				break;
 			case RELATIVE_RIGHT_INPUT_STR_0:
 			case RELATIVE_RIGHT_INPUT_STR_1:
-				this.nextDir = TurnDirection.RIGHT;
+				this.nextDir = Direction.TurnDirection.RIGHT;
 				break;
 			case RELATIVE_FOWARD_INPUT_STR_0:
 			case RELATIVE_FOWARD_INPUT_STR_1:
-				this.nextDir = TurnDirection.NONE;
+				this.nextDir = Direction.TurnDirection.NONE;
 				break;
 		}
-	}
-
-	public TurnDirection nextTurn()
-	{
-		TurnDirection result = this.nextDir;
-		this.nextDir = TurnDirection.NONE;
-		return result;
 	}
 }

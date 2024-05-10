@@ -7,9 +7,23 @@ import java.util.Queue;
 
 import GameEngine.*;
 import Geometry.*;
+import SnakeGame.Direction.*;
 
+/**
+ * Responsible for controlling the snake automatically
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ * 
+ * @inv will always give a direction
+ * @see ISnakeController
+ */
 public class AISnakeController extends GameObject implements ISnakeController
 {
+	/**
+	 * Represents a position associated with the position it came from.
+	 * In other words a path represented as a linked list of sorts
+	*/
 	private class Node
 	{
 		private Node parent;
@@ -28,6 +42,13 @@ public class AISnakeController extends GameObject implements ISnakeController
 	private ISpatialComponent food;
 	private GameMap map;
 
+	/**
+	 * Instantiates an AISnakeController
+	 * @param snake a provider for the snake to control's values
+	 * @param snakeSize the size of the snake being controlled
+	 * @param food a provider for the food's values
+	 * @param map the map the snake is in
+	 */
 	public AISnakeController(ISnakeStats snake, int snakeSize, IFoodStats food, GameMap map)
 	{
 		this.snake = snake;
@@ -36,16 +57,25 @@ public class AISnakeController extends GameObject implements ISnakeController
 		this.map = map;
 	}
 
+	@Override
 	public TurnDirection nextTurn()
 	{
 		return generateNextDir();
 	}
 
+	/**
+	 * Calculates the next turn direction the snake should turn to
+	 * @return the next direction the snake should turn to
+	 */
 	private TurnDirection generateNextDir()
 	{
 		return Direction.getRelativeDir(generateNextAbsoluteDir(), snake.direction());
 	}
 
+	/**
+	 * Calculates the next absolute direction the snake should go to
+	 * @return the next absolute direction the snake should turn to
+	 */
 	private Direction generateNextAbsoluteDir()
 	{
 		Direction nextAbsoluteDir = null;
@@ -68,6 +98,10 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return nextAbsoluteDir;
 	}
 
+	/**
+	 * Calculates the next position the snake should go towards
+	 * @return the next position the snake should go towards
+	 */
 	private Point findNextPos()
 	{
 		Point[] validPositions = this.map.getAllValidUnitSpawnPositions(this.snakeSize);
@@ -80,6 +114,16 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return path[0];
 	}
 
+	/**
+	 * Finds the shortest path in a grid between start and finish,
+	 * not going over invalid position
+	 * Uses Dijkstra's/BFS
+	 * @param start the starting position
+	 * @param finish the finishing position
+	 * @param validPositions all the valid positions
+	 * @return the shortest path from start to finish using the valid positions,
+	 * null if no path is found to finish
+	 */
 	private Point[] findShortestPath(Point start, Point finish, Point[] validPositions)
 	{
 		Point startIndex = map.getUnitIndex(start, snakeSize);
@@ -87,7 +131,7 @@ public class AISnakeController extends GameObject implements ISnakeController
 		boolean[][] relativeMap = map.asArray(validPositions, snakeSize);
 
 		set(finishIndex, relativeMap, true);
-		Point back = moveToDir(startIndex, oppositeDir(snake.direction()), relativeMap);
+		Point back = moveToDir(startIndex, Direction.opposite(snake.direction()), relativeMap);
 		if (back != null)
 			set(back, relativeMap, false);
 
@@ -104,6 +148,15 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return path;
 	}
 
+	/**
+	 * Moves a point on the map array coordinates in a direction
+	 * In case the point doesn't exist as the array's coordinates
+	 * null is returned instead;
+	 * @param relativePoint the point of the map array
+	 * @param dir the direction to turn towards
+	 * @param map the map array
+	 * @return the moved Point
+	 */
 	private Point moveToDir(Point relativePoint, Direction dir, boolean[][] map)
 	{
 		Point point = null;
@@ -129,27 +182,14 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return point;
 	}
 
-	private Direction oppositeDir(Direction dir)
-	{
-		Direction opposite = null;
-		switch (dir)
-		{
-			case Direction.UP:
-				opposite = Direction.DOWN;
-				break;
-			case Direction.DOWN:
-				opposite = Direction.UP;
-				break;
-			case Direction.LEFT:
-				opposite = Direction.RIGHT;
-				break;
-			case Direction.RIGHT:
-				opposite = Direction.LEFT;
-				break;
-		}
-		return opposite;
-	}
-
+	/**
+	 * Finds the shortest path in points relative to the
+	 * map array's indexes
+	 * @param relativeStart the map array's indexes for the starting position
+	 * @param relativeFinish the map array's indexes for the finishing position
+	 * @param map the map array
+	 * @return the shortest path relative to the map's indexes
+	 */
 	private ArrayList<Point> findShortestRelativePath(Point relativeStart, Point relativeFinish, boolean[][] map)
 	{
 		Node found = findShortestRelativePathNode(relativeStart, relativeFinish, map);
@@ -169,6 +209,15 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return path;
 	}
 
+	/**
+	 * Finds the shortest path, storing it in nodes holding the map's array indexes
+	 * Uses Dijkstra's algorithm / BFS
+	 * @param start the starting position relative to the map array's indexes
+	 * @param finish the finishing position relative to the map array's indexes
+	 * @param map the map array
+	 * @return the shortest path stored in nodes holding the map's array indexes
+	 * if it can't find a path to finish, returns the longest path found
+	 */
 	private Node findShortestRelativePathNode(Point start, Point finish, boolean[][] map)
 	{
 		Queue<Node> toVisit = new LinkedList<Node>();
@@ -176,9 +225,10 @@ public class AISnakeController extends GameObject implements ISnakeController
 		toVisit.add(new Node(start, null));
 		Node found = null;
 
+		Node current = null;
 		while (toVisit.size() > 0)
 		{
-			Node current = toVisit.remove();
+			current = toVisit.remove();
 
 			if (current.getValue().equals(finish))
 			{
@@ -189,32 +239,19 @@ public class AISnakeController extends GameObject implements ISnakeController
 			addValidSurroundingUnits(current, toVisit, map);
 		}
 
+		// if found is null get's the furthest point
 		if (found == null)
-			found = getAdjacentValidPosition(new Node(start, null));
+			found = current;
 
 		return found;
 	}
 
-	private Node getAdjacentValidPosition(Node start)
-	{
-		Point[] validPositions = map.getAllValidUnitSpawnPositions(this.snakeSize);
-		boolean[][] relativeMap = map.asArray(validPositions, snakeSize);
-
-		Queue<Node> toVisit = new LinkedList<Node>();
-		toVisit.add(start);
-		Node current = null;
-		while (toVisit.size() > 0)
-		{
-			current = toVisit.remove();
-			addValidSurroundingUnits(current, toVisit, relativeMap);
-		}
-
-		if (current == null)
-			return null;
-
-		return current;
-	}
-
+	/**
+	 * Prints a relative map array to string, for debugging purposes
+	 * @param map the map to print
+	 * @param finish the goal point
+	 * @return the map representad as a human-readable string
+	 */
 	private String mapToStr(boolean[][] map, Point finish)
 	{
 		StringBuilder builder = new StringBuilder();
@@ -238,6 +275,12 @@ public class AISnakeController extends GameObject implements ISnakeController
 	}
 
 
+	/**
+	 * Adds all valid surrounding units to a node
+	 * @param current the current node
+	 * @param toVisit the nodes left to visit where the new nodes will be added
+	 * @param map the map
+	 */
 	private void addValidSurroundingUnits(Node current, Queue<Node> toVisit, boolean[][] map)
 	{
 		Point[] surroundings = new Point[4];
@@ -256,11 +299,18 @@ public class AISnakeController extends GameObject implements ISnakeController
 		}
 	}
 
-	private Point safeTranslate(Point point, int x, int y)
+	/**
+	 * Performs a point translation that certainle IS valid
+	 * @param point the point to translate
+	 * @param dx the x difference to translate the point by
+	 * @param dy the y difference to translate the point by
+	 * @return the translated point
+	 */
+	private Point safeTranslate(Point point, int dx, int dy)
 	{
 		try
 		{
-			return point.translate(x, y);
+			return point.translate(dx, dy);
 		}
 		catch (GeometricException e)
 		{
@@ -269,6 +319,13 @@ public class AISnakeController extends GameObject implements ISnakeController
 		}
 	}
 
+	/**
+	 * Checks if a point on the map is valid or not
+	 * @param point the point holding tha map's indexes
+	 * @param map the map
+	 * @return true if the point is valid
+	 * null if the provided point is null or if it's noto a valid path
+	 */
 	private Point validPoint(Point point, boolean[][] map)
 	{
 		if (point == null)
@@ -278,11 +335,23 @@ public class AISnakeController extends GameObject implements ISnakeController
 		return point;
 	}
 
+	/**
+	 * Checks if any point is a valid path/point to go towards
+	 * @param point the point to test
+	 * @param map the map
+	 * @return if the point can be traversed to
+	 */
 	private boolean isValidPath(Point point, boolean[][] map)
 	{
 		return map[(int)Math.round(point.Y())][(int)Math.round(point.X())];
 	}
 
+	/**
+	 * Sets a point on the map as valid/invalid
+	 * @param point the point to set
+	 * @param map the map
+	 * @param value the value to set the point as on the map
+	 */
 	private void set(Point point, boolean[][] map, boolean value)
 	{
 		map[(int)Math.round(point.Y())][(int)Math.round(point.X())] = value;

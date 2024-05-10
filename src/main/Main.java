@@ -35,7 +35,7 @@ public class Main
 		float speed = 0.1f;
 
 		new GameManagerBuilder()
-			.addObstacle(dynamicObstacle, anchor, speed)
+			// .addObstacle(dynamicObstacle, anchor, speed)
 			// .addObstacle(obstacle)
 			// .addObstacle(dynamicObstacle, anchor, speed)
 			.setInputPreset(InputPreset.WASD)

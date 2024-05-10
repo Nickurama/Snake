@@ -1,15 +1,15 @@
 ## To Do
 
 - SnakeGame Documentation
-    * [ ] AISnakeController
-    * [ ] Direction
+    * [x] AISnakeController
+    * [x] Direction
     * [ ] DynamicObstacle
     * [ ] FoodCircle
     * [ ] FoodSquare
     * [ ] FoodStats
     * [ ] GameManager
     * [ ] GameManagerBuilder
-    * [ ] GameMap
+    * [x] GameMap
     * [ ] GameoverOverlay
     * [ ] GameplayOverlay
     * [ ] HighscoresOverlay
@@ -17,19 +17,19 @@
     * [ ] IFoodStats
     * [ ] IHighscoresReader
     * [ ] IObstacle
-    * [ ] ISnakeController
-    * [ ] ISnakeStats
-    * [ ] ISpatialComponent
-    * [ ] InputSnakeController
+    * [x] ISnakeController
+    * [x] ISnakeStats
+    * [x] ISpatialComponent
+    * [x] InputSnakeController
     * [ ] Score
     * [ ] Scoreboard
-    * [ ] Snake
-    * [ ] SnakeController
-    * [ ] SnakeGameException
-    * [ ] SnakeStats
-    * [ ] SnakeUnit
+    * [x] Snake
+    * [x] SnakeController
+    * [x] SnakeGameException
+    * [x] SnakeStats
+    * [x] SnakeUnit
     * [ ] StaticObstacle
-    * [ ] Unit
+    * [x] Unit
 - SnakeGame Report
     * [ ] AISnakeController
     * [ ] Direction

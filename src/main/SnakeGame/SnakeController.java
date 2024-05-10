@@ -2,11 +2,25 @@ package SnakeGame;
 
 import GameEngine.*;
 
+/**
+ * Responsible for controlling a snake (using a controller)
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ * 
+ * @see Snake
+ * @see ISnakeController
+ */
 public class SnakeController extends GameObject
 {
 	private Snake snake;
 	private ISnakeController controller;
 
+	/**
+	 * Instantiates a SnakeController
+	 * @param snake the snake to control
+	 * @param controller the controller
+	 */
 	public SnakeController(Snake snake, ISnakeController controller)
 	{
 		this.snake = snake;
@@ -20,16 +34,20 @@ public class SnakeController extends GameObject
 			turnSnake();
 	}
 
+	/**
+	 * Turns the snake to the next direction
+	 * given by the controller
+	 */
 	private void turnSnake()
 	{
 		switch(controller.nextTurn())
 		{
-			case ISnakeController.TurnDirection.NONE:
+			case Direction.TurnDirection.NONE:
 				break;
-			case ISnakeController.TurnDirection.RIGHT:
+			case Direction.TurnDirection.RIGHT:
 				snake.turnRight();
 				break;
-			case ISnakeController.TurnDirection.LEFT:
+			case Direction.TurnDirection.LEFT:
 				snake.turnLeft();
 				break;
 		}
