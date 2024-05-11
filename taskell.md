@@ -1,7 +1,5 @@
 ## To Do
 
-- Report Tutorial
-- Main examples presets
 - UML
 
 ## Done recent
@@ -134,6 +132,8 @@
     * [x] Unit
 - Report Notes/Design Patterns
 - Javadoc
+- Main examples presets
+- Report Tutorial
 
 ## Doing
 

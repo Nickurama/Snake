@@ -12,10 +12,11 @@ public class Main
 		long seed = new Random().nextLong();
 		System.out.println("Seed: " + seed);
 
-		// defaultExample(seed);
+		defaultExample(seed);
 		// colourExample(seed);
+		// circleExample(seed);
 		// AIExample(seed);
-		dynamicExample(seed);
+		// dynamicExample(seed);
 
 		GameManager.getInstance().play();
     }
@@ -51,6 +52,37 @@ public class Main
 			.setFoodScore(5)
 			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.SQUARE)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+
+			// setting colors
+			.setBackgroundColour(Colour.Background.BLACK)
+			.setSnakeColour(Colour.Foreground.GREEN)
+			.setFoodColour(Colour.Foreground.RED)
+			.setObstaclesColour(Colour.Foreground.MAGENTA)
+
+			// setting drawing characters
+			.setMapChar(' ')
+			.setSnakeHeadChar('░')
+			.setSnakeTailChar('█')
+			.setObstacleChar('▓')
+			.setFoodChar('■')
+			.build();
+	}
+
+	private static void circleExample(long seed) throws Exception
+	{
+		new GameManagerBuilder()
+			.setSeed(seed)
+			.setTextual(true)
+			.setFilled(false)
+			.setMapWidth(90)
+			.setMapHeight(30)
+			.setSnakeSize(5)
+			.setFoodSize(5)
+			.setFoodScore(5)
+			.setInputPreset(InputPreset.WASD)
+			.setFoodType(GameManager.FoodType.CIRCLE)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
 
