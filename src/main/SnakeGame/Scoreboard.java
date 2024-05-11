@@ -2,25 +2,39 @@ package SnakeGame;
 
 import GameEngine.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
+/**
+ * This class represents all of the scores set.
+ * This class is responsible for handling scores,
+ * having utility functions for writing and reading to and from files respectively.
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 06/05/2024
+ * 
+ * @see Score
+ * @see IHighscoresReader
+ */
 public class Scoreboard implements IHighscoresReader
 {
 	private static final String DEFAULT_FILENAME = "scores.ser";
 	private static Scoreboard instance = null;
 	private String filename;
 
+	/**
+	 * Scoreboard singleton constructor
+	 */
 	private Scoreboard()
 	{
 		// Singleton
 		this.filename = DEFAULT_FILENAME;
 	}
 
+	/**
+	 * Gets the scoreboard instance.
+	 * @return the scoreboard instance
+	 */
 	public static Scoreboard getInstance()
 	{
 		if (instance == null)
@@ -29,11 +43,21 @@ public class Scoreboard implements IHighscoresReader
 		return instance;
 	}
 
+	/**
+	 * Sets a file for reading/writing scores.
+	 * @param filename the name of the file to set for reading/writing scores
+	 * @post the class will now use the file set
+	 */
 	public void setFile(String filename)
 	{
 		this.filename = filename;
 	}
 	
+	/**
+	 * Adds a new score. (writing it to the file)
+	 * @param score the score to add to the scoreboard
+	 * @throws SnakeGameException if an error occurred while writing to the file
+	 */
 	public void addEntry(Score score) throws SnakeGameException
 	{
 		File file = new File(this.filename);
@@ -46,6 +70,11 @@ public class Scoreboard implements IHighscoresReader
 		writeScores(scores);
 	}
 
+	/**
+	 * Creates the file to hold the scores.
+	 * If a file with the same name already exists, it is overwritten.
+	 * @throws SnakeGameException if an error occurred creating the file
+	 */
 	private void createScoreFile() throws SnakeGameException
 	{
 		try (FileOutputStream fileOut = new FileOutputStream(filename);
@@ -60,6 +89,11 @@ public class Scoreboard implements IHighscoresReader
 		}
 	}
 
+	/**
+	 * Reads all the scores from the file
+	 * @return all the scores read
+	 * @throws SnakeGameException if an error occurred reading from the file
+	 */
 	@SuppressWarnings("unchecked")
 	private ArrayList<Score> readScores() throws SnakeGameException
 	{
@@ -79,6 +113,11 @@ public class Scoreboard implements IHighscoresReader
 		return scores;
 	}
 
+	/**
+	 * scores to the file
+	 * @param scores the scores to write to the file
+	 * @throws SnakeGameException if an error occurred writing to the file
+	 */
 	private void writeScores(ArrayList<Score> scores) throws SnakeGameException
 	{
 		File file = new File(filename);
@@ -95,6 +134,7 @@ public class Scoreboard implements IHighscoresReader
 		}
 	}
 
+	@Override
 	public Score[] getScores() throws SnakeGameException
 	{
 		ArrayList<Score> scores = readScores();
@@ -106,6 +146,9 @@ public class Scoreboard implements IHighscoresReader
 		return result;
 	}
 
+	/**
+	 * Purges the scoreboard, clearing all the scores.
+	 */
 	public void purgeScores()
 	{
 		try

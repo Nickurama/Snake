@@ -49,9 +49,10 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 	 * @param size the length of each side
 	 * @param isFilled if the unit should be filled
 	 * @param drawChar the character to draw the unit with
-	 * @param colour the colour to draw the unit with
+	 * @param colour the colour to draw the unit with (can be null)
 	 * @param layer the layer to draw the unit in
 	 * @throws SnakeGameException if it's placed in an invalid position (including zero-based coordiantes)
+	 * @pre size > 0
 	 */
 	public Unit(Point position, double size, boolean isFilled, char drawChar, Colour.Foreground colour, int layer) throws SnakeGameException
 	{

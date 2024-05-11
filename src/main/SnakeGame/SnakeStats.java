@@ -1,8 +1,6 @@
 package SnakeGame;
 
 import Geometry.*;
-import SnakeGame.*;
-import SnakeGame.Snake.*;
 
 /**
  * A class containing the required information to be

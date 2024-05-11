@@ -3,6 +3,15 @@ package SnakeGame;
 import GameEngine.*;
 import Geometry.*;
 
+/**
+ * Represents a food item that is a circle.
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 09/05/2024
+ * 
+ * @inv is removed from it's scene when consumed
+ * @see IFood
+ */
 public class FoodCircle extends GameObject implements IFood
 {
 	private static final double CIRCLE_OFFSET = 0.1;
@@ -13,11 +22,30 @@ public class FoodCircle extends GameObject implements IFood
 	private boolean isDeepCollision;
 	private boolean wasConsumed;
 
+	/**
+	 * Initializes a FoodCircle without colour
+	 * @param position the position to spawn the food in
+	 * @param radius the radius of the circle
+	 * @param isFilled if the circle should be filled
+	 * @param drawChar the character the circle should be drawn with
+	 * @throws SnakeGameException if placed in an invalid position or if it doesn't describe a circle
+	 * @pre radius > 0
+	 */
 	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar) throws SnakeGameException
 	{
 		this(position, radius, isFilled, drawChar, null);
 	}
 
+	/**
+	 * Initializes a FoodCircle
+	 * @param position the position to spawn the food in
+	 * @param radius the radius of the circle
+	 * @param isFilled if the circle should be filled
+	 * @param drawChar the character the circle should be drawn with
+	 * @param colour the colour to draw the circle with (can be null)
+	 * @throws SnakeGameException if placed in an invalid position or if it doesn't describe a circle
+	 * @pre radius > 0
+	 */
 	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar, Colour.Foreground colour) throws SnakeGameException
 	{
 		Circle circle = null;
@@ -41,23 +69,28 @@ public class FoodCircle extends GameObject implements IFood
 		this.wasConsumed = false;
 	}
 
+	@Override
 	public void consume()
 	{
 		super.sceneHandle().remove(this);
 		this.wasConsumed = true;
 	}
 
+	@Override
 	public Point position() { return this.collider.getCentroid(); }
 
+	@Override
 	public boolean wasConsumed() { return this.wasConsumed; }
 
+	@Override
 	public RenderData<?> getRenderData() { return this.rData; }
 
-	public GameObject getGameObject() { return this; }
-
+	@Override
 	public IGeometricShape<Circle> getCollider() { return this.collider; }
 	
+	@Override
 	public void onCollision(GameObject other) { }
 
+	@Override
 	public boolean isDeepCollision() { return this.isDeepCollision; }
 }

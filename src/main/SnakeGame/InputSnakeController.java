@@ -18,9 +18,39 @@ public class InputSnakeController extends GameObject implements ISnakeController
 	*/
 	public enum InputPreset
 	{
+		/**
+		 * Uses:
+		 * 'w' to go up
+		 * 'a' to go left
+		 * 'd' to go right
+		 * 's' to go down
+		 */
 		WASD,
+
+		/**
+		 * Uses:
+		 * 'k' to go up
+		 * 'h' to go left
+		 * 'l' to go right
+		 * 'j' to go down
+		 */
 		VIM,
+
+		/**
+		 * Uses:
+		 * 'up' or 'u' to go up
+		 * 'left' or 'l' to go left
+		 * 'right' or 'r' to go right
+		 * 'down' or 'd' to go down
+		 */
 		ABSOLUTE,
+
+		/**
+		 * Uses:
+		 * 'foward' or 'f' (or nothing) to walk foward
+		 * 'left' or 'l' to turn left
+		 * 'right' or 'r' to turn right
+		 */
 		RELATIVE,
 	}
 

@@ -35,6 +35,7 @@ public class Main
 		float speed = 0.1f;
 
 		new GameManagerBuilder()
+			.setSnakePos(new Point(1.5, 1.5))
 			// .addObstacle(dynamicObstacle, anchor, speed)
 			// .addObstacle(obstacle)
 			// .addObstacle(dynamicObstacle, anchor, speed)
@@ -56,7 +57,6 @@ public class Main
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
 			.setControlMethod(GameManager.ControlMethod.AUTO)
 			.setMapChar(' ')
-			.setSnakeHeadChar('■')
 			.setSnakeHeadChar('░')
 			.setSnakeTailChar('█')
 			.setObstacleChar('▓')

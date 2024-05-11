@@ -3,32 +3,32 @@
 - SnakeGame Documentation
     * [x] AISnakeController
     * [x] Direction
-    * [ ] DynamicObstacle
-    * [ ] FoodCircle
-    * [ ] FoodSquare
-    * [ ] FoodStats
+    * [x] DynamicObstacle
+    * [x] FoodCircle
+    * [x] FoodSquare
+    * [x] FoodStats
     * [ ] GameManager
-    * [ ] GameManagerBuilder
+    * [x] GameManagerBuilder
     * [x] GameMap
-    * [ ] GameoverOverlay
-    * [ ] GameplayOverlay
-    * [ ] HighscoresOverlay
-    * [ ] IFood
-    * [ ] IFoodStats
-    * [ ] IHighscoresReader
-    * [ ] IObstacle
+    * [x] GameoverOverlay
+    * [x] GameplayOverlay
+    * [x] HighscoresOverlay
+    * [x] IFood
+    * [x] IFoodStats
+    * [x] IHighscoresReader
+    * [x] IObstacle
     * [x] ISnakeController
     * [x] ISnakeStats
     * [x] ISpatialComponent
     * [x] InputSnakeController
-    * [ ] Score
-    * [ ] Scoreboard
+    * [x] Score
+    * [x] Scoreboard
     * [x] Snake
     * [x] SnakeController
     * [x] SnakeGameException
     * [x] SnakeStats
     * [x] SnakeUnit
-    * [ ] StaticObstacle
+    * [x] StaticObstacle
     * [x] Unit
 - SnakeGame Report
     * [ ] AISnakeController

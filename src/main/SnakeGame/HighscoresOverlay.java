@@ -3,6 +3,16 @@ package SnakeGame;
 import Geometry.*;
 import GameEngine.*;
 
+/**
+ * The overlay to display the highscores
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 08/05/2024
+ *
+ * @see score
+ * @see IHighscoresReader
+ * @see IOverlay
+ */
 public class HighscoresOverlay extends GameObject implements IOverlay
 {
 	public static final String HIGHSCORE_TITLE_STR = "Highscores";
@@ -13,6 +23,13 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	private TextOverlay overlay;
 	private int maxHighscoreEntries;
 
+	/**
+	 * Instantiates a HighscoresOverlay
+	 * @param highscoresReader where to get the highscores from
+	 * @param camera the camera to draw the overlay on
+	 * @param maxHighscoreEntries the max entries to display
+	 * @param outline the overlay's outline
+	 */
 	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, int maxHighscoreEntries, TextOverlayOutline outline)
 	{
 		this.highscoresReader = highscoresReader;
@@ -21,21 +38,52 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		this.maxHighscoreEntries = maxHighscoreEntries;
 	}
 
-	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, TextOverlayOutline overlay)
+	/**
+	 * Instantiates a HighscoresOverlay without limiting the number of entries
+	 * @param highscoresReader where to get the highscores from
+	 * @param camera the camera to draw the overlay on
+	 * @param outline the overlay's outline
+	 */
+	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, TextOverlayOutline outline)
 	{
-		this(highscoresReader, camera, -1, overlay);
+		this(highscoresReader, camera, -1, outline);
 	}
 
+	/**
+	 * Initializes a HighscoresOverlay. 
+	 * @param camera the camera to draw the overlay in
+	 * @param maxHighscoreEntries the max entries to display
+	 * @param cornerTL the top left corner character
+	 * @param cornerTR the top right corner character
+	 * @param cornerDL the bottom left corner character
+	 * @param cornerDR the bottom right corner character
+	 * @param sideLR the left and right sides character
+	 * @param sideTD the top and bottom character
+	 */
 	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, int maxHighscoreEntries, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
 		this(highscoresReader, camera, maxHighscoreEntries, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
+	/**
+	 * Initializes a HighscoresOverlay without limiting the number of entries. 
+	 * @param camera the camera to draw the overlay in
+	 * @param cornerTL the top left corner character
+	 * @param cornerTR the top right corner character
+	 * @param cornerDL the bottom left corner character
+	 * @param cornerDR the bottom right corner character
+	 * @param sideLR the left and right sides character
+	 * @param sideTD the top and bottom character
+	 */
 	public HighscoresOverlay(IHighscoresReader highscoresReader, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
 	{
 		this(highscoresReader, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
 	}
 
+	/**
+	 * Draws the highscores overlay
+	 * @param maxScores the maximum number of scores to display
+	 */
 	private void drawOverlay(int maxScores)
 	{
 		overlay.fillEmpty();
@@ -46,6 +94,9 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		writeScores();
 	}
 
+	/**
+	 * Writes the scores from the highscores reader to the screen
+	 */
 	private void writeScores()
 	{
 		Score[] scores = null;
@@ -75,6 +126,11 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		writeScores(scores, writeIndex);
 	}
 
+	/**
+	 * Writes scores to the screen
+	 * @param scores the scores to write to display
+	 * @param writeIndex the index where the scores should start being displayed in
+	 */
 	private void writeScores(Score[] scores, int writeIndex)
 	{
 		int maxNameLen = scores[0].name().length();
@@ -91,6 +147,15 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 			overlay.writeLeft(formatScore(scores[i], i + 1, numScoresDisplayed, maxNameLen, maxScoreLen), writeIndex + i);
 	}
 
+	/**
+	 * Formats a score line
+	 * @param s the score to format
+	 * @param place the place in the leaderboard (top n)
+	 * @param maxPlace the maximum place to be displayed
+	 * @param maxNameLen the maximum name length of the scores
+	 * @param maxScoreLen the maximum score digit length of the scores
+	 * @return A string with the score formatted
+	 */
 	private String formatScore(Score s, int place, int maxPlace, int maxNameLen, int maxScoreLen)
 	{
 		int maxNumLen = Integer.toString(maxPlace).length();
@@ -121,6 +186,7 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		drawOverlay(this.maxHighscoreEntries);
 	}
 
+	@Override
 	public char[][] getOverlay()
 	{
 		return this.overlay.getOverlay();
