@@ -5,28 +5,61 @@ import Geometry.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
-import SnakeGame.*;
 import SnakeGame.InputSnakeController.*;
 
+/**
+ * Class responsible for managing the game, being also the one that
+ * initializes it.
+ * Has the necessary methods to initialize the game, and place everything where it should be.
+ * Links the necessary classes together on initialization.
+ * 
+ * @author Diogo Fonseca a79858
+ * @version 09/05/2024
+ * 
+ * @inv Respawns the food when it is consumed
+ * @see Snake
+ * @see GameMap
+ * @see IFood
+ * @see IObstacle
+ * @see ISnakeController
+ * @see GameplayOverlay
+ * @see GameoverOverlay
+ * @see HighscoresOverlay
+ */
 public class GameManager extends GameObject implements IInputListener
 {
+	/**
+	 * The snake's control method setting.
+	*/
 	public static enum ControlMethod
 	{
+		/**
+		 * Control the snake manually.
+		 */
 		MANUAL,
+
+		/**
+		 * Control the snake autonomously.
+		 */
 		AUTO,
 	}
 
+	/**
+	 * The type of food to spawn.
+	*/
 	public static enum FoodType
 	{
 		SQUARE,
 		CIRCLE,
 	}
 
+	/**
+	 * A representation of the current game's state
+	*/
 	private static enum GameState
 	{
 		INITIALIZATION,
@@ -47,10 +80,6 @@ public class GameManager extends GameObject implements IInputListener
 	private static final Colour.Foreground DEFAULT_COLOUR_SNAKE = null;
 	private static final Colour.Foreground DEFAULT_COLOUR_FOOD = null;
 	private static final Colour.Foreground DEFAULT_COLOUR_OBSTACLES = null;
-	// private static final Colour.Background COLOUR_BG = Colour.Background.BLACK;
-	// private static final Colour.Foreground COLOUR_SNAKE = Colour.Foreground.GREEN;
-	// private static final Colour.Foreground COLOUR_FOOD = Colour.Foreground.RED;
-	// private static final Colour.Foreground COLOUR_OBSTACLES = Colour.Foreground.WHITE;
 
 	private Point initialPosition;
 	private char mapChar;
@@ -93,7 +122,11 @@ public class GameManager extends GameObject implements IInputListener
 	private boolean hasWon;
 	private boolean hasShowedHighscores;
 
-	private GameManager() // Singleton
+	/**
+	 * Singleton instantiation.
+	 * Sets default values.
+	 */
+	private GameManager()
 	{
 		this.inputPreset = DEFAULT_INPUT_PRESET;
 		this.mapChar = DEFAULT_MAP;
@@ -125,6 +158,10 @@ public class GameManager extends GameObject implements IInputListener
 		this.dynamicObstacles = new ArrayList<DynamicObstacle>();
 	}
 
+	/**
+	 * Gets the GameManager instance
+	 * @return the GameManager instance
+	 */
 	public static GameManager getInstance()
 	{
 		if (instance == null)
@@ -133,18 +170,28 @@ public class GameManager extends GameObject implements IInputListener
 		return instance;
 	}
 
+	/**
+	 * Resets the GameManager instance
+	 */
 	public static void resetInstance()
 	{
 		if (instance != null)
 			instance = new GameManager();
 	}
 
+	/**
+	 * Clears all the obstacles to be instantiated
+	 */
 	public void clearObstacles()
 	{
 		this.staticObstacles = new ArrayList<Polygon>();
 		this.dynamicObstacles = new ArrayList<DynamicObstacle>();
 	}
 
+	/**
+	 * Same as {@link GameManager#init(int,int,Point,Direction,int,boolean,Point,double,FoodType,int,boolean,UpdateMethod,ControlMethod,long)}
+	 * but generates the snake direction, snake position and food position randomly
+	 */
 	public void init(int mapWidth, int mapHeight, int snakeSize, boolean isFilled, double foodSize, FoodType foodType,
 		int foodScore, boolean isTextual, UpdateMethod updateMethod,
 		ControlMethod controlMethod, long seed) throws SnakeGameException
@@ -153,6 +200,11 @@ public class GameManager extends GameObject implements IInputListener
 			isTextual, updateMethod, controlMethod, seed);
 	}
 
+	/**
+	 * Same as {@link GameManager#init(int,int,Point,Direction,int,boolean,Point,double,FoodType,int,boolean,UpdateMethod,ControlMethod,long)}
+	 * but doesn't generate random values and doesn't take null values.
+	 * @pre no null values
+	 */
 	public void init(int mapWidth, int mapHeight, Point relativeSnakePos, Direction snakeDir, int snakeSize,
 		boolean isFilled, Point relativeFoodPos, double foodSize, FoodType foodType, int foodScore, boolean isTextual,
 		UpdateMethod updateMethod, ControlMethod controlMethod)
@@ -168,6 +220,32 @@ public class GameManager extends GameObject implements IInputListener
 			foodSize, foodType, foodScore, isTextual, updateMethod, controlMethod, 0);
 	}
 
+	/**
+	 * Initializes a GameManager, making the game ready to be played.
+	 * if the snake direction, snake position or food positions are null
+	 * they will be generated randomly.
+	 *
+	 * @param mapWidth the map's width
+	 * @param mapHeight the map's height
+	 * @param relativeSnakePos the initial snake position, taking the map's origin as (0,0) (can be null)
+	 * @param snakeDir the initial snake direction (can be null)
+	 * @param snakeSize the snake's size
+	 * @param isFilled if the {@link GameObject GameObjects} should be filled}
+	 * @param relativeFoodPos the initial food position, taking the map's origin as (0,0) (can be null)
+	 * @param foodSize the food's size
+	 * @param foodType the type of food to spawn
+	 * @param foodScore the score value of a food
+	 * @param isTextual if the game should be rendered textually
+	 * @param updateMethod the method in which to update the engine
+	 * @param controlMethod the method the snake should be controlled as
+	 * @param seed the seed for random usage (can be null)
+	 * @throws SnakeGameException if the initialization parameters are invalid
+	 * @pre mapWidth and mapHeight should be a multiple of the snake's size
+	 * @pre foodSize <= snakeSize
+	 * @pre relativeSnakePos should be valid according to it's size
+	 * @pre relativeFoodPos should be valid according to it's size
+	 * @post game is ready to be played by calling {@link GameManager#play() play}.
+	 */
 	public void init(int mapWidth, int mapHeight, Point relativeSnakePos, Direction snakeDir, int snakeSize,
 		boolean isFilled, Point relativeFoodPos, double foodSize, FoodType foodType, int foodScore, boolean isTextual,
 		UpdateMethod updateMethod, ControlMethod controlMethod, long seed)
@@ -214,6 +292,11 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Validates the game's objects, checking if everything is valid
+	 * @throws SnakeGameException if a SnakeGame component was not valid
+	 * @throws GeometricException if a Geometry component was not valid
+	 */
 	private void validate() throws SnakeGameException, GeometricException
 	{
 		validateDimensions();
@@ -225,6 +308,10 @@ public class GameManager extends GameObject implements IInputListener
 		validateFoodColliding();
 	}
 
+	/**
+	 * Checks if the map's dimentions are valid
+	 * @throws SnakeGameException if the map's dimentions are not valid
+	 */
 	private void validateDimensions() throws SnakeGameException
 	{
 		if (this.mapWidth < 2 || this.mapHeight < 2)
@@ -234,6 +321,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Checks if the map-to-snake ratio is valid
+	 * @throws SnakeGameException if the map-to-snake ratio is not valid
+	 */
 	private void validateRatio() throws SnakeGameException
 	{
 		if (this.mapWidth % this.snakeSize != 0 || this.mapHeight % this.snakeSize != 0)
@@ -243,6 +334,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Checks if the food-to-snake ratio is valid
+	 * @throws SnakeGameException if the food-to-snake ratio is valid
+	 */
 	private void validateFoodRatio() throws SnakeGameException
 	{
 		if (this.foodSize > this.snakeSize)
@@ -252,6 +347,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 	
+	/**
+	 * Checks if the snake's position is valid
+	 * @throws SnakeGameException if the snake's position isn't valid
+	 */
 	private void validateSnakePos() throws SnakeGameException
 	{
 		if (this.startingSnakePos == null)
@@ -264,6 +363,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Checks if the snake is colliding with something
+	 * @throws SnakeGameException if the snake is colliding with something
+	 */
 	private void validateSnakeColliding() throws SnakeGameException
 	{
 		if (this.startingSnakePos == null)
@@ -280,6 +383,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Checks if the food position is valid
+	 * @throws SnakeGameException if the food position is not valid
+	 */
 	private void validateFoodPos() throws SnakeGameException
 	{
 		if (this.startingFoodPos == null)
@@ -293,6 +400,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Checks if the food is colliding with something
+	 * @throws SnakeGameException if the food is colliging with something
+	 */
 	private void validateFoodColliding() throws SnakeGameException
 	{
 		if (this.startingFoodPos == null)
@@ -309,6 +420,11 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Initializes the game's {@link Scene scene}
+	 * @throws SnakeGameException if an error occurred while generating the scene
+	 * @post {@link Scene Scene} initialized
+	 */
 	private void initScene() throws SnakeGameException
 	{
 		try
@@ -322,6 +438,12 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Initializes the {@link GameEngine game engine}
+	 * @throws SnakeGameException if an error occurred while generating the game engine
+	 * @pre Scene initialized
+	 * @post {@link GameEngine GameEngine} initialized
+	 */
 	private void initGameEngine() throws SnakeGameException
 	{
 		try
@@ -336,6 +458,12 @@ public class GameManager extends GameObject implements IInputListener
 	}
 
 
+	/**
+	 * Generates the snake's {@link ISnakeController controller}
+	 * @return the snake's controller
+	 * @pre {@link Scene Scene} initialized
+	 * @post {@link Controller Controller} initialized
+	 */
 	private ISnakeController generateController()
 	{
 		ISnakeController controller = null;
@@ -353,6 +481,15 @@ public class GameManager extends GameObject implements IInputListener
 		return controller;
 	}
 
+	/**
+	 * Generates the game's {@link Scene scene}
+	 * @throws SnakeGameException if there was an error generating the scene
+	 * @post {@link Scene Scene} initialized
+	 * @post {@link Snake Snake} initialized
+	 * @post {@link GameMap Map} initialized
+	 * @Post {@link IFood Food} initialized
+	 * @Post {@link IObstacle Obstacles} initialized
+	 */
 	private void generateScene() throws SnakeGameException
 	{
 		this.scene = new Scene();
@@ -365,7 +502,7 @@ public class GameManager extends GameObject implements IInputListener
 			for (IObstacle obstacle : obstacles)
 				scene.add((GameObject)obstacle);
 
-		if (shouldGenerateSnakeFirst())
+		if (this.startingSnakePos != null) // if should generate the snake first
 		{
 			this.snake = generateSnake(map);
 			scene.add(snake);
@@ -396,11 +533,12 @@ public class GameManager extends GameObject implements IInputListener
 		scene.add(this);
 	}
 
-	private boolean shouldGenerateSnakeFirst()
-	{
-		return this.startingSnakePos != null;
-	}
-
+	/**
+	 * Generates the {@link Snake snake}
+	 * @param map the map to generate the snake on
+	 * @return the generated snake
+	 * @throws SnakeGameException if an error occurred while generating the snake
+	 */
 	private Snake generateSnake(GameMap map) throws SnakeGameException
 	{
 		Point snakePos = this.startingSnakePos == null ? map.getRandomUnitSpawnPosition(snakeSize) : this.startingSnakePos;
@@ -408,6 +546,10 @@ public class GameManager extends GameObject implements IInputListener
 		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar, this.snakeColour);
 	}
 
+	/**
+	 * Generates the {@link Map map}
+	 * @return the generated map
+	 */
 	private GameMap generateMap()
 	{
 		GameMap map;
@@ -423,26 +565,52 @@ public class GameManager extends GameObject implements IInputListener
 		return map;
 	}
 
+	/**
+	 * Adds a {@link StaticObstacle static obstacle} to be added upon initialization
+	 * @param obstacle the obstacle's shape
+	 * @pre hasn't {@link GameManager#init() initiated}
+	 */
 	public void addStaticObstacle(Polygon obstacle)
 	{
 		this.staticObstacles.add(obstacle);
 	}
 
+	/**
+	 * Adds a {@link DynamicObstacle dynamic obstacle} to be added upon initialization
+	 * @param obstacle the obstacle's shape
+	 * @param anchor the point the obstacle should rotate around
+	 * @param speed the speed at which the obstacle should rotate around the anchor
+	 * @pre hasn't {@link GameManager#init() initiated}
+	 */
 	public void addDynamicObstacle(Polygon obstacle, VirtualPoint anchor, float speed)
 	{
 		this.dynamicObstacles.add(new DynamicObstacle(obstacle, this.isFilled, this.obstacleChar, anchor, speed));
 	}
 
+	/**
+	 * Sets the maximum scores to be displayed
+	 * @param maxScoresDisplay the maximum ammount of scores to display
+	 * @pre hasn't {@link GameManager#init() initiated}
+	 */
 	public void setMaxScoresDisplay(int maxScoresDisplay)
 	{
 		this.maxScoresDisplay = maxScoresDisplay;
 	}
 
+	/**
+	 * Sets the {@link InputPreset input preset}.
+	 * @param preset the preset to use as input
+	 */
 	public void setInputPresetMethod(InputPreset preset)
 	{
 		this.inputPreset = preset;
 	}
 
+	/**
+	 * Generates the game obstacles from the added obstacles
+	 * @param map the map to add the obstacles to
+	 * @return the generated obstacles
+	 */
 	private IObstacle[] generateObstacles(GameMap map)
 	{
 		IObstacle[] obstacles = new IObstacle[this.staticObstacles.size() + this.dynamicObstacles.size()];
@@ -461,12 +629,22 @@ public class GameManager extends GameObject implements IInputListener
 		return obstacles;
 	}
 
+	/**
+	 * Generates a random direction
+	 * @return a random direction
+	 */
 	private Direction getRandomSnakeDir()
 	{
 		Direction[] values = Direction.values();
 		return values[rng.nextInt(values.length)];
 	}
 
+	/**
+	 * Generates the game's camera
+	 * @return the generated camera
+	 * @throws SnakeGameException there was an error while generating the camera
+	 * @pre {@link GameMap map} initialized
+	 */
 	private Rectangle generateCamera() throws SnakeGameException
 	{
 		Rectangle camera;
@@ -484,11 +662,23 @@ public class GameManager extends GameObject implements IInputListener
 		return camera;
 	}
 
+	/**
+	 * Generates the game's {@link IFood food}
+	 * @param map the map to generate the food on
+	 * @return the generated food
+	 * @throws SnakeGameException if an error occurred while generating the food
+	 */
 	private IFood generateFood(GameMap map) throws SnakeGameException
 	{
 		return this.startingFoodPos == null ? generateRandomFruit(map) : generateFood(this.startingFoodPos);
 	}
 
+	/**
+	 * Generates a random food
+	 * @param map the map to generate the food on
+	 * @return the generated food
+	 * @throws SnakeGameException if an error occurred while generating the food
+	 */
 	private IFood generateRandomFruit(GameMap map) throws SnakeGameException
 	{
 		Point pos = map.getRandomInnerUnitSpawnPosition((int)Math.round(this.foodSize), this.snakeSize);
@@ -498,6 +688,12 @@ public class GameManager extends GameObject implements IInputListener
 		return foodGenerated;
 	}
 
+	/**
+	 * Generates the food at a position
+	 * @param foodPos the position to generate the food at
+	 * @return the generated food
+	 * @throws SnakeGameException if an error occurred while generating the food
+	 */
 	private IFood generateFood(Point foodPos) throws SnakeGameException
 	{
 		IFood food;
@@ -524,6 +720,12 @@ public class GameManager extends GameObject implements IInputListener
 		return food;
 	}
 
+	/**
+	 * Generates the gameplay overlay
+	 * @return the gameplay overlay generated
+	 * @pre {@link Snake snake} initialized
+	 * @pre Camera initialized
+	 */
 	private IOverlay generateOverlay()
 	{
 		TextOverlayOutline outline = new TextOverlayOutline();
@@ -531,6 +733,9 @@ public class GameManager extends GameObject implements IInputListener
 		return overlay;
 	}
 
+	/**
+	 * Sets up the game engine for execution
+	 */
 	private void setupGameEngine()
 	{
 		GameEngine engine = GameEngine.getInstance();
@@ -547,6 +752,10 @@ public class GameManager extends GameObject implements IInputListener
 		Renderer.getInstance().setBackgroundColour(this.bgColour);
 	}
 
+	/**
+	 * runs the game engine on the the initialized scene.
+	 * @pre must {@link GameManager#init() initialize} first.
+	 */
 	public void play()
 	{
 		this.gameState = GameState.GAMEPLAY;
@@ -555,6 +764,11 @@ public class GameManager extends GameObject implements IInputListener
 		this.isFirstSetup = true;
 	}
 
+	/**
+	 * The current score
+	 * @return the current score
+	 * @pre GameManager was {@link GameManager#init() initialized}.
+	 */
 	public int score()
 	{
 		if (this.snake == null)
@@ -588,6 +802,11 @@ public class GameManager extends GameObject implements IInputListener
 			this.hasShowedHighscores = true;
 	}
 
+	/**
+	 * Restarts the scene to the initial values set when {@link GameManager#init() init} was called.
+	 * Except for the snake's direction and position, and for the food's position. Which will be
+	 * generated randomly upon restarting
+	 */
 	private void restart()
 	{
 		try
@@ -608,6 +827,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Respawns the food
+	 * @pre game is {@link GameManager#init() initialized}.
+	 */
 	private void respawnFood()
 	{
 		try
@@ -629,6 +852,10 @@ public class GameManager extends GameObject implements IInputListener
 			this.scene.add((GameObject)this.food);
 	}
 
+	/**
+	 * Goes into the game over state.
+	 * Sets the game over overlay
+	 */
 	private void gameover()
 	{
 		this.gameState = GameState.GAMEOVER;
@@ -636,6 +863,7 @@ public class GameManager extends GameObject implements IInputListener
 		this.scene.add(overlay);
 	}
 
+	@Override
 	public void onInputReceived(String input)
 	{
 		if (this.gameState.equals(GameState.GAMEOVER))
@@ -645,6 +873,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Registers a new score when one is generated
+	 * @param name the name of the user who'se score was set
+	 */
 	private void registerScore(String name)
 	{
 		if (name.isEmpty())
@@ -665,6 +897,10 @@ public class GameManager extends GameObject implements IInputListener
 		}
 	}
 
+	/**
+	 * Goes into the highscores state.
+	 * Sets the highscores overlay
+	 */
 	private void highscores()
 	{
 		this.gameState = GameState.HIGHSCORES;
@@ -676,24 +912,72 @@ public class GameManager extends GameObject implements IInputListener
 		this.scene.add(overlay);
 	}
 
+	/**
+	 * The current food's position
+	 * @return the current food's position
+	 */
 	public Point foodPos() { return this.food.position(); }
 
+	/**
+	 * Sets the background colour
+	 * @param colour the background colour to be set to
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setBackgroundColour(Colour.Background colour) { this.bgColour = colour; }
 
+	/**
+	 * Sets the snake's colour
+	 * @param colour the new snake's colour
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setSnakeColour(Colour.Foreground colour) { this.snakeColour = colour; }
 
+	/**
+	 * Sets the food's colour
+	 * @param colour the new food's colour
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setFoodColour(Colour.Foreground colour) { this.foodColour = colour; }
 
+	/**
+	 * Sets the obstacle's colour
+	 * @param colour the new obstacle's colour
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setObstaclesColour(Colour.Foreground colour) { this.obstaclesColour = colour; }
 
+	/**
+	 * Sets the map's draw character
+	 * @param c the new map's draw character
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setMap(char c) { this.mapChar = c; }
 
+	/**
+	 * Sets the obstacle's draw character
+	 * @param c the new obstacle's draw character
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setObstacle(char c) { this.obstacleChar = c; }
 
+	/**
+	 * Sets the food's draw character
+	 * @param c the new food's draw character
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setFood(char c) { this.foodChar = c; }
 
+	/**
+	 * Sets the snake's head draw character
+	 * @param c the new snake'e head draw character
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setSnakeHead(char c) { this.snakeHeadChar = c; }
 
+	/**
+	 * Sets the snake's tail draw character
+	 * @param c the new snake's tail draw character
+	 * @pre was not {@link GameManager#init() initialized}
+	 */
 	public void setSnakeTail(char c) { this.snakeTailChar = c; }
-
 }
