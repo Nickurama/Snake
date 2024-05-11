@@ -1,71 +1,8 @@
 ## To Do
 
-- SnakeGame Documentation
-    * [x] AISnakeController
-    * [x] Direction
-    * [x] DynamicObstacle
-    * [x] FoodCircle
-    * [x] FoodSquare
-    * [x] FoodStats
-    * [ ] GameManager
-    * [x] GameManagerBuilder
-    * [x] GameMap
-    * [x] GameoverOverlay
-    * [x] GameplayOverlay
-    * [x] HighscoresOverlay
-    * [x] IFood
-    * [x] IFoodStats
-    * [x] IHighscoresReader
-    * [x] IObstacle
-    * [x] ISnakeController
-    * [x] ISnakeStats
-    * [x] ISpatialComponent
-    * [x] InputSnakeController
-    * [x] Score
-    * [x] Scoreboard
-    * [x] Snake
-    * [x] SnakeController
-    * [x] SnakeGameException
-    * [x] SnakeStats
-    * [x] SnakeUnit
-    * [x] StaticObstacle
-    * [x] Unit
-- SnakeGame Report
-    * [ ] AISnakeController
-    * [ ] Direction
-    * [ ] DynamicObstacle
-    * [ ] FoodCircle
-    * [ ] FoodSquare
-    * [ ] FoodStats
-    * [ ] GameManager
-    * [ ] GameManagerBuilder
-    * [ ] GameMap
-    * [ ] GameoverOverlay
-    * [ ] GameplayOverlay
-    * [ ] HighscoresOverlay
-    * [ ] IFood
-    * [ ] IFoodStats
-    * [ ] IHighscoresReader
-    * [ ] IObstacle
-    * [ ] ISnakeController
-    * [ ] ISnakeStats
-    * [ ] ISpatialComponent
-    * [ ] InputSnakeController
-    * [ ] Score
-    * [ ] Scoreboard
-    * [ ] Snake
-    * [ ] SnakeController
-    * [ ] SnakeGameException
-    * [ ] SnakeStats
-    * [ ] SnakeUnit
-    * [ ] StaticObstacle
-    * [ ] Unit
-- Report Notes/Design Patterns
 - Report Tutorial
 - Main examples presets
-- Javadoc
 - UML
-- Report UML
 
 ## Done recent
 
@@ -135,6 +72,68 @@
     * [x] Scene
     * [x] TextOverlay
     * [x] TextOverlayOutline
+- SnakeGame Documentation
+    * [x] AISnakeController
+    * [x] Direction
+    * [x] DynamicObstacle
+    * [x] FoodCircle
+    * [x] FoodSquare
+    * [x] FoodStats
+    * [x] GameManager
+    * [x] GameManagerBuilder
+    * [x] GameMap
+    * [x] GameoverOverlay
+    * [x] GameplayOverlay
+    * [x] HighscoresOverlay
+    * [x] IFood
+    * [x] IFoodStats
+    * [x] IHighscoresReader
+    * [x] IObstacle
+    * [x] ISnakeController
+    * [x] ISnakeStats
+    * [x] ISpatialComponent
+    * [x] InputSnakeController
+    * [x] Score
+    * [x] Scoreboard
+    * [x] Snake
+    * [x] SnakeController
+    * [x] SnakeGameException
+    * [x] SnakeStats
+    * [x] SnakeUnit
+    * [x] StaticObstacle
+    * [x] Unit
+- SnakeGame Report
+    * [x] AISnakeController
+    * [x] Direction
+    * [x] DynamicObstacle
+    * [x] FoodCircle
+    * [x] FoodSquare
+    * [x] FoodStats
+    * [x] GameManager
+    * [x] GameManagerBuilder
+    * [x] GameMap
+    * [x] GameoverOverlay
+    * [x] GameplayOverlay
+    * [x] HighscoresOverlay
+    * [x] IFood
+    * [x] IFoodStats
+    * [x] IHighscoresReader
+    * [x] IObstacle
+    * [x] ISnakeController
+    * [x] ISnakeStats
+    * [x] ISpatialComponent
+    * [x] InputSnakeController
+    * [x] Score
+    * [x] Scoreboard
+    * [x] Snake
+    * [x] SnakeController
+    * [x] SnakeGameException
+    * [x] SnakeStats
+    * [x] SnakeUnit
+    * [x] StaticObstacle
+    * [x] Unit
+- Report Notes/Design Patterns
+- Javadoc
 
 ## Doing
 
@@ -248,3 +247,4 @@
 - Stopping game engine should free the game object, and the scene shouldn't be active anymore
 - GameManager builder
 - Render food AND snake with #
+- Report UML

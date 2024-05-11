@@ -1,72 +1,197 @@
 import Geometry.*;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
 import java.util.Random;
-
 import GameEngine.*;
-import GameEngine.GameEngineFlags.*;
 import SnakeGame.*;
 import SnakeGame.InputSnakeController.*;
-import SnakeGame.GameManager.*;
 
 public class Main
 {
     public static void main(String[] args) throws Exception
     {	
 		long seed = new Random().nextLong();
-		// long seed = 3947318154746772141L;
 		System.out.println("Seed: " + seed);
 
-		// Arrange
-		// Polygon obstacle = new Rectangle(new Point(0, 0), new Point(5, 3));
-		// Polygon dynamicObstacle = new Rectangle(new Point(30, 4), new Point(31, 5));
-		// Point anchor = new Point(31, 4.5);
-		// float speed = (float)Math.PI / 2;
+		// defaultExample(seed);
+		// colourExample(seed);
+		// AIExample(seed);
+		dynamicExample(seed);
 
-		Polygon dynamicObstacle = new Polygon(new Point[]{
-			new Point(3, 10),
-			new Point(4, 13),
-			new Point(8, 6),
-			new Point(7, 5),
-		});
-		Point anchor = new Point(6, 7);
-		float speed = 0.1f;
+		GameManager.getInstance().play();
+    }
 
+	private static void defaultExample(long seed) throws Exception
+	{
 		new GameManagerBuilder()
-			.setSnakePos(new Point(1.5, 1.5))
-			// .addObstacle(dynamicObstacle, anchor, speed)
-			// .addObstacle(obstacle)
-			// .addObstacle(dynamicObstacle, anchor, speed)
-			.setInputPreset(InputPreset.WASD)
-			// .addObstacle(dynamicObstacle, anchor, speed)
 			.setSeed(seed)
+			.setTextual(true)
+			.setFilled(true)
 			.setMapWidth(80)
 			.setMapHeight(40)
-			// .setSnakePos(new Point(1, 8))
 			.setSnakeSize(4)
-			.setTextual(true)
 			.setFoodSize(2)
-			.setMaxScoresDisplay(10)
-			// .setSnakeDir(Snake.Direction.UP)
-			// .setFoodPos(new Point(1, 9))
 			.setFoodScore(5)
+			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.SQUARE)
-			.setFilled(true)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setControlMethod(GameManager.ControlMethod.AUTO)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.build();
+	}
+
+	private static void colourExample(long seed) throws Exception
+	{
+		new GameManagerBuilder()
+			.setSeed(seed)
+			.setTextual(true)
+			.setFilled(true)
+			.setMapWidth(80)
+			.setMapHeight(40)
+			.setSnakeSize(4)
+			.setFoodSize(2)
+			.setFoodScore(5)
+			.setInputPreset(InputPreset.WASD)
+			.setFoodType(GameManager.FoodType.SQUARE)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+
+			// setting colors
+			.setBackgroundColour(Colour.Background.BLACK)
+			.setSnakeColour(Colour.Foreground.GREEN)
+			.setFoodColour(Colour.Foreground.RED)
+			.setObstaclesColour(Colour.Foreground.MAGENTA)
+
+			// setting drawing characters
 			.setMapChar(' ')
 			.setSnakeHeadChar('░')
 			.setSnakeTailChar('█')
 			.setObstacleChar('▓')
 			.setFoodChar('■')
+			.build();
+	}
+
+	private static void AIExample(long seed) throws Exception
+	{
+		Triangle obstacle0 = new Triangle(new Point[] {
+			new Point(38, 40),
+			new Point(42, 40),
+			new Point(40, 25),
+		});
+
+		Triangle obstacle1 = new Triangle(new Point[] {
+			new Point(38, 0),
+			new Point(42, 0),
+			new Point(40, 15),
+		});
+
+		new GameManagerBuilder()
+			// Global setup
+			.setSeed(seed)
+			.setTextual(true)
+			.setFilled(true)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setControlMethod(GameManager.ControlMethod.AUTO)
+
+			// Obstacle setup
+			.addObstacle(obstacle0)
+			.addObstacle(obstacle1)
+
+			// Map setup
+			.setMapWidth(80)
+			.setMapHeight(40)
+
+			// Snake setup
+			.setSnakeSize(2)
+			.setSnakePos(new Point(60.5, 20.5))
+			.setSnakeDir(Direction.LEFT)
+
+			// Food setup
+			.setFoodSize(2)
+			.setFoodScore(5)
+			.setFoodPos(new Point(4.5, 4.5))
+			.setFoodType(GameManager.FoodType.SQUARE)
+
+			// Colour setup
 			.setBackgroundColour(Colour.Background.BLACK)
 			.setSnakeColour(Colour.Foreground.GREEN)
 			.setFoodColour(Colour.Foreground.RED)
 			.setObstaclesColour(Colour.Foreground.MAGENTA)
-			.build();
 
-		GameManager.getInstance().play();
-    }
+			// Character setup
+			.setMapChar(' ')
+			.setSnakeHeadChar('░')
+			.setSnakeTailChar('█')
+			.setObstacleChar('▓')
+			.setFoodChar('■')
+
+			.build();
+	}
+
+	private static void dynamicExample(long seed) throws Exception
+	{
+		Polygon obstacle0 = new Polygon(new Point[] {
+			new Point(40, 24),
+			new Point(41, 21),
+			new Point(44, 20),
+			new Point(41, 19),
+			new Point(40, 16),
+			new Point(39, 19),
+			new Point(36, 20),
+			new Point(39, 21),
+		});
+		float speed0 = -0.5f;
+
+
+		Square obstacle1 = new Square(new Point[] {
+			new Point(39, 38),
+			new Point(39, 40),
+			new Point(41, 40),
+			new Point(41, 38),
+		});
+		Point rotationPoint1 = new Point(40, 20);
+		float speed1 = 0.25f;
+
+		new GameManagerBuilder()
+			// Global setup
+			.setSeed(seed)
+			.setTextual(true)
+			.setFilled(true)
+			.setMaxScoresDisplay(10)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setInputPreset(InputPreset.WASD)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+
+			// Obstacle setup
+			.addObstacle(obstacle0, null, speed0)
+			.addObstacle(obstacle1, rotationPoint1, speed1)
+
+			// Map setup
+			.setMapWidth(80)
+			.setMapHeight(40)
+
+			// Snake setup
+			.setSnakeSize(2)
+			.setSnakePos(new Point(60.5, 20.5))
+			.setSnakeDir(Direction.LEFT)
+
+			// Food setup
+			.setFoodSize(2)
+			.setFoodScore(5)
+			.setFoodPos(new Point(4.5, 4.5))
+			.setFoodType(GameManager.FoodType.SQUARE)
+
+			// Colour setup
+			.setBackgroundColour(Colour.Background.BLACK)
+			.setSnakeColour(Colour.Foreground.GREEN)
+			.setFoodColour(Colour.Foreground.RED)
+			.setObstaclesColour(Colour.Foreground.MAGENTA)
+
+			// Character setup
+			.setMapChar(' ')
+			.setSnakeHeadChar('░')
+			.setSnakeTailChar('█')
+			.setObstacleChar('▓')
+			.setFoodChar('■')
+
+			.build();
+	}
 }

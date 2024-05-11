@@ -250,7 +250,7 @@ public class GameManagerBuilder
 	 * The obstacle will rotate around the anchor point with the given speed.
 	 * Can be called multiple times.
 	 * @param obstacle the obstacle's shape
-	 * @param anchor the point to rotate the obstacle around
+	 * @param anchor the point to rotate the obstacle around (can be null)
 	 * @param speed the speed the obstacle should rotate around the anchor
 	 * @return the GameManagerBuilder instance
 	 */
