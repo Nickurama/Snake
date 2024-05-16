@@ -84,6 +84,7 @@ public class GameEngine
 		this.isRunning = false;
 		this.lastFrameMillis = System.currentTimeMillis();
 		this.currentFrameMillis = System.currentTimeMillis();
+		Renderer.getInstance().setTextual(flags.isTextual());
 		this.camera = camera;
 	}
 	

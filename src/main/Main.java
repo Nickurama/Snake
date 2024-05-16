@@ -1,24 +1,178 @@
 import Geometry.*;
 
 import java.util.Random;
+
+
 import GameEngine.*;
 import SnakeGame.*;
 import SnakeGame.InputSnakeController.*;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+
 public class Main
 {
+	public static class TestPane extends JPanel
+	{
+		private BufferedImage img;
+
+		public TestPane()
+		{
+			img = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_RGB);
+
+			Graphics2D g2d = img.createGraphics();
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+            g2d.dispose();
+			// for (int x = 0; x < img.getWidth(); x++)
+			// 	for (int y = 0; y < img.getHeight(); y++)
+			// 		img.setRGB(x, y, Color.RED.getRGB());
+		}
+
+		public void draw(int x, int y)
+		{
+			draw(x, y, Color.BLACK);
+		}
+
+		public void draw(int x, int y, Color color)
+		{
+			// if (x < 0 || x >= img.getWidth() || y < 0 || y >= img.getHeight())
+			// 	return;
+			img.setRGB(x, y, color.getRGB());
+		}
+
+		int x = 0;
+
+		@Override
+		public void paintComponent(Graphics graphics)
+		{
+			super.paintComponents(graphics);
+			// graphics.setColor(Color.GREEN);
+			// graphics.fillRect(0, 0, 1000, 1000);
+
+			for (int i = 0; i < 1000; i++)
+				for (int j = 0; j < 1000; j++)
+					draw(i, j, Color.RED);
+			System.out.println("called " + (x++) + " times.");
+
+			Graphics2D g2d = (Graphics2D) graphics.create();
+			g2d.drawImage(img, 0, 0, this);
+			g2d.dispose();
+		}
+	}
+
     public static void main(String[] args) throws Exception
     {	
-		long seed = new Random().nextLong();
-		System.out.println("Seed: " + seed);
+		JFrame frame = new JFrame("Testing");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new BorderLayout());
+		TestPane pane = new TestPane();
+		frame.add(pane);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setSize(1000, 1000);
+		frame.setVisible(true);
 
-		defaultExample(seed);
-		// colourExample(seed);
-		// circleExample(seed);
-		// AIExample(seed);
-		// dynamicExample(seed);
 
-		GameManager.getInstance().play();
+		Random r = new Random();
+		int x = 500;
+		int y = 500;
+		long ns = System.nanoTime();
+		while(true)
+		{
+			// if (x >= 500)
+			// {
+			// 	// x = 0;
+			// 	for (int i = x - 10; i < x + 10; i++)
+			// 		for (int j = y - 10; j < y + 10; j++)
+			// 			pane.draw(i, j, Color.RED);
+			// 	System.out.println("Right side won");
+			// 	break;
+			// }
+			// if (x < 0)
+			// {
+			// 	// x = 499;
+			// 	for (int i = x - 10; i < x + 10; i++)
+			// 		for (int j = y - 10; j < y + 10; j++)
+			// 			pane.draw(i, j, Color.RED);
+			// 	System.out.println("Left side won");
+			// 	break;
+			// }
+			// if (y >= 500)
+			// {
+			// 	// y = 0;
+			// 	for (int i = x - 10; i < x + 10; i++)
+			// 		for (int j = y - 10; j < y + 10; j++)
+			// 			pane.draw(i, j, Color.RED);
+			// 	System.out.println("Down side won");
+			// 	break;
+			// }
+			// if (y < 0)
+			// {
+			// 	// y = 499;
+			// 	for (int i = x - 10; i < x + 10; i++)
+			// 		for (int j = y - 10; j < y + 10; j++)
+			// 			pane.draw(i, j, Color.RED);
+			// 	System.out.println("Up side won");
+			// 	break;
+			// }
+
+			// int size = 500;
+			// for (int i = x - size; i < x + size; i++)
+			// 	for (int j = y - size; j < y + size; j++)
+			// 		pane.draw(i, j);
+
+			// pane.draw(x, y);
+			boolean increment = r.nextBoolean();
+
+			long newNs = System.nanoTime();
+			long deltaNs = newNs - ns;
+			ns = newNs;
+			double deltaS = (double)deltaNs / 1000000000;
+			double fps = 1 / deltaS;
+			System.out.println(fps);
+
+			if (increment)
+			{
+				if (r.nextBoolean())
+					x++;
+				else
+					x--;
+			}
+
+			increment = r.nextBoolean();
+			if (increment)
+			{
+				if (r.nextBoolean())
+					y++;
+				else
+					y--;
+			}
+
+			// for (int i = 0; i < 1000; i++)
+			// 	for (int j = 0; j < 1000; j++)
+			// 		pane.draw(i, j, Color.RED);
+			frame.repaint();
+			// Thread.sleep(0, 100000);
+		}
+
+
+
+
+		// long seed = new Random().nextLong();
+		// System.out.println("Seed: " + seed);
+		//
+		// defaultExample(seed);
+		// // colourExample(seed);
+		// // circleExample(seed);
+		// // AIExample(seed);
+		// // dynamicExample(seed);
+		//
+		// GameManager.getInstance().play();
     }
 
 	private static void defaultExample(long seed) throws Exception

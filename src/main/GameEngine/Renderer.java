@@ -78,6 +78,7 @@ public class Renderer
 	private char[][] raster;
 	private boolean isFrameUsingColour;
 	private String[][] colourRaster;
+	private boolean isTextual;
 
 	/**
 	 * Singleton Renderer initialization
@@ -106,6 +107,16 @@ public class Renderer
 	{
 		if (instance != null)
 			instance = new Renderer();
+	}
+
+	/**
+	 * Sets if the renderer should render as text to
+	 * the terminal or to a GUI
+	 * @param value if the renderer should render as text
+	 */
+	public void setTextual(boolean value)
+	{
+		this.isTextual = value;
 	}
 
 	/**
@@ -184,6 +195,21 @@ public class Renderer
 		x = x - (int)Math.ceil(camera.minPoint().X());
 		y = (raster.length - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
 
+		if (this.isTextual)
+			drawTextual(x, y);
+		else
+			drawGUI(x, y);
+
+
+	}
+
+	private void drawGUI(int x, int y)
+	{
+
+	}
+
+	private void drawTextual(int x, int y)
+	{
 		raster[y][x] = drawChar;
 
 		if (drawColour != null)
@@ -219,6 +245,19 @@ public class Renderer
 	 * Prints in colour in case any colour has been set
 	 */
 	private void print()
+	{
+		if (isTextual)
+			printTextual();
+		else
+			printGUI();
+	}
+
+	private void printGUI()
+	{
+
+	}
+
+	private void printTextual()
 	{
 		if (drawColour != null)
 		{
