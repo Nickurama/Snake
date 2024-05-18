@@ -2,18 +2,19 @@
 
 - Detect keypress input
 - Keypress documentation
-- Close window when stopping engine
 - Auto update with clock
 - Clock documentation
 - Graphical overlays
 - Graphical overlays documentation
 - Update UML
+- Fix UML dependencies on naming
 - Update Javadoc
 - Write Report
 
 ## Done recent
 
 - Graphical stuff documentation
+- Close window when stopping engine
 
 ## Doing
 

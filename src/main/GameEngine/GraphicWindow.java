@@ -2,29 +2,28 @@ package GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 
 /**
- * Represents the frame in which to render the game in.
+ * Represents the window in which to render the game in.
  * Contains a raster to draw on.
  * 
  * @author Diogo Fonseca a79858
  * @version 16/05/2024
  */
-public class RenderFrame extends JFrame
+public class GraphicWindow
 {
 	private JFrame frame;
 	private Raster raster;
 	
 	/**
-	 * Instantiates a new frame.
+	 * Instantiates a new window.
 	 * @param width the width of the inner raster
 	 * @param height the height of the inner raster
 	 * @param title the title of the window
 	 * @param color the background color
 	 */
-	public RenderFrame(int width, int height, String title, Color bgColor)
+	public GraphicWindow(int width, int height, String title, Color bgColor)
 	{
 		frame = new JFrame(title);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,7 +55,21 @@ public class RenderFrame extends JFrame
 		raster.draw(x, y, drawColor);
 	}
 
-	@Override
+	/**
+	 * Disposes the frame, closing the window.
+	 */
+	public void close()
+	{
+		this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
+		// this.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
+
+		this.frame = null;
+		this.raster = null;
+	}
+
+	/**
+	 * Repaints everything
+	 */
 	public void repaint()
 	{
 		frame.repaint();

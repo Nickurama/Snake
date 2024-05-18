@@ -1,6 +1,7 @@
 package GameEngine;
 
 import java.awt.Color;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,8 +75,8 @@ public class Renderer
 	}
 
 	private static final String DEFAULT_WINDOW_TITLE = "GameEngine Graphical Window";
-	private static final TerminalColour.Background DEFAULT_BACKGROUND_COLOUR = null;
-	private static final Color DEFAULT_COLOR = Color.black;
+	private static final TerminalColour.Background DEFAULT_TEXTUAL_BACKGROUND_COLOUR = null;
+	private static final Color DEFAULT_GRAPHICAL_COLOR = Color.black;
 
 	private static Renderer instance = null;
 	private BoundingBox camera;
@@ -89,7 +90,7 @@ public class Renderer
 	private boolean isFrameUsingColour;
 	private String[][] colourRaster;
 	private boolean isTextual;
-	private RenderFrame graphicalRaster;
+	private GraphicWindow graphicalRaster;
 	private String graphicalWindowTitle;
 
 	private int width;
@@ -101,7 +102,7 @@ public class Renderer
 	private Renderer()
 	{
 		this.graphicalWindowTitle = DEFAULT_WINDOW_TITLE;
-		this.terminalBgColour = DEFAULT_BACKGROUND_COLOUR;
+		this.terminalBgColour = DEFAULT_TEXTUAL_BACKGROUND_COLOUR;
 	}
 
 	/**
@@ -121,8 +122,11 @@ public class Renderer
 	 */
 	public static void resetInstance()
 	{
-		if (instance != null)
-			instance = new Renderer();
+		if (instance == null)
+			return;
+
+		instance.closeGraphicWindow();
+		instance = new Renderer();
 	}
 
 	/**
@@ -174,7 +178,7 @@ public class Renderer
 	{
 		if (this.graphicalRaster == null)
 		{
-			this.graphicalRaster = new RenderFrame(this.width, this.height, this.graphicalWindowTitle, bgColor);
+			this.graphicalRaster = new GraphicWindow(this.width, this.height, this.graphicalWindowTitle, bgColor);
 			return;
 		}
 
@@ -266,7 +270,7 @@ public class Renderer
 	private void drawGraphical(int x, int y)
 	{
 		if (this.graphicalDrawColor == null)
-			this.graphicalDrawColor = DEFAULT_COLOR;
+			this.graphicalDrawColor = DEFAULT_GRAPHICAL_COLOR;
 		this.graphicalRaster.draw(x, y, this.graphicalDrawColor);
 	}
 
@@ -1120,4 +1124,21 @@ public class Renderer
 			}
 		}
 	}
+
+	/**
+	 * closes the graphical window
+	 */
+	protected void closeGraphicWindow()
+	{
+		if (this.graphicalRaster == null)
+			return;
+		this.graphicalRaster.close();
+	}
+
+	/**
+	 * Gets the graphical window.
+	 * Returns null when there is no window (if it's in textual mode).
+	 * @return the graphical window (may be null)
+	 */
+	protected GraphicWindow getGraphicWindow() { return this.graphicalRaster; }
 }

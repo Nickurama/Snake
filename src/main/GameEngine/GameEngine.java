@@ -173,6 +173,8 @@ public class GameEngine// implements KeyListener
 
 		for (GameObject obj : currScene)
 			obj.stop();
+
+		Renderer.getInstance().closeGraphicWindow();
 	}
 
 	/**
