@@ -1,5 +1,7 @@
 package TestUtil;
 
+import java.awt.event.KeyEvent;
+
 import GameEngine.*;
 
 public class MockGameObject extends GameObject implements IInputListener
@@ -105,4 +107,11 @@ public class MockGameObject extends GameObject implements IInputListener
 	public int earlyUpdateCount() { return earlyUpdateCount; }
 
 	public boolean hasInitialized() { return hasInitialized; }
+
+	@Override
+	public void onKeyPressed(KeyEvent event) { }
+	@Override
+	public void onKeyReleased(KeyEvent event) { }
+	@Override
+	public void onKeyTyped(KeyEvent event) { }
 }

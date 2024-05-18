@@ -1,6 +1,5 @@
 ## To Do
 
-- Detect keypress input
 - Keypress documentation
 - Auto update with clock
 - Clock documentation
@@ -15,6 +14,7 @@
 
 - Graphical stuff documentation
 - Close window when stopping engine
+- Detect keypress input
 
 ## Doing
 

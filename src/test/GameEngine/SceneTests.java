@@ -6,6 +6,8 @@ import TestUtil.*;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 public class SceneTests
@@ -143,6 +145,12 @@ public class SceneTests
 			public MockInputListener() { this.inputReceived = ""; }
 			public void onInputReceived(String input) { this.inputReceived = input; }
 			public String inputReceived() { return this.inputReceived; }
+			@Override
+			public void onKeyPressed(KeyEvent event) { }
+			@Override
+			public void onKeyReleased(KeyEvent event) { }
+			@Override
+			public void onKeyTyped(KeyEvent event) { }
 		}
 		MockInputListener mockListener = new MockInputListener();
 		Scene sc = new Scene();
@@ -166,6 +174,12 @@ public class SceneTests
 			public MockInputListener() { this.inputReceived = ""; }
 			public void onInputReceived(String input) { this.inputReceived = input; }
 			public String inputReceived() { return this.inputReceived; }
+			@Override
+			public void onKeyPressed(KeyEvent event) { }
+			@Override
+			public void onKeyReleased(KeyEvent event) { }
+			@Override
+			public void onKeyTyped(KeyEvent event) { }
 		}
 		MockInputListener mockListener0 = new MockInputListener();
 		MockInputListener mockListener1 = new MockInputListener();

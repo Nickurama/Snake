@@ -3,6 +3,7 @@ package SnakeGame;
 import Geometry.*;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -892,6 +893,15 @@ public class GameManager extends GameObject implements IInputListener
 			highscores();
 		}
 	}
+
+	@Override
+	public void onKeyPressed(KeyEvent event) { }
+
+	@Override
+	public void onKeyReleased(KeyEvent event) { }
+
+	@Override
+	public void onKeyTyped(KeyEvent event) { }
 
 	/**
 	 * Registers a new score when one is generated

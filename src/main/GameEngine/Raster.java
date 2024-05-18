@@ -19,9 +19,9 @@ public class Raster extends JPanel
 
 	/**
 	 * Instantiates a new raster 
-	 * @param width
-	 * @param height
-	 * @param bgColor
+	 * @param width the width of the raster
+	 * @param height the height of the raster
+	 * @param bgColor the backgrond color of the raster
 	 */
 	public Raster(int width, int height, Color bgColor)
 	{
@@ -30,10 +30,6 @@ public class Raster extends JPanel
 		this.preferredSize = new Dimension(width, height);
 		this.bgColor = bgColor;
 		reset();
-		// Timer timer = new Timer(1000, new (this));
-		// addKeyListener(GameEngine.getInstance());
-		// setFocusable(true);
-		// requestFocus();
 	}
 
 	/**

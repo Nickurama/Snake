@@ -77,6 +77,7 @@ public class Renderer
 	private static final String DEFAULT_WINDOW_TITLE = "GameEngine Graphical Window";
 	private static final TerminalColour.Background DEFAULT_TEXTUAL_BACKGROUND_COLOUR = null;
 	private static final Color DEFAULT_GRAPHICAL_COLOR = Color.black;
+	private static final boolean DEFAULT_IS_TEXTUAL = true;
 
 	private static Renderer instance = null;
 	private BoundingBox camera;
@@ -103,6 +104,8 @@ public class Renderer
 	{
 		this.graphicalWindowTitle = DEFAULT_WINDOW_TITLE;
 		this.terminalBgColour = DEFAULT_TEXTUAL_BACKGROUND_COLOUR;
+		this.graphicalBgColor = DEFAULT_GRAPHICAL_COLOR;
+		this.isTextual = DEFAULT_IS_TEXTUAL;
 	}
 
 	/**

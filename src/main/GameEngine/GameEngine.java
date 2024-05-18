@@ -36,20 +36,8 @@ import Geometry.Rectangle;
  * @see Renderer
  * @see CollisionManager
  */
-public class GameEngine// implements KeyListener
+public class GameEngine implements IInputListener
 {
-	// public void keyPressed(KeyEvent event)
-	// {
-	// 	System.out.println("key event!");
-	// 	if (event.getKeyChar() == 'n')
-	// 	{
-	// 		System.out.println("N key pressed.");
-	// 		update(1);
-	// 	}
-	// }
-	// public void keyReleased(KeyEvent event) { }
-	// public void keyTyped(KeyEvent event) { }
-
 	private final String STOP_CMD_STR = "stop";
 	private final String DEBUG_CMD_STR = "debug";
 	private final char BG_CHAR = ' ';
@@ -146,8 +134,12 @@ public class GameEngine// implements KeyListener
 		if (this.camera != null)
 			Renderer.getInstance().render(this.currScene, this.camera, this.BG_CHAR);
 
+		InputManager.getInstance().init(this.currScene);
+		if (Renderer.getInstance().getGraphicWindow() != null)
+		Renderer.getInstance().getGraphicWindow().addKeyListener(InputManager.getInstance());
+
 		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
-			updateStepped();
+			InputManager.getInstance().captureInput();
 		else if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.AUTO)
 		{
 			// TODO: implement
@@ -177,23 +169,52 @@ public class GameEngine// implements KeyListener
 		Renderer.getInstance().closeGraphicWindow();
 	}
 
-	/**
-	 * Updates the game engine in a stepped manner (iteratively),
-	 * reading from stdin on every update.
-	 *
-	 * The input read will be distributed among all the IInputListeners in
-	 * the current scene
-	 */
-	private void updateStepped()
+	@Override
+	public void onInputReceived(String input)
 	{
-		Scanner reader = new Scanner(System.in);
-		while(this.isRunning)
-		{
-			String command = reader.nextLine();
-			executeCommand(command);
-		}
-		reader.close();
+		update(1);
 	}
+
+	/**
+	 * Called when received input. Runs before the other InputListeners.
+	 * @param input the input received
+	 */
+	public void priorityInput(String input)
+	{
+		executeCommand(input);
+	}
+
+	@Override
+	public void onKeyPressed(KeyEvent event)
+	{
+		if (event.getKeyCode() == KeyEvent.VK_C)
+			stop();
+
+		if (isNotModifierKey(event) && this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
+			update(1);
+	}
+
+	/**
+	 * If the event doesn't describe a modifier key,
+	 * such as ALT, CTRL, SHIFT...
+	 * @param event the event to test for modifier keys
+	 * @return true if the event doesn't describe a modifier key
+	 */
+	private boolean isNotModifierKey(KeyEvent event)
+	{
+		return event.getKeyCode() != KeyEvent.VK_ALT &&
+			event.getKeyCode() != KeyEvent.VK_CONTROL &&
+			event.getKeyCode() != KeyEvent.VK_SHIFT &&
+			event.getKeyCode() != KeyEvent.VK_CAPS_LOCK &&
+			event.getKeyCode() != KeyEvent.VK_ALT &&
+			event.getKeyCode() != KeyEvent.VK_ALT_GRAPH;
+	}
+
+	@Override
+	public void onKeyReleased(KeyEvent event) { }
+
+	@Override
+	public void onKeyTyped(KeyEvent event) { }
 
 	/**
 	 * Executes a command, distributing it through all the IInputListeners in the
@@ -215,11 +236,6 @@ public class GameEngine// implements KeyListener
 			case DEBUG_CMD_STR:
 				Logger.startLogging(Logger.Level.DEBUG);
 				Logger.log(Logger.Level.INFO, "Started debugging.");
-				break;
-			default:
-				for (IInputListener listener : currScene.inputListeners())
-					listener.onInputReceived(command);
-				update(1);
 				break;
 		}
 	}
@@ -270,6 +286,7 @@ public class GameEngine// implements KeyListener
 		for (GameObject obj : newScene)
 			obj.start();
 
+		InputManager.getInstance().init(newScene);
 	}
 
 	/**

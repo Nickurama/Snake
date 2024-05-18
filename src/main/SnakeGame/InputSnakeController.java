@@ -1,5 +1,7 @@
 package SnakeGame;
 
+import java.awt.event.KeyEvent;
+
 import GameEngine.*;
 
 /**
@@ -52,6 +54,15 @@ public class InputSnakeController extends GameObject implements ISnakeController
 		 * 'right' or 'r' to turn right
 		 */
 		RELATIVE,
+
+		/**
+		 * Uses:
+		 * up arrow to go up
+		 * left arrow to go left
+		 * right arrow to go right
+		 * down arrow to go down
+		 */
+		ARROW_KEYS,
 	}
 
 	// WASD
@@ -84,6 +95,12 @@ public class InputSnakeController extends GameObject implements ISnakeController
 	private static final String RELATIVE_FOWARD_INPUT_STR_0 = "foward";
 	private static final String RELATIVE_FOWARD_INPUT_STR_1 = "f";
 
+	// ARROW_KEYS
+	private static final int ARROW_KEYS_UP_KEYCODE = KeyEvent.VK_UP;
+	private static final int ARROW_KEYS_DOWN_KEYCODE = KeyEvent.VK_DOWN;
+	private static final int ARROW_KEYS_LEFT_KEYCODE = KeyEvent.VK_LEFT;
+	private static final int ARROW_KEYS_RIGHT_KEYCODE = KeyEvent.VK_RIGHT;
+
 	private Direction.TurnDirection nextDir;
 	private InputPreset inputPreset;
 	private ISnakeStats snake;
@@ -112,7 +129,28 @@ public class InputSnakeController extends GameObject implements ISnakeController
 	@Override
 	public void onInputReceived(String input)
 	{
-		input = input.toLowerCase();
+		interpretInput(input.toLowerCase());
+	}
+
+	@Override
+	public void onKeyPressed(KeyEvent event)
+	{
+		interpretInput(Character.toString(event.getKeyChar()));
+		interpretInput(event);
+	}
+
+	@Override
+	public void onKeyReleased(KeyEvent event) { }
+
+	@Override
+	public void onKeyTyped(KeyEvent event) { }
+
+	/**
+	 * Interprets input from input string
+	 * @param input the input string
+	 */
+	private void interpretInput(String input)
+	{
 		switch(inputPreset)
 		{
 			case WASD:
@@ -126,6 +164,26 @@ public class InputSnakeController extends GameObject implements ISnakeController
 				break;
 			case RELATIVE:
 				turnRelative(input);
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * Interprets input from KeyEvents
+	 * @param event the KeyEvent to interpret
+	 */
+	private void interpretInput(KeyEvent event)
+	{
+		Character.toString(event.getKeyChar());
+
+		switch(inputPreset)
+		{
+			case ARROW_KEYS:
+				turnArrows(event);
+				break;
+			default:
 				break;
 		}
 	}
@@ -222,6 +280,29 @@ public class InputSnakeController extends GameObject implements ISnakeController
 			case RELATIVE_FOWARD_INPUT_STR_0:
 			case RELATIVE_FOWARD_INPUT_STR_1:
 				this.nextDir = Direction.TurnDirection.NONE;
+				break;
+		}
+	}
+
+	/**
+	 * Moves the snake with the arrow keys
+	 * @param event the player input
+	 */
+	private void turnArrows(KeyEvent event)
+	{
+		switch (event.getKeyCode())
+		{
+			case ARROW_KEYS_UP_KEYCODE:
+				this.nextDir = Direction.getRelativeDir(Direction.UP, snake.direction());
+				break;
+			case ARROW_KEYS_DOWN_KEYCODE:
+				this.nextDir = Direction.getRelativeDir(Direction.DOWN, snake.direction());
+				break;
+			case ARROW_KEYS_LEFT_KEYCODE:
+				this.nextDir = Direction.getRelativeDir(Direction.LEFT, snake.direction());
+				break;
+			case ARROW_KEYS_RIGHT_KEYCODE:
+				this.nextDir = Direction.getRelativeDir(Direction.RIGHT, snake.direction());
 				break;
 		}
 	}

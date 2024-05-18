@@ -2,6 +2,7 @@ package GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
 /**
@@ -34,6 +35,9 @@ public class GraphicWindow
 		frame.setLocationRelativeTo(null);
 		// frame.setSize(width, height);
 		frame.setVisible(true);
+		// Timer timer = new Timer(1000, new (this));
+		frame.setFocusable(true);
+		frame.requestFocus();
 	}
 
 	/**
@@ -74,5 +78,14 @@ public class GraphicWindow
 	{
 		frame.repaint();
 		raster.repaint();
+	}
+
+	/**
+	 * Adds a key listener to the frame
+	 * @param listener the listener to add to the frame
+	 */
+	public void addKeyListener(KeyListener listener)
+	{
+		frame.addKeyListener(listener);
 	}
 }
