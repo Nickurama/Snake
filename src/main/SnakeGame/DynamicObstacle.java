@@ -1,6 +1,9 @@
 package SnakeGame;
 
 import Geometry.*;
+
+import java.awt.Color;
+
 import GameEngine.*;
 
 /**
@@ -28,11 +31,13 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	 * @param drawChar the character to draw the obstacle with
 	 * @param rotationPoint the point the obstacle will rotate around (can be null, rotating around it's centroid)
 	 * @param speed the speed the obstacle should rotate at (rad/ms)
-	 * @param colour the colour the obstacle should be drawn with
+	 * @param terminalColour the colour the obstacle should be drawn with in the terminal
+	 * @param graphicalColor the colour the obstacle should be drawn with in the graphical interface
 	 */
-	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed, Colour.Foreground colour)
+	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed,
+		TerminalColour.Foreground terminalColour, Color graphicalColor)
 	{
-		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, colour);
+		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, terminalColour, graphicalColor);
 		this.collider = obstacle;
 		this.rotationPoint = rotationPoint;
 		if (rotationPoint == null)
@@ -51,7 +56,7 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	 */
 	public DynamicObstacle(Polygon obstacle, boolean isFilled, char drawChar, VirtualPoint rotationPoint, float speed)
 	{
-		this(obstacle, isFilled, drawChar, rotationPoint, speed, null);
+		this(obstacle, isFilled, drawChar, rotationPoint, speed, null, null);
 	}
 
 	/**
@@ -72,7 +77,8 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	 */
 	public DynamicObstacle(DynamicObstacle obstacle)
 	{
-		this((Polygon)obstacle.collider, obstacle.rData.isFilled(), obstacle.rData.getCharacter(), obstacle.rotationPoint, obstacle.speed, obstacle.rData.getColour());
+		this((Polygon)obstacle.collider, obstacle.rData.isFilled(), obstacle.rData.getCharacter(), obstacle.rotationPoint, obstacle.speed,
+			obstacle.rData.getTerminalColour(), obstacle.rData.getGraphicalColor());
 	}
 
 	@Override
@@ -102,7 +108,8 @@ public class DynamicObstacle extends GameObject implements IObstacle
 	@Override
 	public RenderData<Polygon> getRenderData()
 	{
-		this.rData = new RenderData<Polygon>((Polygon)this.collider, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), this.rData.getColour());
+		this.rData = new RenderData<Polygon>((Polygon)this.collider, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(),
+			this.rData.getTerminalColour(), this.rData.getGraphicalColor());
 		return this.rData;
 	}
 

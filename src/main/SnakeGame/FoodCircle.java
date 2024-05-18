@@ -1,5 +1,7 @@
 package SnakeGame;
 
+import java.awt.Color;
+
 import GameEngine.*;
 import Geometry.*;
 
@@ -33,7 +35,7 @@ public class FoodCircle extends GameObject implements IFood
 	 */
 	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar) throws SnakeGameException
 	{
-		this(position, radius, isFilled, drawChar, null);
+		this(position, radius, isFilled, drawChar, null, null);
 	}
 
 	/**
@@ -42,11 +44,12 @@ public class FoodCircle extends GameObject implements IFood
 	 * @param radius the radius of the circle
 	 * @param isFilled if the circle should be filled
 	 * @param drawChar the character the circle should be drawn with
-	 * @param colour the colour to draw the circle with (can be null)
+	 * @param terminalColor the colour to draw the circle with in the terminal (can be null)
+	 * @param graphicalColor the colour to draw the circle with in the graphical interface (can be null)
 	 * @throws SnakeGameException if placed in an invalid position or if it doesn't describe a circle
 	 * @pre radius > 0
 	 */
-	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar, Colour.Foreground colour) throws SnakeGameException
+	public FoodCircle(Point position, double radius, boolean isFilled, char drawChar, TerminalColour.Foreground terminalColor, Color graphicalColor) throws SnakeGameException
 	{
 		Circle circle = null;
 
@@ -54,9 +57,9 @@ public class FoodCircle extends GameObject implements IFood
 		{
 			circle = new Circle(position, radius - Unit.UNIT_OFFSET - CIRCLE_OFFSET);
 			if (radius <= 1)
-				this.rData = new FoodSquare(position, radius * 2, isFilled, drawChar, colour).getRenderData();
+				this.rData = new FoodSquare(position, radius * 2, isFilled, drawChar, terminalColor, graphicalColor).getRenderData();
 			else
-				this.rData = new RenderData<Circle>(circle, isFilled, LAYER, drawChar, colour);
+				this.rData = new RenderData<Circle>(circle, isFilled, LAYER, drawChar, terminalColor, graphicalColor);
 		}
 		catch (GeometricException e)
 		{

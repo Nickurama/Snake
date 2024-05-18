@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,15 +34,16 @@ public class Snake extends GameObject implements ISpatialComponent
 	private int toGrow;
 	private boolean isAwake;
 	private Queue<SnakeUnit> units;
-	private Colour.Foreground colour;
+	private TerminalColour.Foreground terminalColour;
+	private Color graphicalColor;
 
 	/**
 	 * Instantiates a snake.
-	 * same as {@link Snake#Snake(Point,Direction,int,boolean,char,char,Colour.Foreground)} but with no colour
+	 * same as {@link Snake#Snake(Point,Direction,int,boolean,char,char,TerminalColour.Foreground)} but with no colour
 	 */
 	public Snake(Point initialPos, Direction initialDir, int unitSize, boolean isFilled, char tailChar, char headChar) throws SnakeGameException
 	{
-		this(initialPos, initialDir, unitSize, isFilled, tailChar, headChar, null);
+		this(initialPos, initialDir, unitSize, isFilled, tailChar, headChar, null, null);
 	}
 
 	/**
@@ -55,9 +57,11 @@ public class Snake extends GameObject implements ISpatialComponent
 	 * @param colour the colour of the snake
 	 * @throws SnakeGameException if trying to instantiate a snake in an invalid position
 	 */
-	public Snake(Point initialPos, Direction initialDir, int unitSize, boolean isFilled, char tailChar, char headChar, Colour.Foreground colour) throws SnakeGameException
+	public Snake(Point initialPos, Direction initialDir, int unitSize, boolean isFilled, char tailChar, char headChar,
+		TerminalColour.Foreground terminalColour, Color graphicalColor) throws SnakeGameException
 	{
-		this.colour = colour;
+		this.terminalColour = terminalColour;
+		this.graphicalColor = graphicalColor;
 		this.units = new LinkedList<SnakeUnit>();
 		this.unitSize = unitSize;
 		this.currDir = initialDir;
@@ -91,7 +95,8 @@ public class Snake extends GameObject implements ISpatialComponent
 	private void createHead(Point initialPos) throws SnakeGameException
 	{
 		this.head = new SnakeUnit(this, initialPos, headChar);
-		this.head.setDrawColour(this.colour);
+		this.head.setTerminalDrawColour(this.terminalColour);
+		this.head.setGraphicalDrawColor(this.graphicalColor);
 		head.setHead(true);
 		this.units.add(this.head);
 		if (super.sceneHandle() != null)

@@ -6,7 +6,7 @@ package GameEngine;
  * @author Diogo Fonseca a79858
  * @version 08/05/2024
  */
-public enum Colour
+public enum TerminalColour
 {
 	/**
 	 * Represents a reset of background/foreground colour

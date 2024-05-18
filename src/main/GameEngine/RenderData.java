@@ -1,5 +1,7 @@
 package GameEngine;
 
+import java.awt.Color;
+
 import Geometry.*;
 
 /**
@@ -20,7 +22,18 @@ public class RenderData<T extends IGeometricShape<?>> implements Comparable<Rend
 	private boolean isFilled;
 	private int layer;
 	private Character character;
-	private Colour.Foreground colour;
+	private TerminalColour.Foreground terminalColour;
+	private Color graphicalColor;
+
+	// public RenderData(T shape, boolean isFilled, int layer, Color color)
+	// {
+	// 	this.shape = shape;
+	// 	this.isFilled = isFilled;
+	// 	this.layer = layer;
+	// 	this.character = null;
+	// 	this.terminalColour = null;
+	// 	this.color = color;
+	// }
 
 	/**
 	 * Initializes a RenderData
@@ -28,25 +41,26 @@ public class RenderData<T extends IGeometricShape<?>> implements Comparable<Rend
 	 * @param isFilled if the shape is to be filled
 	 * @param layer the layer to render the shape in
 	 * @param character the character to render the shape with
-	 * @param colour the colour to render the shape with (can be null)
+	 * @param graphicalColor the colour to render the shape with (can be null)
 	 */
-	public RenderData(T shape, boolean isFilled, int layer, Character character, Colour.Foreground colour)
+	public RenderData(T shape, boolean isFilled, int layer, Character character, TerminalColour.Foreground terminalColour, Color graphicalColor)
 	{
 		this.shape = shape;
 		this.isFilled = isFilled;
 		this.layer = layer;
 		this.character = character;
-		this.colour = colour;
+		this.terminalColour = terminalColour;
+		this.graphicalColor = graphicalColor;
 	}
 
 	/**
 	 * Initializes a RenderData
-	 * Same as {@link RenderData#RenderData(T,boolean,int,Character,Colour.Foreground)} but colour is null
+	 * Same as {@link RenderData#RenderData(T,boolean,int,Character,TerminalColour.Foreground)} but colour is null
 	 * (renders without colour)
 	 */
 	public RenderData(T shape, boolean isFilled, int layer, Character character)
 	{
-		this(shape, isFilled, layer, character, null);
+		this(shape, isFilled, layer, character, null, null);
 	}
 
 	/**
@@ -74,10 +88,16 @@ public class RenderData<T extends IGeometricShape<?>> implements Comparable<Rend
 	public Character getCharacter() { return this.character; }
 
 	/**
-	 * The colour the shape should be rendered with
+	 * The colour the shape should be rendered with textually
 	 * @return the colour the shape should be rendered with
 	 */
-	public Colour.Foreground getColour() { return this.colour; }
+	public TerminalColour.Foreground getTerminalColour() { return this.terminalColour; }
+
+	/**
+	 * The color the shape should be rendered with graphically
+	 * @return the color the shape should be rendered with
+	 */
+	public Color getGraphicalColor() { return this.graphicalColor; }
 
 	@Override
 	public int compareTo(RenderData<T> that)

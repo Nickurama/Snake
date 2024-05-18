@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 
+import java.awt.Color;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,10 +77,15 @@ public class GameManager extends GameObject implements IInputListener
 	private static final char DEFAULT_SNAKE_TAIL = 'T';
 	private static final InputPreset DEFAULT_INPUT_PRESET = InputPreset.WASD;
 	public static final long DEFAULT_SEED = 137;
-	private static final Colour.Background DEFAULT_COLOUR_BG = null;
-	private static final Colour.Foreground DEFAULT_COLOUR_SNAKE = null;
-	private static final Colour.Foreground DEFAULT_COLOUR_FOOD = null;
-	private static final Colour.Foreground DEFAULT_COLOUR_OBSTACLES = null;
+	private static final TerminalColour.Background DEFAULT_TRM_COLOUR_BG = null;
+	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_SNAKE = null;
+	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_FOOD = null;
+	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_OBSTACLES = null;
+	private static final Color DEFAULT_GRA_COLOR_BG = Color.white;
+	private static final Color DEFAULT_GRA_COLOR_SNAKE = Color.green;
+	private static final Color DEFAULT_GRA_COLOR_FOOD = Color.red;
+	private static final Color DEFAULT_GRA_COLOR_OBSTACLES = Color.gray;
+	private static final String DEFAULT_GRAPHICAL_WINDOW_TITLE = "Snake Game";
 
 	private Point initialPosition;
 	private char mapChar;
@@ -106,10 +112,15 @@ public class GameManager extends GameObject implements IInputListener
 	private ControlMethod controlMethod;
 	private Integer maxScoresDisplay;
 	private long seed;
-	private Colour.Background bgColour;
-	private Colour.Foreground snakeColour;
-	private Colour.Foreground foodColour;
-	private Colour.Foreground obstaclesColour;
+	private TerminalColour.Background terminalBgColour;
+	private TerminalColour.Foreground terminalSnakeColour;
+	private TerminalColour.Foreground terminalFoodColour;
+	private TerminalColour.Foreground terminalObstaclesColour;
+	private Color graphicalBgColor;
+	private Color graphicalSnakeColor;
+	private Color graphicalFoodColor;
+	private Color graphicalObstaclesColor;
+	private String windowTitle;
 
 	private Scene scene;
 	private Snake snake;
@@ -135,10 +146,15 @@ public class GameManager extends GameObject implements IInputListener
 		this.snakeHeadChar = DEFAULT_SNAKE_HEAD;
 		this.snakeTailChar = DEFAULT_SNAKE_TAIL;
 		this.seed = DEFAULT_SEED;
-		this.bgColour = DEFAULT_COLOUR_BG;
-		this.snakeColour = DEFAULT_COLOUR_SNAKE;
-		this.foodColour = DEFAULT_COLOUR_FOOD;
-		this.obstaclesColour = DEFAULT_COLOUR_OBSTACLES;
+		this.terminalBgColour = DEFAULT_TRM_COLOUR_BG;
+		this.terminalSnakeColour = DEFAULT_TRM_COLOUR_SNAKE;
+		this.terminalFoodColour = DEFAULT_TRM_COLOUR_FOOD;
+		this.terminalObstaclesColour = DEFAULT_TRM_COLOUR_OBSTACLES;
+		this.graphicalBgColor = DEFAULT_GRA_COLOR_BG;
+		this.graphicalSnakeColor = DEFAULT_GRA_COLOR_SNAKE;
+		this.graphicalFoodColor = DEFAULT_GRA_COLOR_FOOD;
+		this.graphicalObstaclesColor = DEFAULT_GRA_COLOR_OBSTACLES;
+		this.windowTitle = DEFAULT_GRAPHICAL_WINDOW_TITLE;
 		this.rng = new Random(this.seed);
 		try
 		{
@@ -543,7 +559,7 @@ public class GameManager extends GameObject implements IInputListener
 	{
 		Point snakePos = this.startingSnakePos == null ? map.getRandomUnitSpawnPosition(snakeSize) : this.startingSnakePos;
 		Direction snakeDir = this.startingSnakeDir == null ? getRandomSnakeDir() : this.startingSnakeDir;
-		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar, this.snakeColour);
+		return new Snake(snakePos, snakeDir, this.snakeSize, this.isFilled, this.snakeTailChar, this.snakeHeadChar, this.terminalSnakeColour, this.graphicalSnakeColor);
 	}
 
 	/**
@@ -556,6 +572,7 @@ public class GameManager extends GameObject implements IInputListener
 		try
 		{
 			map = new GameMap(this.mapWidth, this.mapHeight, initialPosition, this.mapChar, this.seed);
+			map.setGraphicalColor(this.graphicalBgColor);
 		}
 		catch (Exception e)
 		{
@@ -618,13 +635,14 @@ public class GameManager extends GameObject implements IInputListener
 		for (Polygon poly : this.staticObstacles)
 		{
 			Polygon absoluteCollider = map.getAbsolute(poly);
-			obstacles[n++] = new StaticObstacle(absoluteCollider, this.isFilled, this.obstacleChar, this.obstaclesColour);
+			obstacles[n++] = new StaticObstacle(absoluteCollider, this.isFilled, this.obstacleChar, this.terminalObstaclesColour, this.graphicalObstaclesColor);
 		}
 		for (DynamicObstacle obstacle : this.dynamicObstacles)
 		{
 			Polygon absoluteCollider = map.getAbsolute((Polygon)obstacle.getCollider());
 			VirtualPoint absoluteAnchor = map.getAbsolute(((DynamicObstacle)obstacle).rotationPoint());
-			obstacles[n++] = new DynamicObstacle(absoluteCollider, this.isFilled, this.obstacleChar, absoluteAnchor, obstacle.speed(), this.obstaclesColour);
+			obstacles[n++] = new DynamicObstacle(absoluteCollider, this.isFilled, this.obstacleChar, absoluteAnchor, obstacle.speed(),
+				this.terminalObstaclesColour, this.graphicalObstaclesColor);
 		}
 		return obstacles;
 	}
@@ -702,10 +720,10 @@ public class GameManager extends GameObject implements IInputListener
 			switch(foodType)
 			{
 				case FoodType.SQUARE:
-					food = new FoodSquare(foodPos, this.foodSize, this.isFilled, this.foodChar, this.foodColour);
+					food = new FoodSquare(foodPos, this.foodSize, this.isFilled, this.foodChar, this.terminalFoodColour, this.graphicalFoodColor);
 					break;
 				case FoodType.CIRCLE:
-					food = new FoodCircle(foodPos, this.foodSize / 2, this.isFilled, this.foodChar, this.foodColour);
+					food = new FoodCircle(foodPos, this.foodSize / 2, this.isFilled, this.foodChar, this.terminalFoodColour, this.graphicalFoodColor);
 					break;
 				default:
 					Logger.log(Logger.Level.FATAL, "Unrecognized food type.");
@@ -749,7 +767,9 @@ public class GameManager extends GameObject implements IInputListener
 		flags.setTextual(this.isTextual);
 		flags.setUpdateMethod(this.updateMethod);
 		engine.init(flags, this.scene, this.camera);
-		Renderer.getInstance().setBackgroundColour(this.bgColour);
+		Renderer.getInstance().setTerminalBackgroundColour(this.terminalBgColour);
+		Renderer.getInstance().setGraphicalBackgroundColor(this.graphicalBgColor);
+		Renderer.getInstance().setGraphicalWindowTitle(this.windowTitle);
 	}
 
 	/**
@@ -923,28 +943,36 @@ public class GameManager extends GameObject implements IInputListener
 	 * @param colour the background colour to be set to
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
-	public void setBackgroundColour(Colour.Background colour) { this.bgColour = colour; }
+	public void setTerminalBackgroundColour(TerminalColour.Background colour) { this.terminalBgColour = colour; }
+
+	public void setGraphicalBackgroundColor(Color color) { this.graphicalBgColor = color; }
 
 	/**
 	 * Sets the snake's colour
 	 * @param colour the new snake's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
-	public void setSnakeColour(Colour.Foreground colour) { this.snakeColour = colour; }
+	public void setTerminalSnakeColour(TerminalColour.Foreground colour) { this.terminalSnakeColour = colour; }
+
+	public void setGraphicalSnakeColor(Color color) { this.graphicalSnakeColor = color; }
 
 	/**
 	 * Sets the food's colour
 	 * @param colour the new food's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
-	public void setFoodColour(Colour.Foreground colour) { this.foodColour = colour; }
+	public void setTerminalFoodColour(TerminalColour.Foreground colour) { this.terminalFoodColour = colour; }
+
+	public void setGraphicalFoodColor(Color color) { this.graphicalFoodColor = color; }
 
 	/**
 	 * Sets the obstacle's colour
 	 * @param colour the new obstacle's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
-	public void setObstaclesColour(Colour.Foreground colour) { this.obstaclesColour = colour; }
+	public void setTerminalObstaclesColour(TerminalColour.Foreground colour) { this.terminalObstaclesColour = colour; }
+
+	public void setGraphicalObstaclesColor(Color color) { this.graphicalObstaclesColor = color; }
 
 	/**
 	 * Sets the map's draw character

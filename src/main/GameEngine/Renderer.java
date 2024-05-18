@@ -1,5 +1,6 @@
 package GameEngine;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,8 +13,11 @@ import Geometry.*;
  * renderer with information as to how to render a shape, such as colour, or
  * if the shape should be filled or not.
  *
- * Colour is completely optional, especially in textual mode, since some terminals
- * don't interpret the ANSI color codes.
+ * TerminalColour is the colour for when rendering with the terminal, in a textual manner.
+ * It's completely optional, since some terminals don't interpret the ANSI color codes.
+ *
+ * Color is the color for when rendering graphically. It's also optional, having a default color
+ * for when a color is null.
  *
  * {@link IOverlay Overlays} are rendered differently, being overlayed on top of the
  * raster after all the rasterization was completed.
@@ -69,23 +73,35 @@ public class Renderer
 		}
 	}
 
+	private static final String DEFAULT_WINDOW_TITLE = "GameEngine Graphical Window";
+	private static final TerminalColour.Background DEFAULT_BACKGROUND_COLOUR = null;
+	private static final Color DEFAULT_COLOR = Color.black;
+
 	private static Renderer instance = null;
 	private BoundingBox camera;
-	private Colour.Background bgColour;
+	private TerminalColour.Background terminalBgColour;
 	private char backgroundChar;
+	private Color graphicalBgColor;
 	private char drawChar;
-	private Colour.Foreground drawColour;
+	private Color graphicalDrawColor;
+	private TerminalColour.Foreground terminalDrawColour;
 	private char[][] raster;
 	private boolean isFrameUsingColour;
 	private String[][] colourRaster;
 	private boolean isTextual;
+	private RenderFrame graphicalRaster;
+	private String graphicalWindowTitle;
+
+	private int width;
+	private int height;
 
 	/**
 	 * Singleton Renderer initialization
 	 */
 	private Renderer()
 	{
-		this.bgColour = null;
+		this.graphicalWindowTitle = DEFAULT_WINDOW_TITLE;
+		this.terminalBgColour = DEFAULT_BACKGROUND_COLOUR;
 	}
 
 	/**
@@ -130,9 +146,39 @@ public class Renderer
 	{
 		this.isFrameUsingColour = false;
 		this.camera = new BoundingBox(camera);
+		this.height = (int)Math.floor(this.camera.maxPoint().Y()) - (int)Math.ceil(this.camera.minPoint().Y()) + 1;
+		this.width = (int)Math.floor(this.camera.maxPoint().X()) - (int)Math.ceil(this.camera.minPoint().X()) + 1;
+
+		if (this.isTextual)
+			initTextual(backgroundChar);
+		else
+			initGraphical(this.graphicalBgColor);
+	}
+
+	/**
+	 * Initializes the renderer for renderization in the terminal.
+	 * @param backgroundChar the character that represents empty space
+	 */
+	private void initTextual(char backgroundChar)
+	{
 		this.backgroundChar = backgroundChar;
-		generateRaster(this.camera);
-		generateColourRaster(this.camera);
+		generateRaster();
+		generateColourRaster();
+	}
+
+	/**
+	 * Initializes the renderer for graphical renderization
+	 * @param bgColor the color that represents empty space
+	 */
+	private void initGraphical(Color bgColor)
+	{
+		if (this.graphicalRaster == null)
+		{
+			this.graphicalRaster = new RenderFrame(this.width, this.height, this.graphicalWindowTitle, bgColor);
+			return;
+		}
+
+		this.graphicalRaster.reset();
 	}
 
 	/**
@@ -140,28 +186,41 @@ public class Renderer
 	 * Can be null (disabling background colour)
 	 * @param colour the background colour (can be null)
 	 */
-	public void setBackgroundColour(Colour.Background colour)
+	public void setTerminalBackgroundColour(TerminalColour.Background colour)
 	{
-		this.bgColour = colour;
+		this.terminalBgColour = colour;
+	}
+
+	/**
+	 * Sets the graphical background color.
+	 * @param color the color to set the graphical background to.
+	 */
+	public void setGraphicalBackgroundColor(Color color)
+	{
+		this.graphicalBgColor = color;
+	}
+
+	/**
+	 * Sets the graphical window title.
+	 * @param title the tile of the graphical window.
+	 */
+	public void setGraphicalWindowTitle(String title)
+	{
+		this.graphicalWindowTitle = title;
 	}
 
 	/**
 	 * Generates the empty rendering raster (with the background character)
 	 * @param cam the location to render
 	 */
-	private void generateRaster(BoundingBox cam)
+	private void generateRaster()
 	{
-		int dy = (int)Math.floor(cam.maxPoint().Y()) - (int)Math.ceil(cam.minPoint().Y()) + 1;
-		int dx = (int)Math.floor(cam.maxPoint().X()) - (int)Math.ceil(cam.minPoint().X()) + 1;
-
-		raster = new char[dy][dx];
-		for (int i = 0; i < dy; i++) // iterate over y
+		raster = new char[this.height][this.width];
+		for (int i = 0; i < this.height; i++) // iterate over y
 		{
-			raster[i] = new char[dx];
-			for (int j = 0; j < dx; j++) // iterate over x
-			{
+			raster[i] = new char[this.width];
+			for (int j = 0; j < this.width; j++) // iterate over x
 				raster[i][j] = backgroundChar;
-			}
 		}
 	}
 
@@ -169,14 +228,11 @@ public class Renderer
 	 * Generates the empty colour raster (with the background colour, in case there is one)
 	 * @param cam the location to render
 	 */
-	private void generateColourRaster(BoundingBox cam)
+	private void generateColourRaster()
 	{
-		int dy = (int)Math.floor(cam.maxPoint().Y()) - (int)Math.ceil(cam.minPoint().Y()) + 1;
-		int dx = (int)Math.floor(cam.maxPoint().X()) - (int)Math.ceil(cam.minPoint().X()) + 1;
-
-		colourRaster = new String[dy][dx];
-		for (int i = 0; i < dy; i++) // iterate over y
-			colourRaster[i] = new String[dx];
+		colourRaster = new String[this.height][this.width];
+		for (int i = 0; i < this.height; i++) // iterate over y
+			colourRaster[i] = new String[this.width];
 	}
 
 	/**
@@ -193,26 +249,37 @@ public class Renderer
 			return;
 
 		x = x - (int)Math.ceil(camera.minPoint().X());
-		y = (raster.length - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
+		// y = (raster.length - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
+		y = (this.height - 1) - (y - (int)Math.ceil(camera.minPoint().Y()));
 
 		if (this.isTextual)
 			drawTextual(x, y);
 		else
-			drawGUI(x, y);
-
-
+			drawGraphical(x, y);
 	}
 
-	private void drawGUI(int x, int y)
+	/**
+	 * Draws on the graphical raster
+	 * @param x the x coordinate to draw on
+	 * @param y the y coordinate to draw on
+	 */
+	private void drawGraphical(int x, int y)
 	{
-
+		if (this.graphicalDrawColor == null)
+			this.graphicalDrawColor = DEFAULT_COLOR;
+		this.graphicalRaster.draw(x, y, this.graphicalDrawColor);
 	}
 
+	/**
+	 * Draws on the textual raster
+	 * @param x the x coordinate to draw on
+	 * @param y the y coordinate to draw on
+	 */
 	private void drawTextual(int x, int y)
 	{
 		raster[y][x] = drawChar;
 
-		if (drawColour != null)
+		if (terminalDrawColour != null)
 			drawColour(x, y);
 	}
 
@@ -225,18 +292,18 @@ public class Renderer
 	{
 		this.isFrameUsingColour = true;
 		int next = x + 1;
-		colourRaster[y][x] = drawColour.toString();
+		colourRaster[y][x] = terminalDrawColour.toString();
 		if (next < colourRaster[0].length && colourRaster[y][next] == null)
 		{
-			colourRaster[y][next] = Colour.RESET.toString();
-			if (this.bgColour != null)
-				colourRaster[y][next] += bgColour.toString();
+			colourRaster[y][next] = TerminalColour.RESET.toString();
+			if (this.terminalBgColour != null)
+				colourRaster[y][next] += terminalBgColour.toString();
 		}
 		else if (y + 1 < colourRaster.length && colourRaster[y + 1][0] == null)
 		{
-			colourRaster[y + 1][0] = Colour.RESET.toString();
-			if (this.bgColour != null)
-				colourRaster[y + 1][0] += bgColour.toString();
+			colourRaster[y + 1][0] = TerminalColour.RESET.toString();
+			if (this.terminalBgColour != null)
+				colourRaster[y + 1][0] += terminalBgColour.toString();
 		}
 	}
 
@@ -249,45 +316,56 @@ public class Renderer
 		if (isTextual)
 			printTextual();
 		else
-			printGUI();
+			printGraphical();
 	}
 
-	private void printGUI()
+	/**
+	 * Prints the raster to the graphical window
+	 */
+	private void printGraphical()
 	{
-
+		this.graphicalRaster.repaint();
 	}
 
+	/**
+	 * Prints the raster to the terminal
+	 */
 	private void printTextual()
 	{
-		if (drawColour != null)
-		{
+		if (this.isFrameUsingColour)
 			printColour();
-			return;
-		}
+		else
+			printNoColor();
+	}
 
+	/**
+	 * Prints the raster to the terminal without color
+	 */
+	private void printNoColor()
+	{
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < raster.length; i++) // iterate over y
 		{
-			if (bgColour != null)
-				builder.append(this.bgColour);
+			if (this.terminalBgColour != null)
+				builder.append(this.terminalBgColour);
 			builder.append(new String(raster[i]));
 			builder.append('\n');
 		}
-		if (bgColour != null)
-			builder.append(Colour.RESET);
+		if (this.terminalBgColour != null)
+			builder.append(TerminalColour.RESET);
 		System.out.print(builder.toString());
 	}
 
 	/**
-	 * Prints the current raster to the screen with colour
+	 * Prints the current raster to the terminal with colour
 	 */
 	private void printColour()
 	{
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < raster.length; i++) // iterate over y
 		{
-			if (bgColour != null)
-				builder.append(this.bgColour);
+			if (this.terminalBgColour != null)
+				builder.append(this.terminalBgColour);
 			for (int j = 0; j < raster[0].length; j++) // iterate over x
 			{
 				if (colourRaster[i][j] != null)
@@ -296,8 +374,8 @@ public class Renderer
 			}
 			builder.append('\n');
 		}
-		if (bgColour != null)
-			builder.append(Colour.RESET);
+		if (this.terminalBgColour != null)
+			builder.append(TerminalColour.RESET);
 		System.out.print(builder.toString());
 	}
 
@@ -445,22 +523,24 @@ public class Renderer
 	 */
 	public void render(Circle circle, char drawChar) throws GameEngineException
 	{
-		render(circle, drawChar, null);
+		render(circle, drawChar, null, null);
 	}
 
 	/**
 	 * Renders a circle to the screen with colour.
 	 * @param circle the circle to render
 	 * @param drawChar the character to render the circle with
-	 * @param colour the colour to render the circle with (can be null)
+	 * @param terminalColour the colour to render the circle with in the terminal (can be null)
+	 * @param graphicalColor the colour to render the circle with in the graphical interface (can be null)
 	 * @pre must initialize renderer first
 	 * @throws GameEngineException if the renderer was not initialized properly
 	 */
-	public void render(Circle circle, char drawChar, Colour.Foreground colour) throws GameEngineException
+	public void render(Circle circle, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws GameEngineException
 	{
 		validateRender();
 		this.drawChar = drawChar;
-		this.drawColour = colour;
+		this.terminalDrawColour = terminalColour;
+		this.graphicalDrawColor = graphicalColor;
 		rasterize(circle);
 		print();
 	}
@@ -474,22 +554,24 @@ public class Renderer
 	 */
 	public void renderSides(Circle circle, char drawChar) throws GameEngineException
 	{
-		renderSides(circle, drawChar, null);
+		renderSides(circle, drawChar, null, null);
 	}
 
 	/**
 	 * Renders the outline of a circle to the screen with colour.
 	 * @param circle the circle to render
 	 * @param drawChar the character to render the circle with
-	 * @param colour the colour to draw the circle with (can be null)
+	 * @param terminalColour the colour to draw the circle with in the terminal (can be null)
+	 * @param graphicalColor the colour to draw the circle with in the graphical interface (can be null)
 	 * @pre must initialize renderer first
 	 * @throws GameEngineException if the renderer was not initialized properly
 	 */
-	public void renderSides(Circle circle, char drawChar, Colour.Foreground colour) throws GameEngineException
+	public void renderSides(Circle circle, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws GameEngineException
 	{
 		validateRender();
 		this.drawChar = drawChar;
-		this.drawColour = colour;
+		this.terminalDrawColour = terminalColour;
+		this.graphicalDrawColor = graphicalColor;
 		rasterizeSides(circle);
 		print();
 	}
@@ -503,22 +585,24 @@ public class Renderer
 	 */
 	public void render(Polygon poly, char drawChar) throws GameEngineException
 	{
-		render(poly, drawChar, null);
+		render(poly, drawChar, null, null);
 	}
 
 	/**
 	 * Renders a polygon to the screen with colour.
 	 * @param poly the polygon to render
 	 * @param drawChar the character to render the polygon with
-	 * @param colour the colour to draw the polygon with (can be null)
+	 * @param terminalColour the colour to draw the polygon with in the terminal (can be null)
+	 * @param graphicalColor the colour to draw the polygon with in the graphical interface (can be null)
 	 * @pre must initialize renderer first
 	 * @throws GameEngineException if the renderer was not initialized properly
 	 */
-	public void render(Polygon poly, char drawChar, Colour.Foreground colour) throws GameEngineException
+	public void render(Polygon poly, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws GameEngineException
 	{
 		validateRender();
 		this.drawChar = drawChar;
-		this.drawColour = colour;
+		this.terminalDrawColour = terminalColour;
+		this.graphicalDrawColor = graphicalColor;
 		rasterize(poly);
 		print();
 	}
@@ -532,22 +616,24 @@ public class Renderer
 	 */
 	public void renderSides(Polygon poly, char drawChar) throws GameEngineException
 	{
-		renderSides(poly, drawChar, null);
+		renderSides(poly, drawChar, null, null);
 	}
 
 	/**
 	 * Renders the outline of a polygon to the screen with colour.
 	 * @param poly the polygon to render
 	 * @param drawChar the character to render the polygon with
-	 * @param colour the colour to render the polygon with (can be null)
+	 * @param terminalColour the colour to render the polygon with in the terminal (can be null)
+	 * @param graphicalColor the colour to render the polygon with in the graphical interface (can be null)
 	 * @pre must initialize renderer first
 	 * @throws GameEngineException if the renderer was not initialized properly
 	 */
-	public void renderSides(Polygon poly, char drawChar, Colour.Foreground colour) throws GameEngineException
+	public void renderSides(Polygon poly, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws GameEngineException
 	{
 		validateRender();
 		this.drawChar = drawChar;
-		this.drawColour = colour;
+		this.terminalDrawColour = terminalColour;
+		this.graphicalDrawColor = graphicalColor;
 		rasterizeSides(poly);
 		print();
 	}
@@ -561,22 +647,24 @@ public class Renderer
 	 */
 	public void render(LineSegment segment, char drawChar) throws GameEngineException
 	{
-		render(segment, drawChar, null);
+		render(segment, drawChar, null, null);
 	}
 
 	/**
 	 * Renders a segment to the screen with colour.
 	 * @param segment the segment to render
 	 * @param drawChar the character to render the segment with
-	 * @param colour the colour to render the segment with
+	 * @param terminalColour the colour to render the segment with in the terminal
+	 * @param graphicalColor the colour to render the segment with in the graphical interface
 	 * @pre must initialize renderer first
 	 * @throws GameEngineException if the renderer was not initialized properly
 	 */
-	public void render(LineSegment segment, char drawChar, Colour.Foreground colour) throws GameEngineException
+	public void render(LineSegment segment, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws GameEngineException
 	{
 		validateRender();
 		this.drawChar = drawChar;
-		this.drawColour = colour;
+		this.terminalDrawColour = terminalColour;
+		this.graphicalDrawColor = graphicalColor;
 		rasterize(segment);
 		print();
 	}
@@ -597,6 +685,18 @@ public class Renderer
 	 */
 	private void rasterize(IOverlay overlay)
 	{
+		if (this.isTextual)
+			rasterizeTextualOverlay(overlay);
+		else
+			rasterizeGraphicalOverlay(overlay);
+	}
+
+	/**
+	 * Rasterizes a textual overlay
+	 * @param overlay the overlay to rasterize
+	 */
+	private void rasterizeTextualOverlay(IOverlay overlay)
+	{
 		char[][] overlayRaster = overlay.getOverlay();
 		for (int i = 0; i < raster.length; i++)
 		{
@@ -607,12 +707,21 @@ public class Renderer
 				raster[i][j] = overlayRaster[i][j];
 				if (isFrameUsingColour)
 				{
-					colourRaster[i][j] = Colour.RESET.toString();
-					if (this.bgColour != null)
-						colourRaster[i][j] += this.bgColour.toString();
+					colourRaster[i][j] = TerminalColour.RESET.toString();
+					if (this.terminalBgColour != null)
+						colourRaster[i][j] += this.terminalBgColour.toString();
 				}
 			}
 		}
+	}
+
+	/**
+	 * Rasterizes a graphical overlay
+	 * @param overlay the overlay to rasterize
+	 */
+	private void rasterizeGraphicalOverlay(IOverlay overlay)
+	{
+
 	}
 
 	/**
@@ -626,7 +735,8 @@ public class Renderer
 		for (RenderData<?> rData : renderDataArr)
 		{
 			IGeometricShape<?> shape = rData.getShape();
-			this.drawColour = rData.getColour();
+			this.terminalDrawColour = rData.getTerminalColour();
+			this.graphicalDrawColor = rData.getGraphicalColor();
 			this.drawChar = rData.getCharacter();
 			if (shape instanceof Polygon)
 			{

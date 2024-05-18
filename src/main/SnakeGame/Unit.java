@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 import GameEngine.*;
+import java.awt.Color;
 
 /**
  * Represents a unit:
@@ -35,11 +36,11 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 
 	/**
 	 * Instantiates a unit.
-	 * Same as {@link Unit#Unit(Point,double,boolean,char,Colour.Foreground,int)} but with no colour.
+	 * Same as {@link Unit#Unit(Point,double,boolean,char,TerminalColour.Foreground,int)} but with no colour.
 	 */
 	public Unit(Point position, double size, boolean isFilled, char drawChar, int layer) throws SnakeGameException
 	{
-		this(position, size, isFilled, drawChar, null, layer);
+		this(position, size, isFilled, drawChar, null, null, layer);
 	}
 
 	/**
@@ -49,17 +50,18 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 	 * @param size the length of each side
 	 * @param isFilled if the unit should be filled
 	 * @param drawChar the character to draw the unit with
-	 * @param colour the colour to draw the unit with (can be null)
+	 * @param terminalColour the colour to draw the unit with on the terminal (can be null)
+	 * @param graphicalColor the colour to draw the unit with on the graphical interface (can be null)
 	 * @param layer the layer to draw the unit in
 	 * @throws SnakeGameException if it's placed in an invalid position (including zero-based coordiantes)
 	 * @pre size > 0
 	 */
-	public Unit(Point position, double size, boolean isFilled, char drawChar, Colour.Foreground colour, int layer) throws SnakeGameException
+	public Unit(Point position, double size, boolean isFilled, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor, int layer) throws SnakeGameException
 	{
 		this.position = position;
 		this.size = size;
 		generateUnit();
-		this.rData = new RenderData<Square>(this.unit, isFilled, layer, drawChar, colour);
+		this.rData = new RenderData<Square>(this.unit, isFilled, layer, drawChar, terminalColour, graphicalColor);
 	}
 
 	/**
@@ -118,16 +120,22 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 	 */
 	public void setDrawChar(char newChar)
 	{
-		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), newChar, this.rData.getColour());
+		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), newChar,
+			this.rData.getTerminalColour(), this.rData.getGraphicalColor());
 	}
 
 	/**
 	 * Sets the colour to draw the unit with
 	 * @param newColour the colour to draw the unit with
 	 */
-	public void setDrawColour(Colour.Foreground newColour)
+	public void setTerminalDrawColour(TerminalColour.Foreground newColour)
 	{
-		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), newColour);
+		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), newColour, this.rData.getGraphicalColor());
+	}
+
+	public void setGraphicalDrawColor(Color newColor)
+	{
+		this.rData = new RenderData<Square>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), this.rData.getTerminalColour(), newColor);
 	}
 
 	@Override
@@ -136,7 +144,8 @@ public class Unit extends GameObject implements IRenderable, ISpatialComponent
 	@Override
 	public RenderData<Square> getRenderData()
 	{
-		return this.rData = new RenderData<Square>(this.unit, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(), this.rData.getColour());
+		return this.rData = new RenderData<Square>(this.unit, this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(),
+			this.rData.getTerminalColour(), this.rData.getGraphicalColor());
 	}
 
 	/**

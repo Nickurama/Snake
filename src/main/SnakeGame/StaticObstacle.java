@@ -1,6 +1,9 @@
 package SnakeGame;
 
 import Geometry.*;
+
+import java.awt.Color;
+
 import GameEngine.*;
 
 /**
@@ -27,7 +30,7 @@ public class StaticObstacle extends GameObject implements IObstacle
 	 */
 	public StaticObstacle(Polygon obstacle, boolean isFilled, char drawChar)
 	{
-		this(obstacle, isFilled, drawChar, null);
+		this(obstacle, isFilled, drawChar, null, null);
 	}
 
 	/**
@@ -35,11 +38,12 @@ public class StaticObstacle extends GameObject implements IObstacle
 	 * @param obstacle the 'hitbox' of the obstacle
 	 * @param isFilled if the obstacle should be drawn as filled
 	 * @param drawChar the character the obstacle should be drawn with
-	 * @param colour the colour to draw the obstacle with (can be null)
+	 * @param terminalColour the colour to draw the obstacle with in the terminal (can be null)
+	 * @param graphicalColor the colour to draw the obstacle with in the graphic interface (can be null)
 	 */
-	public StaticObstacle(Polygon obstacle, boolean isFilled, char drawChar, Colour.Foreground colour)
+	public StaticObstacle(Polygon obstacle, boolean isFilled, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor)
 	{
-		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, colour);
+		this.rData = new RenderData<Polygon>(obstacle, isFilled, LAYER, drawChar, terminalColour, graphicalColor);
 		this.shape = obstacle;
 		this.isDeepCollision = false;
 	}

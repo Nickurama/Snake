@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -345,46 +346,90 @@ public class GameManagerBuilder
 	}
 
 	/**
-	 * Sets the background colour for the rendered game
+	 * Sets the background colour for the rendered game in the terminal
 	 * @param colour the colour to use as background
 	 * @return the GameManagerBuilder instance
 	 */
-	public GameManagerBuilder setBackgroundColour(Colour.Background colour)
+	public GameManagerBuilder setTerminalBackgroundColour(TerminalColour.Background colour)
 	{
-		this.gmInstance.setBackgroundColour(colour);
+		this.gmInstance.setTerminalBackgroundColour(colour);
 		return this;
 	}
 
 	/**
-	 * Sets the snake's colour
+	 * Sets the snake's colour in the terminal
 	 * @param colour the snake's colour
 	 * @return the GameManagerBuilder instance
 	 */
-	public GameManagerBuilder setSnakeColour(Colour.Foreground colour)
+	public GameManagerBuilder setTerminalSnakeColour(TerminalColour.Foreground colour)
 	{
-		this.gmInstance.setSnakeColour(colour);
+		this.gmInstance.setTerminalSnakeColour(colour);
 		return this;
 	}
 
 	/**
-	 * Sets the food's colour
+	 * Sets the food's colour in the terminal
 	 * @param colour the food's colour
 	 * @return the GameManagerBuilder instance
 	 */
-	public GameManagerBuilder setFoodColour(Colour.Foreground colour)
+	public GameManagerBuilder setTerminalFoodColour(TerminalColour.Foreground colour)
 	{
-		this.gmInstance.setFoodColour(colour);
+		this.gmInstance.setTerminalFoodColour(colour);
 		return this;
 	}
 
 	/**
-	 * Sets the obstacle's colour
+	 * Sets the obstacle's colour in the terminal
 	 * @param colour the obstacle's colour
 	 * @return the GameManagerBuilder instance
 	 */
-	public GameManagerBuilder setObstaclesColour(Colour.Foreground colour)
+	public GameManagerBuilder setTerminalObstaclesColour(TerminalColour.Foreground colour)
 	{
-		this.gmInstance.setObstaclesColour(colour);
+		this.gmInstance.setTerminalObstaclesColour(colour);
+		return this;
+	}
+
+	/**
+	 * Sets the background colour for the rendered game in the graphical interface
+	 * @param colour the colour to use as background
+	 * @return the GameManagerBuilder instance
+	 */
+	public GameManagerBuilder setGraphicalBackgroundColour(Color colour)
+	{
+		this.gmInstance.setGraphicalBackgroundColor(colour);
+		return this;
+	}
+
+	/**
+	 * Sets the snake's colour in the graphical interface
+	 * @param colour the snake's colour
+	 * @return the GameManagerBuilder instance
+	 */
+	public GameManagerBuilder setGraphicalSnakeColour(Color colour)
+	{
+		this.gmInstance.setGraphicalSnakeColor(colour);
+		return this;
+	}
+
+	/**
+	 * Sets the food's colour in the graphical interface
+	 * @param colour the food's colour
+	 * @return the GameManagerBuilder instance
+	 */
+	public GameManagerBuilder setGraphicalFoodColour(Color colour)
+	{
+		this.gmInstance.setGraphicalFoodColor(colour);
+		return this;
+	}
+
+	/**
+	 * Sets the obstacle's colour in the graphical interface
+	 * @param colour the obstacle's colour
+	 * @return the GameManagerBuilder instance
+	 */
+	public GameManagerBuilder setGraphicalObstaclesColour(Color colour)
+	{
+		this.gmInstance.setGraphicalObstaclesColor(colour);
 		return this;
 	}
 

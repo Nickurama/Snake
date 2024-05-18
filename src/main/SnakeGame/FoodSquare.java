@@ -1,5 +1,7 @@
 package SnakeGame;
 
+import java.awt.Color;
+
 import GameEngine.*;
 import Geometry.*;
 
@@ -31,7 +33,7 @@ public class FoodSquare extends Unit implements IFood
 	 */
 	public FoodSquare(Point position, double size, boolean isFilled, char drawChar) throws SnakeGameException
 	{
-		this(position, size, isFilled, drawChar, null);
+		this(position, size, isFilled, drawChar, null, null);
 	}
 
 	/**
@@ -40,12 +42,13 @@ public class FoodSquare extends Unit implements IFood
 	 * @param size the size of the food
 	 * @param isFilled if the food should be drawn filled
 	 * @param drawChar the character the food should be drawn with
-	 * @param colour the colour the food should be drawn with (can be null)
+	 * @param terminalColour the colour the food should be drawn with in the terminal (can be null)
+	 * @param graphicalColor the colour the food should be drawn with in the graphical interface (can be null)
 	 * @throws SnakeGameException if it's placed in an invalid position
 	 */
-	public FoodSquare(Point position, double size, boolean isFilled, char drawChar, Colour.Foreground colour) throws SnakeGameException
+	public FoodSquare(Point position, double size, boolean isFilled, char drawChar, TerminalColour.Foreground terminalColour, Color graphicalColor) throws SnakeGameException
 	{
-		super(position, size, isFilled, drawChar, colour, LAYER);
+		super(position, size, isFilled, drawChar, terminalColour, graphicalColor, LAYER);
 		this.wasConsumed = false;
 	}
 

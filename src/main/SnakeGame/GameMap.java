@@ -2,6 +2,7 @@ package SnakeGame;
 
 import Geometry.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -633,6 +634,12 @@ public class GameMap extends GameObject implements IRenderable
 	 * @return the map's height
 	 */
 	public int height() { return this.height; }
+
+	public void setGraphicalColor(Color color)
+	{
+		this.rData = new RenderData<Rectangle>(this.rData.getShape(), this.rData.isFilled(), this.rData.getLayer(), this.rData.getCharacter(),
+			this.rData.getTerminalColour(), color);
+	}
 
 	@Override
 	public void start()

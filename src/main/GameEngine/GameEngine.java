@@ -1,5 +1,7 @@
 package GameEngine;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Scanner;
 import Geometry.Rectangle;
 
@@ -34,8 +36,20 @@ import Geometry.Rectangle;
  * @see Renderer
  * @see CollisionManager
  */
-public class GameEngine
+public class GameEngine// implements KeyListener
 {
+	// public void keyPressed(KeyEvent event)
+	// {
+	// 	System.out.println("key event!");
+	// 	if (event.getKeyChar() == 'n')
+	// 	{
+	// 		System.out.println("N key pressed.");
+	// 		update(1);
+	// 	}
+	// }
+	// public void keyReleased(KeyEvent event) { }
+	// public void keyTyped(KeyEvent event) { }
+
 	private final String STOP_CMD_STR = "stop";
 	private final String DEBUG_CMD_STR = "debug";
 	private final char BG_CHAR = ' ';
@@ -190,18 +204,8 @@ public class GameEngine
 	 */
 	private void executeCommand(String command)
 	{
-		// if (command == null || command.isEmpty())
-		// {
-		// 	System.out.println("Command cannot be null.");
-		// 	return;
-		// }
-
 		switch (command)
 		{
-			// case "":
-			// case "step":
-			// 	System.out.println("Stepping...");
-			// 	break;
 			case STOP_CMD_STR:
 				System.out.println("Stopping...");
 				stop();
