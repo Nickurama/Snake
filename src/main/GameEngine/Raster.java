@@ -2,7 +2,6 @@ package GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -10,12 +9,14 @@ import java.awt.image.BufferedImage;
  * 
  * @author Diogo Fonseca a79858
  * @version 16/05/2024
+ * @see GraphicWindow
  */
 public class Raster extends JPanel
 {
 	private BufferedImage img;
 	private Color bgColor;
 	private Dimension preferredSize;
+	private boolean forceNextRepaint;
 
 	/**
 	 * Instantiates a new raster 
@@ -29,6 +30,7 @@ public class Raster extends JPanel
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		this.preferredSize = new Dimension(width, height);
 		this.bgColor = bgColor;
+		this.forceNextRepaint = true;
 		reset();
 	}
 
@@ -63,9 +65,20 @@ public class Raster extends JPanel
 	{
 		super.paint(graphics);
 
-		// Graphics2D g2d = (Graphics2D) graphics.create();
 		Graphics2D g2d = (Graphics2D) graphics;
 		g2d.drawImage(img, 0, 0, this);
-		// g2d.dispose();
+		if (forceNextRepaint)
+		{
+			repaint(0, 0, img.getWidth(), img.getHeight());
+			this.forceNextRepaint = false;
+		}
+	}
+
+	/**
+	 * Sets the next repaint to be forced and immediate
+	 */
+	public void forceNextRepaint()
+	{
+		this.forceNextRepaint = true;
 	}
 }

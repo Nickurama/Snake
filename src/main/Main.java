@@ -57,9 +57,10 @@ public class Main
 			.setSnakeSize(40)
 			.setFoodSize(40)
 			.setFoodScore(5)
-			.setInputPreset(InputPreset.ARROW_KEYS)
+			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.CIRCLE)
-			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.AUTO)
+			.setMaxFps(3)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
 
 			// setting colors

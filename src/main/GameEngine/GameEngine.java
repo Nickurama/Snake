@@ -36,7 +36,7 @@ import Geometry.Rectangle;
  * @see Renderer
  * @see CollisionManager
  */
-public class GameEngine implements IInputListener
+public class GameEngine implements IInputListener, IClockListener
 {
 	private final String STOP_CMD_STR = "stop";
 	private final String DEBUG_CMD_STR = "debug";
@@ -45,9 +45,8 @@ public class GameEngine implements IInputListener
 	private GameEngineFlags flags;
 	private Scene currScene;
 	private boolean isRunning;
-	private long lastFrameMillis;
-	private long currentFrameMillis;
 	private Rectangle camera;
+	private Clock clock;
 
 	/**
 	 * private constructor for singleton
@@ -84,9 +83,9 @@ public class GameEngine implements IInputListener
 		this.flags = new GameEngineFlags(flags);
 		this.currScene = scene;
 		this.isRunning = false;
-		this.lastFrameMillis = System.currentTimeMillis();
-		this.currentFrameMillis = System.currentTimeMillis();
 		Renderer.getInstance().setTextual(flags.isTextual());
+		this.clock = new Clock(flags.maxUpdatesPerSecond());
+		this.clock.addListener(this);
 		this.camera = camera;
 	}
 	
@@ -141,9 +140,7 @@ public class GameEngine implements IInputListener
 		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
 			InputManager.getInstance().captureInput();
 		else if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.AUTO)
-		{
-			// TODO: implement
-		}
+			this.clock.start();
 	}
 
 	/**
@@ -160,6 +157,10 @@ public class GameEngine implements IInputListener
 		if (!this.isRunning)
 			return;
 
+		System.out.println("Stopping...");
+
+		this.clock.stop();
+
 		this.isRunning = false;
 		currScene.setActive(false);
 
@@ -172,7 +173,8 @@ public class GameEngine implements IInputListener
 	@Override
 	public void onInputReceived(String input)
 	{
-		update(1);
+		if (this.flags.updateMethod() == GameEngineFlags.UpdateMethod.STEP)
+			update(1);
 	}
 
 	/**
@@ -230,7 +232,6 @@ public class GameEngine implements IInputListener
 		switch (command)
 		{
 			case STOP_CMD_STR:
-				System.out.println("Stopping...");
 				stop();
 				break;
 			case DEBUG_CMD_STR:
@@ -264,7 +265,7 @@ public class GameEngine implements IInputListener
 	 */
 	public void step() throws GameEngineException
 	{
-		step(getDeltaT());
+		step(this.clock.getDeltaT());
 	}
 
 	/**
@@ -289,15 +290,10 @@ public class GameEngine implements IInputListener
 		InputManager.getInstance().init(newScene);
 	}
 
-	/**
-	 * Time elapsed since the last call of this method.
-	 * @return the time elapsed since the last call of this method.
-	 */
-	private long getDeltaT()
+	@Override
+	public void tick(long deltaTimeMs)
 	{
-		lastFrameMillis = currentFrameMillis;
-		currentFrameMillis = System.currentTimeMillis();
-		return currentFrameMillis - lastFrameMillis;
+		update(deltaTimeMs);
 	}
 
 	/**
@@ -311,7 +307,7 @@ public class GameEngine implements IInputListener
 	 * 4. late update
 	 * 5. rendering (if provided a camera)
 	 *
-	 * @param deltaT the elapsed time since the last update
+	 * @param deltaT the elapsed time since the last update in ms.
 	 */
 	private void update(long deltaT)
 	{
@@ -329,17 +325,6 @@ public class GameEngine implements IInputListener
 
 		if (this.camera != null)
 			Renderer.getInstance().render(this.currScene, this.camera, this.BG_CHAR);
-	}
-
-	/**
-	 * Runs a game engine cycle.
-	 * same as {@link GameEngine#update(long)} but gets the time elapsed since last update
-	 *
-	 * @see GameEngine#update(long)
-	 */
-	private void update()
-	{
-		update(getDeltaT());
 	}
 
 	/**

@@ -208,6 +208,17 @@ public class GameManagerBuilder
 	}
 
 	/**
+	 * Sets the maximum fps for the game.
+	 * @param maxFps the max fps for the game.
+	 * @return the GameManagerBuilder instance
+	 */
+	public GameManagerBuilder setMaxFps(float maxFps)
+	{
+		this.gmInstance.setMaxFps(maxFps);
+		return this;
+	}
+
+	/**
 	 * Sets the control method for the snake.
 	 * (If it should be controlled automatically by an AI
 	 * or manually by the player)

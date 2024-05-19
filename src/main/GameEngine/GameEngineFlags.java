@@ -5,7 +5,7 @@ package GameEngine;
  * In other words, the arguments/options of the engine
  *
  * @author Diogo Fonseca a79858
- * @version 30/04/2024
+ * @version 18/05/2024
  *
  * @see GameEngine
  */
@@ -32,9 +32,11 @@ public class GameEngineFlags
 	}
 	private static final UpdateMethod DEFAULT_UPDATE_METHOD = UpdateMethod.STEP;
 	private static final boolean DEFAULT_IS_TEXTUAL = true;
+	private static final float DEFAULT_MAX_UPDATES_SECOND = 1;
 
 	private UpdateMethod updateMethod;
 	private boolean isTextual;
+	private float maxUpdatesPerSecond;
 
 	/**
 	 * Initalizes GameEngineFlags with default values
@@ -42,7 +44,8 @@ public class GameEngineFlags
 	public GameEngineFlags()
 	{
 		this.isTextual = DEFAULT_IS_TEXTUAL;
-		updateMethod = DEFAULT_UPDATE_METHOD;
+		this.updateMethod = DEFAULT_UPDATE_METHOD;
+		this.maxUpdatesPerSecond = DEFAULT_MAX_UPDATES_SECOND;
 	}
 
 	/**
@@ -53,6 +56,7 @@ public class GameEngineFlags
 	{
 		this.updateMethod = that.updateMethod();
 		this.isTextual = that.isTextual();
+		this.maxUpdatesPerSecond = that.maxUpdatesPerSecond();
 	}
 
 	/**
@@ -78,4 +82,16 @@ public class GameEngineFlags
 	 * @param the method how the engine should update
 	 */
 	public void setUpdateMethod(UpdateMethod method) { this.updateMethod = method; }
+
+	/**
+	 * Sets the maximum updates per second when in AUTO update method
+	 * @param maxUpdatesPerSecond the maxium updates per second
+	 */
+	public void setMaxUpdatesPerSecond(float maxUpdatesPerSecond) { this.maxUpdatesPerSecond = maxUpdatesPerSecond; }
+
+	/**
+	 * The maximum updates per second when in AUTO update method
+	 * @return the maxium updates per second
+	 */
+	public float maxUpdatesPerSecond() { return this.maxUpdatesPerSecond; }
 }

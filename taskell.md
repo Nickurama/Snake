@@ -1,8 +1,5 @@
 ## To Do
 
-- Keypress documentation
-- Auto update with clock
-- Clock documentation
 - Graphical overlays
 - Graphical overlays documentation
 - Update UML
@@ -15,6 +12,9 @@
 - Graphical stuff documentation
 - Close window when stopping engine
 - Detect keypress input
+- Keypress documentation
+- Auto update with clock
+- Clock documentation
 
 ## Doing
 

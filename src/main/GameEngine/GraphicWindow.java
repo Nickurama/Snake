@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
  * 
  * @author Diogo Fonseca a79858
  * @version 16/05/2024
+ * @see Raster
  */
 public class GraphicWindow
 {
@@ -76,6 +77,7 @@ public class GraphicWindow
 	 */
 	public void repaint()
 	{
+		raster.forceNextRepaint();
 		frame.repaint();
 		raster.repaint();
 	}

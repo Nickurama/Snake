@@ -87,6 +87,7 @@ public class GameManager extends GameObject implements IInputListener
 	private static final Color DEFAULT_GRA_COLOR_FOOD = Color.red;
 	private static final Color DEFAULT_GRA_COLOR_OBSTACLES = Color.gray;
 	private static final String DEFAULT_GRAPHICAL_WINDOW_TITLE = "Snake Game";
+	private static final float DEFAULT_MAX_FPS = 1;
 
 	private Point initialPosition;
 	private char mapChar;
@@ -122,6 +123,7 @@ public class GameManager extends GameObject implements IInputListener
 	private Color graphicalFoodColor;
 	private Color graphicalObstaclesColor;
 	private String windowTitle;
+	private float maxFps;
 
 	private Scene scene;
 	private Snake snake;
@@ -156,6 +158,7 @@ public class GameManager extends GameObject implements IInputListener
 		this.graphicalFoodColor = DEFAULT_GRA_COLOR_FOOD;
 		this.graphicalObstaclesColor = DEFAULT_GRA_COLOR_OBSTACLES;
 		this.windowTitle = DEFAULT_GRAPHICAL_WINDOW_TITLE;
+		this.maxFps = DEFAULT_MAX_FPS;
 		this.rng = new Random(this.seed);
 		try
 		{
@@ -293,7 +296,7 @@ public class GameManager extends GameObject implements IInputListener
 			this.isTextual = isTextual;
 			this.updateMethod = updateMethod;
 			this.controlMethod = controlMethod;
-			this.camera = generateCamera();
+			this.camera = generateCamera(this.isTextual);
 			initScene();
 			if (this.isFirstSetup)
 				initGameEngine();
@@ -663,14 +666,25 @@ public class GameManager extends GameObject implements IInputListener
 	 * @return the generated camera
 	 * @throws SnakeGameException there was an error while generating the camera
 	 * @pre {@link GameMap map} initialized
+	 * @pre isTextual initialized
 	 */
-	private Rectangle generateCamera() throws SnakeGameException
+	private Rectangle generateCamera(boolean isTextual) throws SnakeGameException
 	{
 		Rectangle camera;
 		try
 		{
-			Point p0 = initialPosition.translate(new Vector(-1, -2));
-			Point p1 = initialPosition.translate(new Vector(this.mapWidth, this.mapHeight)); // already is +1 because it's inclusive
+			Point p0;
+			Point p1;
+			if (isTextual)
+			{
+				p0 = initialPosition.translate(new Vector(-1, -2));
+				p1 = initialPosition.translate(new Vector(this.mapWidth, this.mapHeight)); // already is +1 because it's inclusive
+			}
+			else
+			{
+				p0 = new Point(initialPosition);
+				p1 = initialPosition.translate(new Vector(this.mapWidth - 1, this.mapHeight - 1));
+			}
 			camera = new Rectangle(p0, p1);
 		}
 		catch (Exception e)
@@ -767,6 +781,7 @@ public class GameManager extends GameObject implements IInputListener
 		GameEngineFlags flags = new GameEngineFlags();
 		flags.setTextual(this.isTextual);
 		flags.setUpdateMethod(this.updateMethod);
+		flags.setMaxUpdatesPerSecond(this.maxFps);
 		engine.init(flags, this.scene, this.camera);
 		Renderer.getInstance().setTerminalBackgroundColour(this.terminalBgColour);
 		Renderer.getInstance().setGraphicalBackgroundColor(this.graphicalBgColor);
@@ -1018,4 +1033,6 @@ public class GameManager extends GameObject implements IInputListener
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
 	public void setSnakeTail(char c) { this.snakeTailChar = c; }
+
+	public void setMaxFps(float maxFps) { this.maxFps = maxFps; }
 }

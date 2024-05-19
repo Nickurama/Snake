@@ -58,7 +58,6 @@ public class InputManager implements KeyListener
 		while(GameEngine.getInstance().isRunning())
 		{
 			String input = reader.nextLine();
-			// System.out.println("input received! " + input);
 
 			GameEngine.getInstance().priorityInput(input);
 			if (GameEngine.getInstance().isRunning())
@@ -74,12 +73,6 @@ public class InputManager implements KeyListener
 	@Override
 	public void keyPressed(KeyEvent event)
 	{
-		System.out.println("key event! " + event.getKeyChar() + " pressed!");
-		if (event.getKeyChar() == 'n')
-		{
-			System.out.println("N key pressed.");
-			// update(1);
-		}
 		for (IInputListener listener : scene.inputListeners())
 			listener.onKeyPressed(event);
 		GameEngine.getInstance().onKeyPressed(event);

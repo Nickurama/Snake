@@ -32,6 +32,7 @@ import Geometry.*;
  * @see IOverlay
  * @see IRenderable
  * @see Geometry.IGeometricShape
+ * @see GraphicWindow
  */
 public class Renderer
 {
