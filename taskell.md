@@ -1,6 +1,5 @@
 ## To Do
 
-- Graphical overlays documentation
 - Update UML
 - Fix UML dependencies on naming
 - Update Javadoc
@@ -16,6 +15,7 @@
 - Auto update with clock
 - Clock documentation
 - Graphical overlays
+- Graphical overlays documentation
 
 ## Doing
 

@@ -855,7 +855,7 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 	@Override
 	public void update(int deltaT)
 	{
-		if (this.hasShowedHighscores)
+		if (this.hasShowedHighscores && this.isTextual)
 			restart();
 		else if (this.gameState.equals(GameState.HIGHSCORES) && !this.hasShowedHighscores)
 			this.hasShowedHighscores = true;
@@ -938,6 +938,8 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 			JTextField textField = overlay.getTextField();
 			textField.requestFocus();
 		}
+		else if (this.hasShowedHighscores)
+			restart();
 	}
 
 	@Override
@@ -954,8 +956,6 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 			this.gameState.equals(GameState.GAMEOVER))
 		{
 			JTextField textField = (JTextField)event.getSource();
-			System.out.println(textField.getText());
-			SwingUtilities.getWindowAncestor(textField).requestFocus();
 			handleUsernameInput(textField.getText());
 			GameEngine.getInstance().step();
 		}

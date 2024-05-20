@@ -47,8 +47,12 @@ public class Main
 			new Point(30, 50),
 		});
 
+		Point rotationPoint = new Point(250, 250);
+		float speed = 0.01f;
+
 		new GameManagerBuilder()
 			// .addObstacle(poly)
+			// .addObstacle(poly, null, speed)
 			.setSeed(seed)
 			.setTextual(false)
 			.setFilled(true)
@@ -59,9 +63,9 @@ public class Main
 			.setFoodScore(5)
 			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.CIRCLE)
-			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setMaxFps(10)
-			.setControlMethod(GameManager.ControlMethod.MANUAL)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.AUTO)
+			.setMaxFps(20)
+			.setControlMethod(GameManager.ControlMethod.AUTO)
 
 			// setting colors
 			.setGraphicalBackgroundColour(Color.black)

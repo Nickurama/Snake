@@ -92,8 +92,12 @@ public class GraphicWindow extends JFrame
 	 */
 	public void setOverlay(JPanel panel)
 	{
+		if (this.overlay != null && this.overlay.equals(panel))
+			return;
+
 		if (this.overlay != null)
 			this.layeredPane.remove(this.overlay);
+
 
 		this.overlay = panel;
 		this.layeredPane.add(panel, JLayeredPane.POPUP_LAYER);

@@ -735,6 +735,7 @@ public class Renderer
 	/**
 	 * Rasterizes a graphical overlay
 	 * @param overlay the overlay to rasterize
+	 * @throws RuntimeException if the overlay was null
 	 */
 	private void rasterizeGraphicalOverlay(IOverlay overlay)
 	{
