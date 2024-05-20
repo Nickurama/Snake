@@ -37,17 +37,17 @@ public enum Direction
 		Direction opposite;
 		switch (dir)
 		{
-			case Direction.UP:
-				opposite = Direction.DOWN;
+			case UP:
+				opposite = DOWN;
 				break;
-			case Direction.DOWN:
-				opposite = Direction.UP;
+			case DOWN:
+				opposite = UP;
 				break;
-			case Direction.LEFT:
-				opposite = Direction.RIGHT;
+			case LEFT:
+				opposite = RIGHT;
 				break;
-			case Direction.RIGHT:
-				opposite = Direction.LEFT;
+			case RIGHT:
+				opposite = LEFT;
 				break;
 			default:
 				Logger.log(Logger.Level.FATAL, "Unrecognized direction.");
@@ -89,19 +89,19 @@ public enum Direction
 	{
 		switch (currentDir)
 		{
-			case Direction.UP:
-				if (absoluteDir.equals(Direction.LEFT))
+			case UP:
+				if (absoluteDir.equals(LEFT))
 					return true;
 				break;
-			case Direction.DOWN:
-				if (absoluteDir.equals(Direction.RIGHT))
+			case DOWN:
+				if (absoluteDir.equals(RIGHT))
 					return true;
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				if (absoluteDir.equals(Direction.DOWN))
 					return true;
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				if (absoluteDir.equals(Direction.UP))
 					return true;
 				break;
@@ -120,19 +120,19 @@ public enum Direction
 	{
 		switch (currentDir)
 		{
-			case Direction.UP:
+			case UP:
 				if (absoluteDir.equals(Direction.RIGHT))
 					return true;
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				if (absoluteDir.equals(Direction.LEFT))
 					return true;
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				if (absoluteDir.equals(Direction.UP))
 					return true;
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				if (absoluteDir.equals(Direction.DOWN))
 					return true;
 				break;

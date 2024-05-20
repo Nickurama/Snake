@@ -340,7 +340,8 @@ public class GameEngine implements IInputListener, IClockListener
 	public static String getProjectPath()
 	{
 		String starting = System.getProperty("user.dir");
-		String[] tokens = starting.split(File.separator);
+        String platformIndependantSplitter = File.separator.replace("\\", "\\\\");
+		String[] tokens = starting.split(platformIndependantSplitter);
 
 		String currPath;
 		for (int i = tokens.length - 1; i >= 0; i--)

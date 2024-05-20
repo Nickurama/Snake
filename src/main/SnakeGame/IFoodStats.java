@@ -1,7 +1,5 @@
 package SnakeGame;
 
-import Geometry.*;
-
 /**
  * An interface to get a food's properties
  * 

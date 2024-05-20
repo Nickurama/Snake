@@ -3,15 +3,9 @@ package SnakeGame;
 import Geometry.*;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
 
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
-import SnakeGame.*;
-import SnakeGame.Snake.*;
 import SnakeGame.GameManager.*;
 
 /**

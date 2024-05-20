@@ -2,10 +2,7 @@ package Geometry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.util.Locale;
 
 /**
  * Represents an immutable point in two dimensional space

@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
@@ -501,10 +500,10 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 		
 		switch(this.controlMethod)
 		{
-			case ControlMethod.MANUAL:
+			case MANUAL:
 				controller = new InputSnakeController(this.inputPreset, new SnakeStats(this.snake));
 				break;
-			case ControlMethod.AUTO:
+			case AUTO:
 				controller = new AISnakeController(new SnakeStats(this.snake), this.snakeSize, new FoodStats(), this.map);
 				break;
 		}
@@ -745,10 +744,10 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 		{
 			switch(foodType)
 			{
-				case FoodType.SQUARE:
+				case SQUARE:
 					food = new FoodSquare(foodPos, this.foodSize, this.isFilled, this.foodChar, this.terminalFoodColour, this.graphicalFoodColor);
 					break;
-				case FoodType.CIRCLE:
+				case CIRCLE:
 					food = new FoodCircle(foodPos, this.foodSize / 2, this.isFilled, this.foodChar, this.terminalFoodColour, this.graphicalFoodColor);
 					break;
 				default:

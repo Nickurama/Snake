@@ -129,16 +129,16 @@ public class Snake extends GameObject implements ISpatialComponent
 		
 		switch(currDir)
 		{
-			case Direction.UP:
+			case UP:
 				moveUp();
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				moveDown();
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				moveLeft();
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				moveRight();
 				break;
 		}
@@ -253,16 +253,16 @@ public class Snake extends GameObject implements ISpatialComponent
 	{
 		switch(currDir)
 		{
-			case Direction.UP:
+			case UP:
 				currDir = Direction.LEFT;
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				currDir = Direction.RIGHT;
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				currDir = Direction.DOWN;
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				currDir = Direction.UP;
 				break;
 		}
@@ -275,16 +275,16 @@ public class Snake extends GameObject implements ISpatialComponent
 	{
 		switch(currDir)
 		{
-			case Direction.UP:
+			case UP:
 				currDir = Direction.RIGHT;
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				currDir = Direction.LEFT;
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				currDir = Direction.UP;
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				currDir = Direction.DOWN;
 				break;
 		}

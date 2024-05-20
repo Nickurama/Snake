@@ -42,12 +42,12 @@ public class SnakeController extends GameObject
 	{
 		switch(controller.nextTurn())
 		{
-			case Direction.TurnDirection.NONE:
+			case NONE:
 				break;
-			case Direction.TurnDirection.RIGHT:
+			case RIGHT:
 				snake.turnRight();
 				break;
-			case Direction.TurnDirection.LEFT:
+			case LEFT:
 				snake.turnLeft();
 				break;
 		}

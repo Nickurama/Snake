@@ -162,19 +162,19 @@ public class AISnakeController extends GameObject implements ISnakeController
 		Point point = null;
 		switch (dir)
 		{
-			case Direction.UP:
+			case UP:
 				if (!MathUtil.areEqual(relativePoint.Y(), map.length - 1))
 					point = safeTranslate(relativePoint, 0, 1);
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				if (!MathUtil.areEqual(relativePoint.Y(), 0))
 					point = safeTranslate(relativePoint, 0, -1);
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				if (!MathUtil.areEqual(relativePoint.X(), 0))
 					point = safeTranslate(relativePoint, -1, 0);
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				if (!MathUtil.areEqual(relativePoint.X(), map[0].length - 1))
 					point = safeTranslate(relativePoint, 1, 0);
 				break;

@@ -74,16 +74,16 @@ public class GameplayOverlay extends GameObject implements IOverlay
 		int direction = 0;
 		switch (snakeStats.direction())
 		{
-			case Direction.UP:
+			case UP:
 				direction = 90;
 				break;
-			case Direction.DOWN:
+			case DOWN:
 				direction = 270;
 				break;
-			case Direction.LEFT:
+			case LEFT:
 				direction = 180;
 				break;
-			case Direction.RIGHT:
+			case RIGHT:
 				direction = 0;
 				break;
 		}

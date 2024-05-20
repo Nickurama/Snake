@@ -87,7 +87,7 @@ public class Line
      */
     public VirtualPoint intersection(Line that)
     {
-		assert(isParalel(that)); // lines shoudn't be paralel
+		//assert(isParalel(that)); // lines shoudn't be paralel
         
         double x = (this.coefficientY * that.constant - that.coefficientY * this.constant) /
                     (this.coefficientX * that.coefficientY - that.coefficientX * this.coefficientY);

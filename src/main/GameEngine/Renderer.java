@@ -1,8 +1,6 @@
 package GameEngine;
 
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -999,7 +997,7 @@ public class Renderer
 		if (intersections.size() == 0)
 			return;
 
-		ScanlinePoint last = intersections.getFirst();
+		ScanlinePoint last = intersections.get(0);
 		boolean isPrinting = true;
 		boolean isHorizontal = false;
 		boolean lastHorizontalMin = false;
