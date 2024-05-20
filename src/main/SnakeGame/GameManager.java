@@ -88,7 +88,7 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_SNAKE = null;
 	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_FOOD = null;
 	private static final TerminalColour.Foreground DEFAULT_TRM_COLOUR_OBSTACLES = null;
-	private static final Color DEFAULT_GRA_COLOR_BG = Color.white;
+	private static final Color DEFAULT_GRA_COLOR_BG = Color.black;
 	private static final Color DEFAULT_GRA_COLOR_SNAKE = Color.green;
 	private static final Color DEFAULT_GRA_COLOR_FOOD = Color.red;
 	private static final Color DEFAULT_GRA_COLOR_OBSTACLES = Color.gray;
@@ -1027,6 +1027,12 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 	 * @return the current food's position
 	 */
 	public Point foodPos() { return this.food.position(); }
+
+	/**
+	 * The graphical window's background color
+	 * @return the graphical window's background color
+	 */
+	public Color getBgColor() { return this.graphicalBgColor; }
 
 	/**
 	 * Sets the background colour for the textual mode

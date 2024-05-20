@@ -30,7 +30,6 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	private static final String GAMEOVER_STR = "Game Over!";
 	private static final String SCORE_STR = "Score: ";
 	private static final String NAME_STR = "What is your name?";
-	private static final String JFrame = null;
 
 	private TextOverlay overlay;
 	private ISnakeStats snakeStats;
@@ -94,7 +93,7 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	private void initPanel(int score)
 	{
 		panel.setOpaque(true);
-		panel.setBackground(Color.black);
+		panel.setBackground(GameManager.getInstance().getBgColor());
 
 		generateTitleLabel();
 		generateScoreLabel(score);
@@ -172,7 +171,7 @@ public class GameoverOverlay extends GameObject implements IOverlay
 
 		int textSize = (panel.width() / spaces) / 2;
 		textField.setFont(new Font("SansSerif", Font.ITALIC + Font.BOLD, textSize));
-		textField.setBackground(Color.black);
+		textField.setBackground(GameManager.getInstance().getBgColor());
 		textField.setForeground(Color.gray);
 		textField.setHorizontalAlignment(JLabel.CENTER);
 		textField.setBorder(new LineBorder(Color.red, 2));

@@ -213,7 +213,7 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	private void initPanel()
 	{
 		panel.setOpaque(true);
-		panel.setBackground(Color.black);
+		panel.setBackground(GameManager.getInstance().getBgColor());
 
 		Dimension titleSize = generateTitleLabel();
 		generateHighscoresList(titleSize);
@@ -281,7 +281,7 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 
 		int fontSize = (int)((panel.width() / HIGHSCORE_TITLE_STR.length()) / 3);
 		highscoresList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
-		highscoresList.setBackground(Color.black);
+		highscoresList.setBackground(GameManager.getInstance().getBgColor());
 		highscoresList.setForeground(Color.white);
 
 		Dimension listDim = highscoresList.getPreferredSize();
