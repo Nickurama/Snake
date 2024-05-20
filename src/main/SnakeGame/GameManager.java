@@ -799,7 +799,17 @@ public class GameManager extends GameObject implements IInputListener, ActionLis
 		engine.init(flags, this.scene, this.camera);
 
 		if (!this.isTextual)
-			setupWindowIcon();
+			setupWindow(Renderer.getInstance().getGraphicWindow());
+	}
+
+	/**
+	 * Sets up the graphical window
+	 * @param window the window to setup
+	 */
+	private void setupWindow(GraphicWindow window)
+	{
+		setupWindowIcon();
+		Renderer.getInstance().getGraphicWindow().setResizable(false);
 	}
 
 	/**

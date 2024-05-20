@@ -7,12 +7,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import GameEngine.*;
@@ -287,12 +289,19 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		int y = (int)(titleSize.height * 2);
 		highscoresList.setBounds(x, y, listDim.width, listDim.height);
 
+		highscoresList.setSelectionModel(new DefaultListSelectionModel()
+		{
+			@Override
+			public void setSelectionInterval(int index0, int index1) { super.setSelectionInterval(-1, -1); }
+		});
+		highscoresList.setFocusable(false);
+
 		int heightBound = panel.height() - (2 * y);
 		int widthBound = Math.min((int)(listDim.width * 1.2), (int)(panel.width() * 0.9));
 		scrollPane.setBounds((panel.width() / 2) - (widthBound / 2), y, widthBound, heightBound);
 		scrollPane.setBorder(null);
-		scrollPane.getVerticalScrollBar().setBackground(Color.darkGray);
 		configureScrollbar(scrollPane.getVerticalScrollBar());
+		configureScrollbar(scrollPane.getHorizontalScrollBar());
 	}
 
 	/**
@@ -301,13 +310,11 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	 */
 	private void configureScrollbar(JScrollBar scrollBar)
 	{
+		scrollBar.setBackground(Color.darkGray);
 		scrollBar.setUI(new BasicScrollBarUI()
 		{
 			@Override
-			protected void configureScrollBarColors()
-			{
-				this.thumbColor = Color.white;
-			}
+			protected void configureScrollBarColors() { this.thumbColor = Color.white; }
 
 			@Override
 			protected JButton createDecreaseButton(int orientation) { return createZeroButton(); }
@@ -315,6 +322,10 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 			@Override
 			protected JButton createIncreaseButton(int orientation) { return createZeroButton(); }
 
+			/**
+			 * Creates a zero-size button
+			 * @return the zero-size button
+			 */
 			private JButton createZeroButton()
 			{
 				JButton button = new JButton();

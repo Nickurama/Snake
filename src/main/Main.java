@@ -32,6 +32,7 @@ public class Main
 		// 	new Point(225, 0),
 		// 	new Point(200, 200),
 		// });
+		// poly = poly.moveCentroid(new Point(250, 250));
 
 		Polygon poly = new Polygon(new Point[] {
 			new Point(10, 60),
@@ -47,7 +48,7 @@ public class Main
 			new Point(30, 50),
 		});
 
-		Point rotationPoint = new Point(250, 250);
+		// Point rotationPoint = new Point(250, 250);
 		float speed = 0.01f;
 
 		new GameManagerBuilder()
@@ -63,9 +64,9 @@ public class Main
 			.setFoodScore(5)
 			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.CIRCLE)
-			.setUpdateMethod(GameEngineFlags.UpdateMethod.AUTO)
-			.setMaxFps(20)
-			.setControlMethod(GameManager.ControlMethod.AUTO)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setMaxFps(100)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
 
 			// setting colors
 			.setGraphicalBackgroundColour(Color.black)
