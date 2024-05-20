@@ -16,7 +16,6 @@ public class Raster extends JPanel
 	private BufferedImage img;
 	private Color bgColor;
 	private Dimension preferredSize;
-	private boolean forceNextRepaint;
 
 	/**
 	 * Instantiates a new raster 
@@ -30,7 +29,7 @@ public class Raster extends JPanel
 		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		this.preferredSize = new Dimension(width, height);
 		this.bgColor = bgColor;
-		this.forceNextRepaint = true;
+		setBounds(0, 0, width, height);
 		reset();
 	}
 
@@ -67,18 +66,6 @@ public class Raster extends JPanel
 
 		Graphics2D g2d = (Graphics2D) graphics;
 		g2d.drawImage(img, 0, 0, this);
-		if (forceNextRepaint)
-		{
-			repaint(0, 0, img.getWidth(), img.getHeight());
-			this.forceNextRepaint = false;
-		}
-	}
-
-	/**
-	 * Sets the next repaint to be forced and immediate
-	 */
-	public void forceNextRepaint()
-	{
-		this.forceNextRepaint = true;
 	}
 }
+

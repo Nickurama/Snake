@@ -98,6 +98,8 @@ public class Scoreboard implements IHighscoresReader
 	private ArrayList<Score> readScores() throws SnakeGameException
 	{
 		File file = new File(filename);
+		if (!file.exists())
+			return null;
 		ArrayList<Score> scores = null;
 
 		try (FileInputStream fileIn = new FileInputStream(file);

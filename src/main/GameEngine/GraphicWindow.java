@@ -2,7 +2,7 @@ package GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
+import java.awt.event.PaintEvent;
 import java.awt.event.WindowEvent;
 
 /**
@@ -13,10 +13,11 @@ import java.awt.event.WindowEvent;
  * @version 16/05/2024
  * @see Raster
  */
-public class GraphicWindow
+public class GraphicWindow extends JFrame
 {
-	private JFrame frame;
 	private Raster raster;
+	private JLayeredPane layeredPane;
+	private JPanel overlay;
 	
 	/**
 	 * Instantiates a new window.
@@ -27,18 +28,34 @@ public class GraphicWindow
 	 */
 	public GraphicWindow(int width, int height, String title, Color bgColor)
 	{
-		frame = new JFrame(title);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new BorderLayout());
-		raster = new Raster(width, height, bgColor);
-		frame.add(raster);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		// frame.setSize(width, height);
-		frame.setVisible(true);
-		// Timer timer = new Timer(1000, new (this));
-		frame.setFocusable(true);
-		frame.requestFocus();
+		super(title);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
+
+		this.layeredPane = new JLayeredPane();
+		add(this.layeredPane);
+
+		this.raster = new Raster(width, height, bgColor);
+		this.layeredPane.setPreferredSize(this.raster.getPreferredSize());
+		this.layeredPane.add(this.raster, JLayeredPane.DEFAULT_LAYER);
+
+		// add(raster);
+		pack();
+		setLocationRelativeTo(null);
+		setVisible(true);
+		setFocusable(true);
+		requestFocus();
+
+		this.overlay = null;
+	}
+
+	/**
+	 * Sets the icon for the window
+	 * @param filename the name of the file to set as an icon for the window
+	 */
+	public void setIcon(String filename)
+	{
+		this.setIconImage(new ImageIcon(filename).getImage());
 	}
 
 	/**
@@ -65,29 +82,32 @@ public class GraphicWindow
 	 */
 	public void close()
 	{
-		this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
-		// this.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
-
-		this.frame = null;
+		dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		this.raster = null;
 	}
 
 	/**
-	 * Repaints everything
+	 * Sets the overlay for the window
+	 * @param panel the overlay's panel
 	 */
-	public void repaint()
+	public void setOverlay(JPanel panel)
 	{
-		raster.forceNextRepaint();
-		frame.repaint();
-		raster.repaint();
+		if (this.overlay != null)
+			this.layeredPane.remove(this.overlay);
+
+		this.overlay = panel;
+		this.layeredPane.add(panel, JLayeredPane.POPUP_LAYER);
 	}
 
-	/**
-	 * Adds a key listener to the frame
-	 * @param listener the listener to add to the frame
-	 */
-	public void addKeyListener(KeyListener listener)
+	@Override
+	public void paint(Graphics g)
 	{
-		frame.addKeyListener(listener);
+		super.paint(g);
+
+		// weird hack to overflow the EventQueue
+		// in order to force it to flush and by
+		// consequence force it to paint immediately
+		for (int i = 0; i < 100; i++)
+			super.paint(g);
 	}
 }

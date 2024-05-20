@@ -1,6 +1,13 @@
 package SnakeGame;
 
 import Geometry.*;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import GameEngine.*;
 
 /**
@@ -21,18 +28,26 @@ public class GameplayOverlay extends GameObject implements IOverlay
 	private TextOverlayOutline outline;
 	private ISnakeStats snakeStats;
 
+	private int unitSize;
+	private GraphicOverlay panel;
+	private JLabel scoreLabel;
+
 	/**
 	 * Initializes a GameplayOverlay
 	 * @param snakeStats the handle to get the snake's info
 	 * @param camera the camera to draw the overlay in
 	 * @param outline the outline of the overlay
 	 */
-	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, TextOverlayOutline outline)
+	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, TextOverlayOutline outline, int unitSize)
 	{
 		this.snakeStats = snakeStats;
 		this.outline = outline;
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
+
+		this.unitSize = unitSize;
+		this.panel = new GraphicOverlay(camera);
+		this.scoreLabel = new JLabel(SCR_STR + "0");
 	}
 
 	/**
@@ -46,9 +61,9 @@ public class GameplayOverlay extends GameObject implements IOverlay
 	 * @param sideLR the left and right sides character
 	 * @param sideTD the top and bottom character
 	 */
-	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD)
+	public GameplayOverlay(ISnakeStats snakeStats, Rectangle camera, char cornerTL, char cornerTR, char cornerDL, char cornerDR, char sideLR, char sideTD, int unitSize)
 	{
-		this(snakeStats, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD));
+		this(snakeStats, camera, new TextOverlayOutline(cornerTL, cornerTR, cornerDL, cornerDR, sideLR, sideTD), unitSize);
 	}
 
 	/**
@@ -86,12 +101,39 @@ public class GameplayOverlay extends GameObject implements IOverlay
 		overlay.setOutline(this.outline);
 		overlay.writeLeft(DIR_STR + dir, overlay.innerHeight());
 		overlay.writeRight(SCR_STR + score, overlay.innerHeight());
+		updateScore(SCR_STR + score);
 	}
 
 	@Override
 	public void start()
 	{
 		updateOverlay();
+		initPanel();
+	}
+
+	/**
+	 * Initialzies the graphical panel
+	 */
+	private void initPanel()
+	{
+		panel.add(this.scoreLabel);
+
+		this.scoreLabel.setFont(new Font("SansSerif", Font.BOLD, this.unitSize / 2));
+		this.scoreLabel.setForeground(Color.white);
+
+		Dimension size = this.scoreLabel.getPreferredSize();
+		this.scoreLabel.setBounds(0, this.overlay.height() - size.height, size.width, size.height);
+	}
+
+	/**
+	 * Updates the score in the graphical panel
+	 * @param text the text to update the score with
+	 */
+	private void updateScore(String text)
+	{
+		this.scoreLabel.setText(text);
+		Dimension size = this.scoreLabel.getPreferredSize();
+		this.scoreLabel.setBounds(0, this.overlay.height() - size.height, size.width, size.height);
 	}
 
 	@Override
@@ -104,5 +146,11 @@ public class GameplayOverlay extends GameObject implements IOverlay
 	public char[][] getOverlay()
 	{
 		return this.overlay.getOverlay();
+	}
+
+	@Override
+	public JPanel getPanel()
+	{
+		return this.panel;
 	}
 }

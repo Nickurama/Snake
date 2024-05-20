@@ -1,5 +1,7 @@
 package GameEngine;
 
+import javax.swing.JPanel;
+
 import Geometry.*;
 
 /**
@@ -247,5 +249,11 @@ public class TextOverlay extends GameObject implements IOverlay
 	public int innerHeight()
 	{
 		return height() - 2;
+	}
+
+	@Override
+	public JPanel getPanel()
+	{
+		return null;
 	}
 }

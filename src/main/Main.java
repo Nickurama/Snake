@@ -48,19 +48,19 @@ public class Main
 		});
 
 		new GameManagerBuilder()
-			.addObstacle(poly)
+			// .addObstacle(poly)
 			.setSeed(seed)
 			.setTextual(false)
 			.setFilled(true)
-			.setMapWidth(400)
-			.setMapHeight(400)
-			.setSnakeSize(40)
-			.setFoodSize(40)
+			.setMapWidth(500)
+			.setMapHeight(500)
+			.setSnakeSize(50)
+			.setFoodSize(50)
 			.setFoodScore(5)
 			.setInputPreset(InputPreset.WASD)
 			.setFoodType(GameManager.FoodType.CIRCLE)
-			.setUpdateMethod(GameEngineFlags.UpdateMethod.AUTO)
-			.setMaxFps(3)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
+			.setMaxFps(10)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
 
 			// setting colors

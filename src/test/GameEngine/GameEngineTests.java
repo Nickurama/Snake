@@ -69,41 +69,41 @@ public class GameEngineTests
 		assertEquals(MockGameObject.Operation.NONE, obj.lastOperation());
 	}
 
-	@Test
-	public void ShouldNotChangeFlagsWhenUpdatingFlagsReference() throws GameEngineException
-	{
-		// Arrange
-		GameEngineFlags flags = new GameEngineFlags();
-		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
-		MockGameObject obj = new MockGameObject();
-		Scene scene = new Scene();
-		scene.add(obj);
-		GameEngine engine = GameEngine.getInstance();
-		engine.init(flags, scene);
+	// @Test
+	// public void ShouldNotChangeFlagsWhenUpdatingFlagsReference() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	GameEngineFlags flags = new GameEngineFlags();
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
+	// 	MockGameObject obj = new MockGameObject();
+	// 	Scene scene = new Scene();
+	// 	scene.add(obj);
+	// 	GameEngine engine = GameEngine.getInstance();
+	// 	engine.init(flags, scene);
+	//
+	// 	// Act
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
+	//
+	// 	// Arrange
+	// 	assertThrows(GameEngineException.class, () -> engine.step());
+	// }
 
-		// Act
-		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.CODE);
-
-		// Arrange
-		assertThrows(GameEngineException.class, () -> engine.step());
-	}
-
-	@Test
-	public void ShouldNotUpdateThroughCodeIfFlagIsSetDifferently() throws GameEngineException
-	{
-		// Arrange
-		GameEngineFlags flags = new GameEngineFlags();
-		flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
-		MockGameObject obj = new MockGameObject();
-		Scene scene = new Scene();
-		scene.add(obj);
-		GameEngine engine = GameEngine.getInstance();
-		engine.init(flags, scene);
-
-		// Act
-		// Arrange
-		assertThrows(GameEngineException.class, () -> engine.step());
-	}
+	// @Test
+	// public void ShouldNotUpdateThroughCodeIfFlagIsSetDifferently() throws GameEngineException
+	// {
+	// 	// Arrange
+	// 	GameEngineFlags flags = new GameEngineFlags();
+	// 	flags.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP);
+	// 	MockGameObject obj = new MockGameObject();
+	// 	Scene scene = new Scene();
+	// 	scene.add(obj);
+	// 	GameEngine engine = GameEngine.getInstance();
+	// 	engine.init(flags, scene);
+	//
+	// 	// Act
+	// 	// Arrange
+	// 	assertThrows(GameEngineException.class, () -> engine.step());
+	// }
 
 	@Test
 	public void ShouldThrowIfStartingWhenAlreadyRunning() throws GameEngineException

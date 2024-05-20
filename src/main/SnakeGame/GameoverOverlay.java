@@ -1,5 +1,18 @@
 package SnakeGame;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
+
 import GameEngine.*;
 import Geometry.*;
 
@@ -17,9 +30,12 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	private static final String GAMEOVER_STR = "Game Over!";
 	private static final String SCORE_STR = "Score: ";
 	private static final String NAME_STR = "What is your name?";
+	private static final String JFrame = null;
 
 	private TextOverlay overlay;
 	private ISnakeStats snakeStats;
+	private GraphicOverlay panel;
+	private JTextField textField;
 
 	/**
 	 * Instantiates a GameoverOverlay
@@ -32,6 +48,8 @@ public class GameoverOverlay extends GameObject implements IOverlay
 		this.snakeStats = snakeStats;
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
+
+		this.panel = new GraphicOverlay(camera);
 	}
 
 	/**
@@ -66,11 +84,123 @@ public class GameoverOverlay extends GameObject implements IOverlay
 	public void start()
 	{
 		drawOverlay(snakeStats.score());
+		initPanel(snakeStats.score());
+	}
+
+	/**
+	 * Initializes the graphical panel
+	 * @param score the score to set the score to in the panel
+	 */
+	private void initPanel(int score)
+	{
+		panel.setOpaque(true);
+		panel.setBackground(Color.black);
+
+		generateTitleLabel();
+		generateScoreLabel(score);
+		generateNameLabel();
+		generateNameTextField();
+	}
+
+	/**
+	 * Generates the title of the graphical panel
+	 */
+	private void generateTitleLabel()
+	{
+		JLabel titleLabel = new JLabel(GAMEOVER_STR);
+		panel.add(titleLabel);
+
+		int titleTextSize = (int)((double)(panel.width() / GAMEOVER_STR.length()) * 1.25);
+		titleLabel.setFont(new Font("SansSerif", Font.BOLD, titleTextSize));
+		titleLabel.setForeground(Color.red);
+
+		Dimension titleSize = titleLabel.getPreferredSize();
+		int x = (panel.width() / 2) - (titleSize.width / 2);
+		int y = (panel.height() / 3) - (titleSize.height / 2);
+		titleLabel.setBounds(x, y, titleSize.width, titleSize.height);
+	}
+
+	/**
+	 * Generates the score on the graphical panel
+	 * @param score the score to display
+	 */
+	private void generateScoreLabel(int score)
+	{
+		String scoreStr = SCORE_STR + score;
+		JLabel scoreLabel = new JLabel(scoreStr);
+		panel.add(scoreLabel);
+
+		int scoreTextSize = (panel.width() / scoreStr.length()) / 3;
+		scoreLabel.setFont(new Font("SansSerif", Font.BOLD, scoreTextSize));
+		scoreLabel.setForeground(Color.white);
+
+		Dimension scoreSize = scoreLabel.getPreferredSize();
+		int x = (panel.width() / 2) - (scoreSize.width / 2);
+		int y = (panel.height() / 2) - (scoreSize.height / 2);
+		scoreLabel.setBounds(x, y, scoreSize.width, scoreSize.height);
+	}
+
+	/**
+	 * Generates the string asking for the user's name on the screen.
+	 */
+	private void generateNameLabel()
+	{
+		JLabel nameLabel = new JLabel(NAME_STR);
+		panel.add(nameLabel);
+
+		int nameTextSize = (int)((panel.width() / NAME_STR.length()) / 1.8);
+		nameLabel.setFont(new Font("SansSerif", Font.PLAIN, nameTextSize));
+		nameLabel.setForeground(Color.white);
+
+		Dimension nameSize = nameLabel.getPreferredSize();
+		int x = (panel.width() / 2) - (nameSize.width / 2);
+		int y = panel.height() - ((panel.height() / 3) + (nameSize.height / 2));
+		nameLabel.setBounds(x, y, nameSize.width, nameSize.height);
+	}
+
+	/**
+	 * Generates the name input text field
+	 */
+	private void generateNameTextField()
+	{
+		int spaces = 8;
+		textField = new JTextField(8);
+		panel.add(textField);
+
+		textField.setActionCommand(GameManager.GAMEOVER_USERNAME_INSERTED_EVENT_STR);
+		textField.addActionListener(GameManager.getInstance());
+
+		int textSize = (panel.width() / spaces) / 2;
+		textField.setFont(new Font("SansSerif", Font.ITALIC + Font.BOLD, textSize));
+		textField.setBackground(Color.black);
+		textField.setForeground(Color.gray);
+		textField.setHorizontalAlignment(JLabel.CENTER);
+		textField.setBorder(new LineBorder(Color.red, 2));
+
+		Dimension textLabelSize = textField.getPreferredSize();
+		int x = (panel.width() / 2) - (textLabelSize.width / 2);
+		int y = panel.height() - ((panel.height() / 5) + (textLabelSize.height / 2));
+		textField.setBounds(x, y, textLabelSize.width, textLabelSize.height);
+	}
+
+	/**
+	 * Gets the input text field
+	 * @return the input text field
+	 */
+	public JTextField getTextField()
+	{
+		return this.textField;
 	}
 
 	@Override
 	public char[][] getOverlay()
 	{
 		return this.overlay.getOverlay();
+	}
+
+	@Override
+	public JPanel getPanel()
+	{
+		return this.panel;
 	}
 }

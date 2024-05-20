@@ -1,6 +1,20 @@
 package SnakeGame;
 
 import Geometry.*;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+
 import GameEngine.*;
 
 /**
@@ -23,6 +37,8 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	private TextOverlay overlay;
 	private int maxHighscoreEntries;
 
+	private GraphicOverlay panel;
+
 	/**
 	 * Instantiates a HighscoresOverlay
 	 * @param highscoresReader where to get the highscores from
@@ -36,6 +52,8 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 		this.overlay = new TextOverlay(camera);
 		this.overlay.setOutline(outline);
 		this.maxHighscoreEntries = maxHighscoreEntries;
+
+		this.panel = new GraphicOverlay(camera);
 	}
 
 	/**
@@ -184,11 +202,196 @@ public class HighscoresOverlay extends GameObject implements IOverlay
 	public void start()
 	{
 		drawOverlay(this.maxHighscoreEntries);
+		initPanel();
+	}
+
+	/**
+	 * Initializes the graphic panel
+	 */
+	private void initPanel()
+	{
+		panel.setOpaque(true);
+		panel.setBackground(Color.black);
+
+		Dimension titleSize = generateTitleLabel();
+		generateHighscoresList(titleSize);
+	}
+
+	/**
+	 * Generates the title label
+	 * @return the dimension of the label
+	 */
+	private Dimension generateTitleLabel()
+	{
+		JLabel title = new JLabel(HIGHSCORE_TITLE_STR);
+		panel.add(title);
+
+		int titleTextSize = (int)((panel.width() / HIGHSCORE_TITLE_STR.length()) / 2);
+		title.setFont(new Font("SansSerif", Font.BOLD, titleTextSize));
+		title.setForeground(Color.white);
+
+		Dimension titleSize = title.getPreferredSize();
+		int x = (panel.width() / 2) - (titleSize.width / 2);
+		int y = (titleSize.height / 2);
+		title.setBounds(x, y, titleSize.width, titleSize.height);
+
+		return titleSize;
+	}
+
+	/**
+	 * Generates the highscores list
+	 * @param titleSize the dimension of the title
+	 */
+	private void generateHighscoresList(Dimension titleSize)
+	{
+		Score[] scores = null;
+
+		try
+		{
+			scores = highscoresReader.getScores();
+		}
+		catch (SnakeGameException e)
+		{
+			generateErrorReadingLabel();
+			return;
+		}
+
+		if (scores == null)
+		{
+			generateNoScoresLabel();
+			return;
+		}
+
+		generateList(scores, titleSize);
+	}
+
+	/**
+	 * Generates the list of scores
+	 * @param scores the scores to populate the list
+	 * @param titleSize the size of the title
+	 */
+	private void generateList(Score[] scores, Dimension titleSize)
+	{
+		String[] scoreStrs = getScoreStrings(scores);
+		JList<String> highscoresList = new JList<String>(scoreStrs);
+		JScrollPane scrollPane = new JScrollPane(highscoresList);
+		panel.add(scrollPane);
+
+		int fontSize = (int)((panel.width() / HIGHSCORE_TITLE_STR.length()) / 3);
+		highscoresList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
+		highscoresList.setBackground(Color.black);
+		highscoresList.setForeground(Color.white);
+
+		Dimension listDim = highscoresList.getPreferredSize();
+		int x = (panel.width() / 2) - (listDim.width / 2);
+		int y = (int)(titleSize.height * 2);
+		highscoresList.setBounds(x, y, listDim.width, listDim.height);
+
+		int heightBound = panel.height() - (2 * y);
+		int widthBound = Math.min((int)(listDim.width * 1.2), (int)(panel.width() * 0.9));
+		scrollPane.setBounds((panel.width() / 2) - (widthBound / 2), y, widthBound, heightBound);
+		scrollPane.setBorder(null);
+		scrollPane.getVerticalScrollBar().setBackground(Color.darkGray);
+		configureScrollbar(scrollPane.getVerticalScrollBar());
+	}
+
+	/**
+	 * Configures the scrollbar for the list of scores
+	 * @param scrollBar the scrollbar to configure
+	 */
+	private void configureScrollbar(JScrollBar scrollBar)
+	{
+		scrollBar.setUI(new BasicScrollBarUI()
+		{
+			@Override
+			protected void configureScrollBarColors()
+			{
+				this.thumbColor = Color.white;
+			}
+
+			@Override
+			protected JButton createDecreaseButton(int orientation) { return createZeroButton(); }
+
+			@Override
+			protected JButton createIncreaseButton(int orientation) { return createZeroButton(); }
+
+			private JButton createZeroButton()
+			{
+				JButton button = new JButton();
+				button.setPreferredSize(new Dimension(0, 0));
+				button.setMinimumSize(new Dimension(0, 0));
+				button.setMaximumSize(new Dimension(0, 0));
+				return button;
+			}
+		});
+	}
+
+	/**
+	 * Generates the strings of scores
+	 * @param scores the scores to generate the strings with
+	 * @return the string representations of the scores
+	 */
+	private String[] getScoreStrings(Score[] scores)
+	{
+		int maxNameLen = scores[0].name().length();
+		int maxScoreLen = Integer.toString(scores[0].score()).length();
+
+		int numScoresDisplayed = this.maxHighscoreEntries < 0 ? scores.length : Math.min(this.maxHighscoreEntries, scores.length);
+
+		for (int i = 0; i < numScoresDisplayed; i++)
+			maxNameLen = Math.max(maxNameLen, scores[i].name().length());
+
+		ArrayList<String> scoreStrs = new ArrayList<String>();
+		for (int i = 0; i < numScoresDisplayed; i++)
+			scoreStrs.add(formatScore(scores[i], i + 1, numScoresDisplayed, maxNameLen, maxScoreLen));
+		return scoreStrs.toArray(new String[0]);
+	}
+
+	/**
+	 * Generates the error message when there was an error reading from file
+	 */
+	private void generateErrorReadingLabel()
+	{
+		JLabel label = new JLabel(ERR_READING_STR);
+		panel.add(label);
+
+		int labelTextSize = (int)((panel.width() / ERR_READING_STR.length()) * 2);
+		label.setFont(new Font("SansSerif", Font.PLAIN, labelTextSize));
+		label.setForeground(Color.red);
+
+		Dimension labelSize = label.getPreferredSize();
+		int x = (panel.width() / 2) - (labelSize.width / 2);
+		int y = (panel.height() / 2) - (labelSize.height / 2);
+		label.setBounds(x, y, labelSize.width, labelSize.height);
+	}
+
+	/**
+	 * Generates the error message when there are no scores
+	 */
+	private void generateNoScoresLabel()
+	{
+		JLabel label = new JLabel(ERR_NO_SCORES_STR + " Go set some!");
+		panel.add(label);
+
+		int labelTextSize = (int)((panel.width() / ERR_READING_STR.length()) * 2);
+		label.setFont(new Font("SansSerif", Font.PLAIN, labelTextSize));
+		label.setForeground(Color.lightGray);
+
+		Dimension labelSize = label.getPreferredSize();
+		int x = (panel.width() / 2) - (labelSize.width / 2);
+		int y = (panel.height() / 2) - (labelSize.height / 2);
+		label.setBounds(x, y, labelSize.width, labelSize.height);
 	}
 
 	@Override
 	public char[][] getOverlay()
 	{
 		return this.overlay.getOverlay();
+	}
+
+	@Override
+	public JPanel getPanel()
+	{
+		return this.panel;
 	}
 }

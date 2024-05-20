@@ -3,11 +3,17 @@ package SnakeGame;
 import Geometry.*;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import GameEngine.*;
 import GameEngine.GameEngineFlags.*;
@@ -32,7 +38,7 @@ import SnakeGame.InputSnakeController.*;
  * @see GameoverOverlay
  * @see HighscoresOverlay
  */
-public class GameManager extends GameObject implements IInputListener
+public class GameManager extends GameObject implements IInputListener, ActionListener
 {
 	/**
 	 * The snake's control method setting.
@@ -88,6 +94,11 @@ public class GameManager extends GameObject implements IInputListener
 	private static final Color DEFAULT_GRA_COLOR_OBSTACLES = Color.gray;
 	private static final String DEFAULT_GRAPHICAL_WINDOW_TITLE = "Snake Game";
 	private static final float DEFAULT_MAX_FPS = 1;
+
+	private static final String ASSETS_FOLDER = "assets";
+	private static final String ICON_FILENAME = "snakeICON.jpg";
+
+	public static final String GAMEOVER_USERNAME_INSERTED_EVENT_STR = "USR_INSRT";
 
 	private Point initialPosition;
 	private char mapChar;
@@ -762,7 +773,7 @@ public class GameManager extends GameObject implements IInputListener
 	private IOverlay generateOverlay()
 	{
 		TextOverlayOutline outline = new TextOverlayOutline();
-		GameplayOverlay overlay = new GameplayOverlay(new SnakeStats(this.snake), this.camera, outline);
+		GameplayOverlay overlay = new GameplayOverlay(new SnakeStats(this.snake), this.camera, outline, this.snakeSize);
 		return overlay;
 	}
 
@@ -782,10 +793,22 @@ public class GameManager extends GameObject implements IInputListener
 		flags.setTextual(this.isTextual);
 		flags.setUpdateMethod(this.updateMethod);
 		flags.setMaxUpdatesPerSecond(this.maxFps);
-		engine.init(flags, this.scene, this.camera);
 		Renderer.getInstance().setTerminalBackgroundColour(this.terminalBgColour);
 		Renderer.getInstance().setGraphicalBackgroundColor(this.graphicalBgColor);
 		Renderer.getInstance().setGraphicalWindowTitle(this.windowTitle);
+		engine.init(flags, this.scene, this.camera);
+
+		if (!this.isTextual)
+			setupWindowIcon();
+	}
+
+	/**
+	 * Sets up the window icon
+	 */
+	private void setupWindowIcon()
+	{
+		String assetsPath = GameEngine.getProjectPath() + ASSETS_FOLDER + File.separator;
+		Renderer.getInstance().getGraphicWindow().setIcon(assetsPath + ICON_FILENAME);
 	}
 
 	/**
@@ -903,20 +926,52 @@ public class GameManager extends GameObject implements IInputListener
 	public void onInputReceived(String input)
 	{
 		if (this.gameState.equals(GameState.GAMEOVER))
-		{
-			registerScore(input);
-			highscores();
-		}
+			handleUsernameInput(input);
 	}
 
 	@Override
-	public void onKeyPressed(KeyEvent event) { }
+	public void onKeyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ENTER &&
+			gameState == GameState.GAMEOVER)
+		{
+			GameoverOverlay overlay = (GameoverOverlay)this.scene.getOverlay();
+			JTextField textField = overlay.getTextField();
+			textField.requestFocus();
+		}
+	}
 
 	@Override
 	public void onKeyReleased(KeyEvent event) { }
 
 	@Override
 	public void onKeyTyped(KeyEvent event) { }
+
+	@Override
+	public void actionPerformed(ActionEvent event)
+	{
+		String eventStr = event.getActionCommand();
+		if (eventStr.equals(GAMEOVER_USERNAME_INSERTED_EVENT_STR) &&
+			this.gameState.equals(GameState.GAMEOVER))
+		{
+			JTextField textField = (JTextField)event.getSource();
+			System.out.println(textField.getText());
+			SwingUtilities.getWindowAncestor(textField).requestFocus();
+			handleUsernameInput(textField.getText());
+			GameEngine.getInstance().step();
+		}
+	}
+
+	/**
+	 * Handles the user input when on the gameover screen
+	 * @param input the input from the user
+	 * @pre the game is in the gameover state
+	 * @pos the game will go to the highscores state
+	 */
+	private void handleUsernameInput(String input)
+	{
+		registerScore(input);
+		highscores();
+	}
 
 	/**
 	 * Registers a new score when one is generated
@@ -964,39 +1019,55 @@ public class GameManager extends GameObject implements IInputListener
 	public Point foodPos() { return this.food.position(); }
 
 	/**
-	 * Sets the background colour
+	 * Sets the background colour for the textual mode
 	 * @param colour the background colour to be set to
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
 	public void setTerminalBackgroundColour(TerminalColour.Background colour) { this.terminalBgColour = colour; }
 
+	/**
+	 * Sets the background color for the graphical mode
+	 * @param color the new background color
+	 */
 	public void setGraphicalBackgroundColor(Color color) { this.graphicalBgColor = color; }
 
 	/**
-	 * Sets the snake's colour
+	 * Sets the snake's colour for the textual mode
 	 * @param colour the new snake's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
 	public void setTerminalSnakeColour(TerminalColour.Foreground colour) { this.terminalSnakeColour = colour; }
 
+	/**
+	 * Sets the snake's color for the graphical mode
+	 * @param color the new snake's color
+	 */
 	public void setGraphicalSnakeColor(Color color) { this.graphicalSnakeColor = color; }
 
 	/**
-	 * Sets the food's colour
+	 * Sets the food's colour for the textual mode
 	 * @param colour the new food's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
 	public void setTerminalFoodColour(TerminalColour.Foreground colour) { this.terminalFoodColour = colour; }
 
+	/**
+	 * Sets the food's color for the graphical mode
+	 * @param color the new food's color
+	 */
 	public void setGraphicalFoodColor(Color color) { this.graphicalFoodColor = color; }
 
 	/**
-	 * Sets the obstacle's colour
+	 * Sets the obstacle's colour for the textual mode
 	 * @param colour the new obstacle's colour
 	 * @pre was not {@link GameManager#init() initialized}
 	 */
 	public void setTerminalObstaclesColour(TerminalColour.Foreground colour) { this.terminalObstaclesColour = colour; }
 
+	/**
+	 * Sets the obstacle's color for the graphical mode
+	 * @param color the new obstacle's color
+	 */
 	public void setGraphicalObstaclesColor(Color color) { this.graphicalObstaclesColor = color; }
 
 	/**
@@ -1034,5 +1105,9 @@ public class GameManager extends GameObject implements IInputListener
 	 */
 	public void setSnakeTail(char c) { this.snakeTailChar = c; }
 
+	/**
+	 * Sets the max fps
+	 * @param maxFps the max fps
+	 */
 	public void setMaxFps(float maxFps) { this.maxFps = maxFps; }
 }

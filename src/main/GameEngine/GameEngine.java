@@ -1,8 +1,7 @@
 package GameEngine;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Scanner;
+import java.io.File;
 import Geometry.Rectangle;
 
 /**
@@ -83,10 +82,12 @@ public class GameEngine implements IInputListener, IClockListener
 		this.flags = new GameEngineFlags(flags);
 		this.currScene = scene;
 		this.isRunning = false;
-		Renderer.getInstance().setTextual(flags.isTextual());
 		this.clock = new Clock(flags.maxUpdatesPerSecond());
 		this.clock.addListener(this);
 		this.camera = camera;
+		Renderer.getInstance().setTextual(flags.isTextual());
+		if (this.camera != null)
+			Renderer.getInstance().init(this.camera, BG_CHAR);
 	}
 	
 	/**
@@ -245,12 +246,11 @@ public class GameEngine implements IInputListener, IClockListener
 	 * Runs a game engine cycle.
 	 * Should only be used when the update method is through code.
 	 * @param deltaT the delta time in ms since last update
-	 * @throws GameEngineException
 	 */
-	public void step(long deltaT) throws GameEngineException
+	public void step(long deltaT)
 	{
-		if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
-			throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
+		// if (flags.updateMethod() != GameEngineFlags.UpdateMethod.CODE)
+		// 	throw new GameEngineException("Called GameEngine.update() when update method isn't through code.");
 		if (!isRunning)
 			return;
 
@@ -263,7 +263,7 @@ public class GameEngine implements IInputListener, IClockListener
 	 *
 	 * @see GameEngine#step(long)
 	 */
-	public void step() throws GameEngineException
+	public void step()
 	{
 		step(this.clock.getDeltaT());
 	}
@@ -332,4 +332,35 @@ public class GameEngine implements IInputListener, IClockListener
 	 * @return if the engine is running
 	 */
 	public boolean isRunning() { return this.isRunning; }
+
+	/**
+	 * The path to the project
+	 * @return the path to the project
+	 */
+	public static String getProjectPath()
+	{
+		String starting = System.getProperty("user.dir");
+		String[] tokens = starting.split(File.separator);
+
+		String currPath;
+		for (int i = tokens.length - 1; i >= 0; i--)
+		{
+			StringBuilder builder = new StringBuilder();
+			for (int j = 0; j <= i; j++)
+			{
+				builder.append(tokens[j]);
+				builder.append(File.separator);
+			}
+
+			String result = builder.toString();
+			builder.append("src");
+			builder.append(File.separator);
+			currPath = builder.toString();
+
+			File f = new File(currPath);
+			if (f.exists())
+				return result;
+		}
+		return null;
+	}
 }

@@ -1,10 +1,13 @@
 package GameEngine;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
+import javax.swing.JPanel;
 
 import Geometry.*;
 
@@ -706,6 +709,12 @@ public class Renderer
 	private void rasterizeTextualOverlay(IOverlay overlay)
 	{
 		char[][] overlayRaster = overlay.getOverlay();
+		if (overlayRaster == null)
+		{
+			Logger.log(Logger.Level.FATAL, "Tried to rasterize a graphic-only overlay as textual! raster was null.");
+			throw new RuntimeException("Tried to rasterize a graphic-only overlay as textual! raster was null.");
+		}
+
 		for (int i = 0; i < raster.length; i++)
 		{
 			for (int j = 0; j < raster[0].length; j++)
@@ -729,7 +738,14 @@ public class Renderer
 	 */
 	private void rasterizeGraphicalOverlay(IOverlay overlay)
 	{
+		JPanel overlayPanel = overlay.getPanel();
+		if (overlayPanel == null)
+		{
+			Logger.log(Logger.Level.FATAL, "Tried to rasterize a text-only overlay as graphical! panel was null.");
+			throw new RuntimeException("Tried to rasterize a text-only overlay as graphical! panel was null.");
+		}
 
+		this.graphicalRaster.setOverlay(overlayPanel);
 	}
 
 	/**
@@ -1144,5 +1160,5 @@ public class Renderer
 	 * Returns null when there is no window (if it's in textual mode).
 	 * @return the graphical window (may be null)
 	 */
-	protected GraphicWindow getGraphicWindow() { return this.graphicalRaster; }
+	public GraphicWindow getGraphicWindow() { return this.graphicalRaster; }
 }
