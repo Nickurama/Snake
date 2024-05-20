@@ -26,6 +26,11 @@ public class Circle implements IGeometricShape<Circle>
 		initialize(center, radius);
 	}
 
+	/**
+	 * Initializes a circle from a point and a radius
+	 * @param center the center of the circle
+	 * @param radius the radius of the circle
+	 */
 	private void initialize(Point center, double radius)
 	{
 		this.center = center;
