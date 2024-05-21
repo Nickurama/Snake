@@ -45,6 +45,7 @@ public class Raster extends JPanel
 
 	/**
 	 * Sets a color to the specified pixel
+	 * Doesn't do anything if the x or y value is invalid
 	 * @param x the x coordinate of the pixel
 	 * @param y the y coordiante of the pixel
 	 * @param drawColor the color to set the pixel to

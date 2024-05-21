@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 /**
  * Represents the window in which to render the game in.
  * Contains a raster to draw on.
+ * Contains an overlay.
  * 
  * @author Diogo Fonseca a79858
  * @version 16/05/2024

@@ -16,12 +16,14 @@ public interface IOverlay
 	/**
 	 * The array to be overlayed over the rendered {@link Scene scene}
 	 * @return the array to be overlayed over the rendered {@link Scene scene}
+	 * or null if it shouldn't be rendered with a textual overlay
 	 */
 	public char[][] getOverlay();
 
 	/**
 	 * Returns the panel overlay
 	 * @return the panel overlay
+	 * or null if it shouldn't be rendered with a graphical overlay
 	 */
 	public JPanel getPanel();
 }

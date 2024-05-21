@@ -13,6 +13,7 @@ public interface IClockListener
 {
 	/**
 	 * Tick event, providing the time elapsed since the last tick in ms
+	 * Should only be called by the {@link Clock clock}
 	 * @param timeElapsedMs the time elapsed since the alst tick in ms
 	 */
 	public void tick(long timeElapsedMs);

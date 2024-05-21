@@ -15,7 +15,9 @@ public class Main
 		long seed = new Random().nextLong();
 		System.out.println("Seed: " + seed);
 
-		testing(seed);
+		graphicExample(seed);
+		// autoupdateExample(seed);
+		
 		// defaultExample(seed);
 		// colourExample(seed);
 		// circleExample(seed);
@@ -25,35 +27,56 @@ public class Main
 		GameManager.getInstance().play();
     }
 
-	private static void testing(long seed) throws Exception
+	private static void autoupdateExample(long seed) throws Exception
 	{
-		// Polygon poly = new Polygon(new Point[] {
-		// 	new Point(175, 0),
-		// 	new Point(225, 0),
-		// 	new Point(200, 200),
-		// });
-		// poly = poly.moveCentroid(new Point(250, 250));
-
 		Polygon poly = new Polygon(new Point[] {
-			new Point(10, 60),
-			new Point(10, 100),
-			new Point(30, 60),
-			new Point(40, 100),
-			new Point(50, 60),
-			new Point(60, 100),
-			new Point(60, 60),
-			new Point(40, 50),
-			new Point(40, 10),
-			new Point(30, 10),
-			new Point(30, 50),
+			new Point(5, 0),
+			new Point(5, 20),
+			new Point(15, 35),
+			new Point(15, 75),
+			new Point(25, 100),
+			new Point(35, 75),
+			new Point(35, 35),
+			new Point(45, 20),
+			new Point(45, 0),
+			new Point(35, 15),
+			new Point(35, 0),
+			new Point(15, 0),
+			new Point(15, 15),
 		});
+		poly = poly.moveCentroid(new Point(100, 250));
 
-		// Point rotationPoint = new Point(250, 250);
-		float speed = 0.01f;
+		Point rotationPoint = new Point(250, 250);
+		float speed = -0.01f;
 
 		new GameManagerBuilder()
-			// .addObstacle(poly)
-			// .addObstacle(poly, null, speed)
+			.addObstacle(poly, rotationPoint, speed)
+			.setSeed(seed)
+			.setTextual(false)
+			.setFilled(false)
+			.setMapWidth(500)
+			.setMapHeight(500)
+			.setSnakeSize(50)
+			.setFoodSize(50)
+			.setFoodScore(5)
+			.setInputPreset(InputPreset.ARROW_KEYS)
+			.setFoodType(GameManager.FoodType.CIRCLE)
+			.setUpdateMethod(GameEngineFlags.UpdateMethod.AUTO)
+			.setMaxFps(1)
+			.setControlMethod(GameManager.ControlMethod.MANUAL)
+
+			// setting colors
+			.setGraphicalBackgroundColour(Color.black)
+			.setGraphicalSnakeColour(Color.green)
+			.setGraphicalFoodColour(Color.red)
+			.setGraphicalObstaclesColour(Color.magenta)
+
+			.build();
+	}
+
+	private static void graphicExample(long seed) throws Exception
+	{
+		new GameManagerBuilder()
 			.setSeed(seed)
 			.setTextual(false)
 			.setFilled(true)
@@ -62,10 +85,9 @@ public class Main
 			.setSnakeSize(50)
 			.setFoodSize(50)
 			.setFoodScore(5)
-			.setInputPreset(InputPreset.WASD)
+			.setInputPreset(InputPreset.ARROW_KEYS)
 			.setFoodType(GameManager.FoodType.CIRCLE)
 			.setUpdateMethod(GameEngineFlags.UpdateMethod.STEP)
-			.setMaxFps(100)
 			.setControlMethod(GameManager.ControlMethod.MANUAL)
 
 			// setting colors

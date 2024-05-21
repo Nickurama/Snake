@@ -1,10 +1,5 @@
 ## To Do
 
-- Update UML
-- Fix UML dependencies on naming
-- Update Javadoc
-- Make graphical examples
-- Write Report
 
 ## Done recent
 
@@ -16,6 +11,11 @@
 - Clock documentation
 - Graphical overlays
 - Graphical overlays documentation
+- Update UML
+- Fix UML dependencies on naming
+- Update Javadoc
+- Make graphical examples
+- Write Report
 
 ## Doing
 

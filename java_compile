@@ -1,0 +1,38 @@
+#!/bin/bash
+
+error=""
+
+function compile
+{
+	local src_dir=$1
+	local out_dir=$2
+	local junit_dir=$3
+
+	# rm -rf out/* 2>/dev/null
+	files=$(find $src_dir -name \*.java)
+	# output=$(javac -cp $junit_dir $src_dir/*.java -d $out_dir 2>&1)
+	output=$(javac -Werror -d $out_dir -cp $junit_dir $files 2>&1)
+	if [ -z "$output" ]
+	then
+		return 0
+		#owo_print "Compiled successfuly!"
+	else
+		error=$output
+		return 1
+		#owo_print "Error compiling!"
+		#echo "$output"
+	fi
+}
+
+src_dir="src"
+out_dir="out"
+junit_dir=$(echo lib/junit-platform-console-standalone-*.jar)
+
+compile $src_dir $out_dir $junit_dir
+if (( $? == 0 ))
+then
+	owo_print "Compiled successfuly!"
+else
+	owo_print "Error compiling!"
+	echo "$error"
+fi
